@@ -1,26 +1,41 @@
 import React, { useState } from 'react';
 import { createProtocol } from './createProtocol';
+import { useImageUpload } from './useImageUpload';
 
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function CreateProtocolForm() {
-  const [id, setId] = useState<string>('');
+
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [group, setGroup] = useState<Group | ''>('');
+
+  const [headerImage, setHeaderImage] = useState('');
+
   const [images, setImages] = useState<string[]>([]);
-  const [headerImage, setHeaderImage] = useState<string>('');
+
+  const { handlePickImage: uploadHeader } = useImageUpload((url) => {
+    setHeaderImage(url);
+  });
+
+  const { handlePickImage: uploadImages, uploading: uploadingImages  } = useImageUpload((url) => {
+    setImages(prev => [...prev, url]);
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!id || !title || !content || !group) {
+    if ( !title || !content || !group) {
       alert('Fill required fields');
       return;
     }
 
+    console.log('SENDING:', {
+      headerImage,
+      images,
+    });
+
     await createProtocol({
-      id,
       title,
       content,
       headerImage,
@@ -29,63 +44,54 @@ export default function CreateProtocolForm() {
     });
 
     alert('Created!');
+    
   };
 
   return (
     <form onSubmit={handleSubmit} style={styles.container}>
-      <input
-        placeholder="id (e.g. emergencyShowerProtocol)"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-        style={styles.input}
-      />
 
-      <input
-        placeholder="title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        style={styles.input}
-      />
-
-      <textarea
-        placeholder="content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        style={{ ...styles.input, height: 120 }}
-      />
-
-      <input
-        placeholder="headerImage URL"
-        value={headerImage}
-        onChange={(e) => setHeaderImage(e.target.value)}
-        style={styles.input}
-      />
-
-      <textarea
-        placeholder="Images URLs (one per line)"
-        value={images.join('\n')}
-        onChange={(e) =>
-            setImages(
-            e.target.value.split('\n').map((url) => url.trim()).filter(Boolean)
-            )
-        }
-        style={{ ...styles.input, height: 100 }}
+        <input
+          id='title'
+          placeholder="כותרת"
+          required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={styles.input}
         />
+
+        <textarea
+          id='content'
+          placeholder="תוכן"
+          required
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          style={{ ...styles.input, height: 120 }}
+        />
+
+      <input type="file" accept="image/*" title='בחר תמונת כותרת' onChange={(e) => uploadHeader(e)} />
+
+      <input type="file" accept="image/*" title='בחר תמונות' multiple onChange={(e) => uploadImages(e)} />
+      
 
       {/* ✅ SELECT GROUP */}
       <select
         value={group}
         onChange={(e) => setGroup(e.target.value as Group)}
         style={styles.input}
+        required
       >
-        <option value="">Select group</option>
-        <option value="controller">Controller</option>
-        <option value="emergency">Emergency</option>
-        <option value="security">Security</option>
+        <option value="">בחר מחלקה</option>
+        <option value="controller">בקרה</option>
+        <option value="emergency">חירום</option>
+        <option value="security">ביטחון</option>
       </select>
-
-      <button type="submit" style={styles.button}>
-        Create Protocol
+      
+      <button
+        style={styles.button}
+        type="submit"
+        disabled={uploadingImages}
+      >
+        {uploadingImages ? `טעינה...` : 'ליצור'}
       </button>
     </form>
   );

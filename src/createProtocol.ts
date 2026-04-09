@@ -1,8 +1,8 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import { toPascalCase } from './toCamelCase';
 
 export const createProtocol = async (data: {
-  id: string;
   title: string;
   content: string;
   group: string;
@@ -10,14 +10,17 @@ export const createProtocol = async (data: {
   headerImage?: string;
 }) => {
   try {
-    await setDoc(doc(db, 'protocols', data.id), {
+    const createId = (group: string, title: string) =>
+      group + toPascalCase(title);
+
+    await setDoc(doc(db, 'protocols', createId(data.group, data.title)), {
       title: data.title,
       content: data.content,
       headerImage: data.headerImage || '',
-      images: [],
+      images: data.images || [],
     });
 
-    await setDoc(doc(db, 'protocolsHeaders', data.id), {
+    await setDoc(doc(db, 'protocolsHeaders', createId(data.group, data.title)), {
       title: data.title,
       group: data.group,
     });
