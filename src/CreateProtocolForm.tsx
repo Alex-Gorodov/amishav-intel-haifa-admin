@@ -8,6 +8,7 @@ export default function CreateProtocolForm() {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [group, setGroup] = useState<Group | ''>('');
+  const [images, setImages] = useState<string[]>([]);
   const [headerImage, setHeaderImage] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,6 +24,7 @@ export default function CreateProtocolForm() {
       title,
       content,
       headerImage,
+      images,
       group,
     });
 
@@ -58,6 +60,17 @@ export default function CreateProtocolForm() {
         onChange={(e) => setHeaderImage(e.target.value)}
         style={styles.input}
       />
+
+      <textarea
+        placeholder="Images URLs (one per line)"
+        value={images.join('\n')}
+        onChange={(e) =>
+            setImages(
+            e.target.value.split('\n').map((url) => url.trim()).filter(Boolean)
+            )
+        }
+        style={{ ...styles.input, height: 100 }}
+        />
 
       {/* ✅ SELECT GROUP */}
       <select

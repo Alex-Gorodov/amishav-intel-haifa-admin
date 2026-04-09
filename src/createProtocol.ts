@@ -6,6 +6,7 @@ export const createProtocol = async (data: {
   title: string;
   content: string;
   group: string;
+  images?: string[];
   headerImage?: string;
 }) => {
   try {
