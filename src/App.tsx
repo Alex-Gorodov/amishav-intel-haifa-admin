@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import CreateProtocolForm from './CreateProtocolForm';
+import { useState } from 'react';
+import CreateProtocolForm from './components/CreateProtocolForm/CreateProtocolForm';
+import { Forms } from './const';
 
 function App() {
+  const [openedForm, setOpenedForm] = useState<Forms | null>(null)
+
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <CreateProtocolForm/>
+      <div className='button__wrapper'>
+        <button className='button' onClick={() => setOpenedForm('protocol')}>הוסף נוהל</button>
+        <button className='button'>הוסף עובד חדש</button>
+        <button className='button'>הוסף משמרת</button>
+      </div>
+      {
+        openedForm === 'protocol'
+        ?
+        <CreateProtocolForm/>
+        :
+        null
+      }
     </div>
   );
 }

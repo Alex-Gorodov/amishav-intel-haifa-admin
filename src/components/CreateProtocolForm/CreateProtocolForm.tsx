@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { createProtocol } from './createProtocol';
-import { useImageUpload } from './useImageUpload';
+import { createProtocol } from '../../services/API/createProtocol.api';
+import { useImageUpload } from '../../hooks/useImageUpload';
 
 type Group = 'controller' | 'emergency' | 'security';
 
@@ -44,7 +44,7 @@ export default function CreateProtocolForm() {
     });
 
     alert('Created!');
-    
+
   };
 
   return (
@@ -68,10 +68,16 @@ export default function CreateProtocolForm() {
           style={{ ...styles.input, height: 120 }}
         />
 
-      <input type="file" accept="image/*" title='בחר תמונת כותרת' onChange={(e) => uploadHeader(e)} />
+      <label htmlFor="headerImage">
+        בחר תמונה ראשית
+        <input type="file" id="headerImage" accept="image/*" title='בחר תמונת כותרת' onChange={(e) => uploadHeader(e)} />
+      </label>
 
-      <input type="file" accept="image/*" title='בחר תמונות' multiple onChange={(e) => uploadImages(e)} />
-      
+      <label htmlFor="articleImages">
+        בחר תמונות תוכן
+        <input type="file" id="articleImages" accept="image/*" title='בחר תמונות' multiple onChange={(e) => uploadImages(e)} />
+      </label>
+
 
       {/* ✅ SELECT GROUP */}
       <select
@@ -85,9 +91,10 @@ export default function CreateProtocolForm() {
         <option value="emergency">חירום</option>
         <option value="security">ביטחון</option>
       </select>
-      
+
       <button
-        style={styles.button}
+        // style={styles.button}
+        className='button'
         type="submit"
         disabled={uploadingImages}
       >
@@ -111,12 +118,12 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 8,
     fontSize: 14,
   },
-  button: {
-    padding: 10,
-    borderRadius: 8,
-    border: 'none',
-    backgroundColor: '#4f46e5',
-    color: '#fff',
-    cursor: 'pointer',
-  },
+  // button: {
+  //   padding: 10,
+  //   borderRadius: 8,
+  //   border: 'none',
+  //   backgroundColor: '#4f46e5',
+  //   color: '#fff',
+  //   cursor: 'pointer',
+  // },
 };
