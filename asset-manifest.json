@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/amishav-intel-haifa-admin/static/css/main.d9355497.css",
-    "main.js": "/amishav-intel-haifa-admin/static/js/main.dc13461d.js",
+    "main.css": "/amishav-intel-haifa-admin/static/css/main.68df6462.css",
+    "main.js": "/amishav-intel-haifa-admin/static/js/main.cc16899d.js",
     "static/js/453.f1efeae3.chunk.js": "/amishav-intel-haifa-admin/static/js/453.f1efeae3.chunk.js",
     "index.html": "/amishav-intel-haifa-admin/index.html",
-    "main.d9355497.css.map": "/amishav-intel-haifa-admin/static/css/main.d9355497.css.map",
-    "main.dc13461d.js.map": "/amishav-intel-haifa-admin/static/js/main.dc13461d.js.map",
+    "main.68df6462.css.map": "/amishav-intel-haifa-admin/static/css/main.68df6462.css.map",
+    "main.cc16899d.js.map": "/amishav-intel-haifa-admin/static/js/main.cc16899d.js.map",
     "453.f1efeae3.chunk.js.map": "/amishav-intel-haifa-admin/static/js/453.f1efeae3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d9355497.css",
-    "static/js/main.dc13461d.js"
+    "static/css/main.68df6462.css",
+    "static/js/main.cc16899d.js"
   ]
 }
