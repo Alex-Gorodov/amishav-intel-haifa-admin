@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export default function Layout({children}: LayoutProps) {
   const location = useLocation();
-  const routeTitle = Titles[location.pathname] ?? "Excellent | 404";
+  const routeTitle = Titles[location.pathname] ?? "עמישב אינטל חיפה | 404";
 
   useEffect(() => {
     document.title = routeTitle;
