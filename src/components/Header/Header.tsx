@@ -4,7 +4,8 @@ import { AppRoute } from '../../const';
 
 export default function Header() {
   const location = useLocation();
-  const isMainPage = location.pathname === `${AppRoute.Root}`;
+  const normalizedPath = location.pathname.replace(/\/$/, '');
+  const isMainPage = normalizedPath === `${AppRoute.Root}`;
 
   return (
     <header className="header">
