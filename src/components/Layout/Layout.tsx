@@ -11,11 +11,12 @@ interface LayoutProps {
 
 export default function Layout({children}: LayoutProps) {
   const location = useLocation();
-  const routeTitle = Titles[location.pathname] ?? "עמישב אינטל חיפה | 404";
+  const normalizedPath = location.pathname.replace(/\/$/, '');
+  const routeTitle = Titles[normalizedPath] ?? "עמישב אינטל חיפה | 404";
 
   useEffect(() => {
     document.title = routeTitle;
-  }, [routeTitle]);
+  }, [normalizedPath]);
 
   return (
     <div className="page">
