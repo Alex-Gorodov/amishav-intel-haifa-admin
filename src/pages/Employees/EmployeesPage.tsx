@@ -3,11 +3,23 @@ import Layout from "../../components/Layout/Layout";
 import RoleLabel from "../../components/ui/RoleLabel";
 import { Roles } from "../../const";
 
+const trainingIcons: Record<string, string> = {
+  "הדרכת בטיחות": "🛡️",
+  "רענון רוני": "🔄",
+  "רענון נשק": "🔫",
+  "רענון אזרה ראשונה": "🩹",
+  "הדרכת סמכויות": "📜"
+};
+
 export default function EmployeesPage() {
   const users = useSelector((state: any) => state.data.users);
 
   const getRoleObject = (roleValue: string) => {
     return Roles.find(r => r.value === roleValue);
+  };
+
+  const getTrainingIcon = (trainingTitle: string): string => {
+    return trainingIcons[trainingTitle] || "📋";
   };
 
   return (
@@ -35,7 +47,19 @@ export default function EmployeesPage() {
                       return roleObj ? <RoleLabel key={roleValue} role={roleObj} /> : null;
                     })}
                   </td>
-                  <td>הדרכות</td>
+                  <td>
+                    {user.trainings && Object.values(user.trainings).map((training: any) =>
+                      training.executionDate ? (
+                        <span
+                          key={training.id}
+                          title={`${training.title} - ${new Date(training.executionDate.toDate()).toLocaleDateString('he-IL')}`}
+                          className="training-icon"
+                        >
+                          {getTrainingIcon(training.title)}
+                        </span>
+                      ) : null
+                    )}
+                  </td>
                   <td>{user.phoneNumber || '-'}</td>
                 </tr>
               ))
