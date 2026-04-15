@@ -1,34 +1,21 @@
-import { useState } from 'react';
-import CreateProtocolForm from './components/CreateProtocolForm/CreateProtocolForm';
-import { Forms } from './const';
-import CreateEmployeeForm from './components/CreateEmployeeForm/CreateEmployeeForm';
+import { Route, Routes } from "react-router-dom";
+import browserHistory from "./browser-history";
+import { HistoryRouter } from "./components/HistoryRoute/HistoryRoute";
+import { store } from "./store";
+import { Provider } from "react-redux";
+import Main from "./components/Main/Main";
+import { AppRoute } from "./const";
+import EmployeesPage from "./pages/Employees/EmployeesPage";
 
 export function App() {
-  const [openedForm, setOpenedForm] = useState<Forms | null>(null)
-
   return (
-    <div className="App">
-      <div className='button__wrapper'>
-        <button className='button' onClick={() => setOpenedForm('protocol')}>הוסף נוהל</button>
-        <button className='button' onClick={() => setOpenedForm('newEmployee')}>הוסף עובד חדש</button>
-        <button className='button'>הוסף משמרת</button>
-      </div>
-      {
-        openedForm === 'protocol'
-        ?
-        <CreateProtocolForm onClose={() => setOpenedForm(null)}/>
-        :
-        null
-      }
-      {
-        openedForm === 'newEmployee'
-        ?
-        <CreateEmployeeForm onClose={() => setOpenedForm(null)}/>
-        :
-        null
-      }
-    </div>
-  );
+    <HistoryRouter history={browserHistory} basename="/">
+      <Provider store={store}>
+        <Routes>
+          <Route path={AppRoute.Root} element={<Main />} />
+          <Route path={AppRoute.Employees} element={<EmployeesPage />} />
+        </Routes>
+      </Provider>
+    </HistoryRouter>
+  )
 }
-
-export default App;
