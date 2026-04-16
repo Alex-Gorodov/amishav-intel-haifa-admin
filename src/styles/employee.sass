@@ -4,6 +4,8 @@
 
   border-bottom: 1px solid #ddd
   transition: background-color 0.2s
+  @media (max-width: 600px)
+    grid-template-columns: 1fr 2fr 1fr 1fr
 
   &:hover
     background-color: #f9f9f9
@@ -15,6 +17,9 @@
     flex-wrap: wrap
     gap: 0.5rem
     position: relative
+    @media (max-width: 600px)
+      flex-direction: column
+      justify-content: stretch
 
   &__role-label
     position: relative
@@ -38,6 +43,9 @@
       &:hover
         background-color: #c0ddff
 
+    @media (max-width: 600px)
+      width: 100%
+
   &__role-remove-btn
     position: absolute
     top: 3px
@@ -54,6 +62,10 @@
 
   &__trainings
     display: flex
+    flex-direction: row
     gap: 0.5rem
     padding: 0.5rem
+    @media (max-width: 600px)
+      flex-direction: column
+
 
