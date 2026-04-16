@@ -30,3 +30,11 @@ export const Titles: Record<string, string> = {
   [AppRoute.Root]: "עמישב אינטל חיפה | מערכת ניהול",
   [AppRoute.Employees]: "עמישב אינטל חיפה | רשימת עובדים",
 };
+
+export const trainingIcons: Record<string, string> = {
+  "הדרכת בטיחות": "🛡️",
+  "רענון רוני": "🔄",
+  "רענון נשק": "🔫",
+  "רענון אזרה ראשונה": "🩹",
+  "הדרכת סמכויות": "📜"
+};

@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { DataState } from "../../types/State";
-import { loadUsers, setUsersDataLoading, updateAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, updateRequestStatus, removeRequest, updateUserShifts, updateTrainingExecutionDate, loadProtocolsPreview } from "../actions";
+import { loadUsers, setUsersDataLoading, updateAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, updateRequestStatus, removeRequest, updateUserShifts, updateTrainingExecutionDate, loadProtocolsPreview, addUserRole, removeUserRole } from "../actions";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { regenerateShiftId } from "../../utils/regenerateShiftId";
 import { Timestamp } from "firebase/firestore";
@@ -147,6 +147,19 @@ export const DataReducer = createReducer(initialState, (builder) => {
       if (userToUpdate) {
         userToUpdate.shifts = action.payload.shifts;
       }
-    });
+    })
+    .addCase(addUserRole, (state, action) => {
+      const userToUpdate = state.users.find(u => u.id === action.payload.userId);
+      if (!userToUpdate) return;
 
+      if (!userToUpdate.roles) userToUpdate.roles = [];
+      userToUpdate.roles.push(action.payload.role.value);
+    })
+    .addCase(removeUserRole, (state, action) => {
+      const userToUpdate = state.users.find(u => u.id === action.payload.userId);
+      if (!userToUpdate) return;
+
+      if (!userToUpdate.roles) userToUpdate.roles = [];
+      userToUpdate.roles = userToUpdate.roles.filter((r: string) => r !== action.payload.role.value);
+    })
 });

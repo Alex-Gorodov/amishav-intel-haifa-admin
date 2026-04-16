@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { User } from "../types/User";
+import { Role, User } from "../types/User";
 import { Availability } from "../types/Availability";
 import { Document } from "../types/Document";
 import { Timestamp } from "firebase/firestore";
@@ -39,3 +39,6 @@ export const setSuccess = createAction<{message: string | null}>('app/setSuccess
 export const updateUserShifts = createAction<{userId: string, shifts: Shift[]}>('data/updateUserShifts');
 
 export const updateTrainingExecutionDate = createAction<{userId: string, training: Training, date: Date}>('data/updateTrainingExecutionDate')
+
+export const addUserRole = createAction<{userId: string, role: Role}>('data/addUserRole');
+export const removeUserRole = createAction<{userId: string, role: Role}>('data/removeUserRole');

@@ -1,10 +1,12 @@
 .employee
-  &-item
-    display: flex
-    flex-direction: row
-    align-items: center
-    gap: 0.5rem
+  display: grid
+  grid-template-columns: 1fr 3fr 2fr 1fr
 
+  border-bottom: 1px solid #ddd
+  transition: background-color 0.2s
+
+  &:hover
+    background-color: #f9f9f9
   &__roles
     display: flex
     flex-direction: row
@@ -12,10 +14,46 @@
     padding: 0.5rem
     flex-wrap: wrap
     gap: 0.5rem
+    position: relative
 
   &__role-label
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: center
     background-color: #f0f0f0
     border-radius: 0.5rem
     padding: 0.25rem 0.5rem
+    padding-left: 24px
     font-size: 0.875rem
     color: #333
+    &--add
+      background-color: #d0e8ff
+      color: #007bff
+      border: none
+      font-weight: bold
+      padding: 0.25rem 0.5rem
+      cursor: pointer
+      transition: 0.3s
+      &:hover
+        background-color: #c0ddff
+
+  &__role-remove-btn
+    position: absolute
+    top: 3px
+    left: 8px
+    background: none
+    border: none
+    color: #999
+    font-size: 1.2rem
+    cursor: pointer
+    transition: 0.3s
+
+    &:hover
+      color: #333
+
+  &__trainings
+    display: flex
+    gap: 0.5rem
+    padding: 0.5rem
+
