@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Role, User } from "../../types/User";
 import { addUserRole, removeUserRole } from "../../store/actions";
+import { updateEmployeeData } from "../../store/api/updateEmployeeData.api";
 
 interface RoleLabelProps {
   isButton?: boolean;
@@ -13,10 +14,16 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
 
   const removeRole = () => {
     dispatch(removeUserRole({userId: user.id, role})); // userId will be handled in the popup component
+    updateEmployeeData(user.id, {
+      roles: user.roles.filter(r => r !== role.value)
+    });
   };
 
   const addRole = () => {
     dispatch(addUserRole({userId: user.id, role})); // userId will be handled in the popup component
+    updateEmployeeData(user.id, {
+      roles: [...user.roles, role.value]
+    });
   };
 
   return (

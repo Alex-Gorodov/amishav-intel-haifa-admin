@@ -4,8 +4,8 @@ import './index.css';
 import './style.sass';
 import reportWebVitals from './reportWebVitals';
 import { App } from './App';
-import { fetchUsers } from './store/api/fetchUsers';
 import { store } from './store';
+import { fetchUsers } from './store/api/fetchUsers.api';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

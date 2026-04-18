@@ -1,6 +1,6 @@
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { toPascalCase } from '../../utils/toCamelCase';
+import { db } from '../../services/firebase';
 
 export const createProtocol = async (data: {
   title: string;
