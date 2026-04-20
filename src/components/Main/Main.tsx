@@ -11,7 +11,7 @@ export function App() {
   return (
     <Layout>
       <div className="wrapper">
-        <div className='buttons-wrapper'>
+        <div className='buttons-wrapper buttons-wrapper--main'>
           <button className='button' onClick={() => setOpenedForm('protocol')}>הוסף נוהל</button>
           <button className='button' onClick={() => setOpenedForm('newEmployee')}>הוסף עובד חדש</button>
           <button className='button'>הוסף משמרת</button>

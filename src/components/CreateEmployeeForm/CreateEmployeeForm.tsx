@@ -81,116 +81,49 @@ export default function CreateEmployeeForm({ onClose }: Props) {
   };
 
   return (
-    <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.container} onClick={(e) => e.stopPropagation()}>
-        <h2 style={styles.title}>עובד חדש</h2>
+    <div className='form__overlay' onClick={onClose}>
+      <div className='form__modal form__modal--employee' onClick={(e) => e.stopPropagation()}>
+        <div className="form__wrapper">
 
-        {error && <p style={styles.error}>{error}</p>}
+          <h2 className='form__title'>עובד חדש</h2>
 
-        <div style={styles.form}>
-          <input placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} style={styles.input}/>
-          <input placeholder="שם משפחה" value={secondName} onChange={e => setSecondName(e.target.value)} style={styles.input}/>
-          <input placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)} style={styles.input}/>
-          <input placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)} style={styles.input}/>
-          <input placeholder="טלפון" value={phone} onChange={e => setPhone(e.target.value)} style={styles.input}/>
-          <input placeholder="סיסמט (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)} style={styles.input}/>
-        </div>
+          {error && <p className='form__error'>{error}</p>}
 
-        <p style={styles.label}>תפקיד:</p>
-        <div style={styles.roles}>
-          {Roles.map(role => (
-            <button
-              key={role.value}
-              onClick={() => toggleRole(role.value)}
-              style={{
-                ...styles.roleItem,
-                ...(selectedRoles.includes(role.value) ? styles.roleSelected : {})
-              }}
-            >
-              {role.label}
+          <div className='form__wrapper'>
+            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)}/>
+            <input className='form__input' placeholder="שם משפחה" value={secondName} onChange={e => setSecondName(e.target.value)}/>
+            <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
+            <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>
+            <input className='form__input' placeholder="טלפון" value={phone} onChange={e => setPhone(e.target.value)}/>
+            <input className='form__input' placeholder="סיסמט (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+          </div>
+
+          <div className="form__wrapper">
+            <p>תפקיד:</p>
+            <div className='form__roles'>
+              {Roles.map(role => (
+                <button
+                  key={role.value}
+                  onClick={() => toggleRole(role.value)}
+                  className={`form__role-item ${selectedRoles.includes(role.value) ? 'form__role-item--selected' : ''}`}
+                >
+                  {role.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="buttons-wrapper">
+            <button className='button button--wide' onClick={handleCreateUser} type='submit'>
+              {loading ? 'שולח...' : 'הוסף עובד'}
             </button>
-          ))}
+
+            <button className='button button--wide button--cancel' onClick={onClose}>
+              ביטול
+            </button>
+          </div>
         </div>
-
-        <button onClick={handleCreateUser} style={styles.submit}>
-          {loading ? 'שולח...' : 'הוסף עובד'}
-        </button>
-
-        <button onClick={onClose} style={styles.cancel}>
-          ביטול
-        </button>
       </div>
     </div>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  overlay: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    background: '#fff',
-    padding: 20,
-    borderRadius: 16,
-    width: 400,
-  },
-  title: {
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-  },
-  input: {
-    padding: 10,
-    borderRadius: 8,
-    border: '1px solid #ccc',
-  },
-  label: {
-    marginTop: 12,
-  },
-  roles: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginBottom: 12,
-  },
-  roleItem: {
-    padding: 8,
-    borderRadius: 8,
-    border: '1px solid #ccc',
-    cursor: 'pointer',
-  },
-  roleSelected: {
-    background: '#c7f0d8',
-  },
-  submit: {
-    width: '100%',
-    padding: 10,
-    background: '#4f46e5',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 8,
-    cursor: 'pointer',
-  },
-  cancel: {
-    marginTop: 8,
-    width: '100%',
-    padding: 10,
-    background: '#eee',
-    border: 'none',
-    borderRadius: 8,
-    cursor: 'pointer',
-  },
-};
