@@ -153,9 +153,9 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
           <h2 className="form__title">הוספת משמרת</h2>
 
           <label className="form__label" htmlFor='user'>בחר העובד</label>
-          <div className="form__posts-list">
+          <div className="form__list form__list--users">
             <input
-              className="form__input form__input--search-user"
+              className="form__list-item form__list-item--search-user"
               type="text"
               id="user"
               onChange={(e) => setInsertedUserName(e.target.value)}
@@ -163,15 +163,21 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
               placeholder="הכנס שם עובד..."
               autoFocus
             />
-            {filteredUsers.map(u => (
-              <div
-                key={u.id}
-                className={`form__post-item ${selectedPost === u.id ? 'form__post-item--selected' : ''}`}
-                onClick={() => setUserId(u.id)}
-              >
-                <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
-              </div>
-            ))}
+            {
+              filteredUsers.length === 0
+              ?
+              <p className='form__message'>לא נמצאו עובדים</p>
+              :
+              filteredUsers.map(u => (
+                <div
+                  key={u.id}
+                  className={`form__list-item ${selectedPost === u.id ? 'form__list-item--selected' : ''}`}
+                  onClick={() => setUserId(u.id)}
+                >
+                  <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                </div>
+              ))
+            }
           </div>
 
           <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
@@ -184,11 +190,11 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
           />
 
           <span className="form__label">בחר עמדה</span>
-          <div className="form__posts-list">
+          <div className="form__list">
             {Posts.map(p => (
               <div
                 key={p.id}
-                className={`form__post-item ${selectedPost === p.id ? 'form__post-item--selected' : ''}`}
+                className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
                 onClick={() => handlePostSelect(p.id)}
               >
                 <span style={{textAlign: 'right'}}>{p.title}</span>

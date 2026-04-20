@@ -14,7 +14,7 @@
     border-radius: 20px
     width: 90%
     max-width: 960px
-    max-height: 90vh
+    max-height: 80vh
     overflow-y: auto
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25)
     &--employee
@@ -49,8 +49,6 @@
     transition: 0.2s
     outline: none
     cursor: pointer
-    &--search-user
-      margin-bottom: 8px
     &:hover
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
     &:focus-within
@@ -105,28 +103,40 @@
     flex-wrap: wrap
     gap: 8px
 
-  &__posts-list
+  &__list
+    position: relative
     max-height: 200px
     border: 1px solid #ccc
     padding: 8px
     border-radius: 24px
     overflow: scroll
     box-shadow: inset 0px -4px 10px 0px rgba(0,0,0,0.4)
+    &--users
+
     &::-webkit-scrollbar
       display: none
 
     scrollbar-width: none
     -ms-overflow-style: none
 
-  &__post-item
+  &__list-item
     padding: 12px
     border-radius: 16px
     border: 1px solid #ccc
     margin-bottom: 6px
     cursor: pointer
     transition: 0.2s
+    outline: none
     &:hover
-      background: #e0f7fa
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+    &:focus-within
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+
+    &--search-user
+      position: sticky
+      top: 0
+      width: 100%
+      margin-bottom: 10px
     &--selected
       background: #b2ebf2
       border-color: #00bcd4
@@ -148,6 +158,7 @@
 
   &__actions
     display: flex
+    flex-direction: column
     gap: 8px
 
   &__delete-btn
@@ -190,3 +201,10 @@
 
     &--selected
       background: #c7f0d8
+
+  &__message
+    padding: 12px 0
+    text-align: center
+    font-size: 18px
+    font-weight: 500
+    color: #555
