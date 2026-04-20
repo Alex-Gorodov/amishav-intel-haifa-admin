@@ -68,6 +68,7 @@ export default function CreateProtocolForm({ onClose }: Props) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="form__input"
+            autoFocus
           />
 
           <textarea

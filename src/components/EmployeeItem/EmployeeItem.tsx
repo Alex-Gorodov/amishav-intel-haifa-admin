@@ -36,7 +36,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
           const roleObj = getRoleObject(roleValue);
           return roleObj ? <RoleLabel key={roleValue} role={roleObj} user={user} /> : null;
         })}
-        <div className="roles-list__wrapper" ref={wrapperRef}>
+        <div className="roles-droplist__wrapper" ref={wrapperRef}>
           <button
             className="employee__role-label employee__role-label--add roles-list__trigger"
             title="הוסף תפקיד"

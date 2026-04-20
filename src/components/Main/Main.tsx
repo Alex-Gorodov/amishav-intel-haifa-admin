@@ -4,6 +4,7 @@ import CreateEmployeeForm from '../CreateEmployeeForm/CreateEmployeeForm';
 import CreateProtocolForm from '../CreateProtocolForm/CreateProtocolForm';
 import { Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
+import AddShiftModal from '../AddShiftModal/AddShiftModal';
 
 export function App() {
   const [openedForm, setOpenedForm] = useState<Forms | null>(null)
@@ -14,7 +15,7 @@ export function App() {
         <div className='buttons-wrapper buttons-wrapper--main'>
           <button className='button' onClick={() => setOpenedForm('protocol')}>הוסף נוהל</button>
           <button className='button' onClick={() => setOpenedForm('newEmployee')}>הוסף עובד חדש</button>
-          <button className='button'>הוסף משמרת</button>
+          <button className='button' onClick={() => setOpenedForm('newShift')}>הוסף משמרת</button>
           <button className='button'>אישור בקשות</button>
           <button className='button'>ביצוע שינוים בסידור</button>
           <Link to={AppRoute.Employees} className='button'>שינוי סטטוס עובדים</Link>
@@ -30,6 +31,13 @@ export function App() {
           openedForm === 'newEmployee'
           ?
           <CreateEmployeeForm onClose={() => setOpenedForm(null)}/>
+          :
+          null
+        }
+        {
+          openedForm === 'newShift'
+          ?
+          <AddShiftModal onClose={() => setOpenedForm(null)} isOpened={false}/>
           :
           null
         }

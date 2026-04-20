@@ -4,7 +4,7 @@ import RoleLabel from "../ui/RoleLabel";
 
 export default function RolesListPopup({user}: {user: User}) {
   return (
-    <div className="roles-list">
+    <div className="roles-droplist">
       {Roles.filter(role => !user.roles?.includes(role.value)).map((role) => (
         <RoleLabel key={role.value} isButton role={role} user={user} />
       ))}

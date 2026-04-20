@@ -19,8 +19,6 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25)
     &--employee
       max-width: 420px
-    &--shift
-      max-width: 560px
     &::-webkit-scrollbar
       display: none
 
@@ -41,16 +39,12 @@
     margin-bottom: 10px
 
   &__input
-    width: 100%
     padding: 10px
     border-radius: 8px
     border: 1px solid #ccc
     resize: vertical
     transition: 0.2s
     outline: none
-    cursor: pointer
-    &--search-user
-      margin-bottom: 8px
     &:hover
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
     &:focus-within
@@ -133,13 +127,8 @@
 
   &__time-row
     display: flex
-    gap: 8px
-
-  &__time-column
-    display: flex
-    flex-direction: column
-    gap: 8px
-    width: 100%
+    justify-content: space-between
+    gap: 6px
 
   &__label
     font-size: 16px
