@@ -12,6 +12,7 @@ interface EmployeeItemProps {
 export default function EmployeeItem({user}: EmployeeItemProps) {
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -29,8 +30,13 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
   }, [isRolesPopupOpen]);
 
   return (
-    <tr key={user.id} className="employee">
-      <td>{user.firstName} {user.secondName}</td>
+    <tr className="employee" key={user.id}>
+      <td className="employee__name">
+        <span className={`employee__uncollapse-trigger ${isCollapsed ? '' : 'employee__uncollapse-trigger--uncollapsed'}`} onClick={() => setIsCollapsed(!isCollapsed)}></span>
+        <span>
+          {user.firstName} {user.secondName}
+        </span>
+      </td>
       <td className="employee__roles">
         {user.roles?.map((roleValue: any) => {
           const roleObj = getRoleObject(roleValue);

@@ -36,6 +36,17 @@
   &__title
     text-align: center
 
+  &__columns
+    display: flex
+    flex-direction: row
+    gap: 8px
+
+  &__column
+    display: flex
+    flex-direction: column
+    gap: 8px
+    width: 100%
+
   &__error
     color: red
     margin-bottom: 10px
@@ -105,7 +116,7 @@
 
   &__list
     position: relative
-    max-height: 200px
+    max-height: 300px
     border: 1px solid #ccc
     padding: 8px
     border-radius: 24px
@@ -135,6 +146,7 @@
     &--search-user
       position: sticky
       top: 0
+      height: 44px
       width: 100%
       margin-bottom: 10px
     &--selected

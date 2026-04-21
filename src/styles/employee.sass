@@ -9,6 +9,24 @@
 
   &:hover
     background-color: #f9f9f9
+
+  &__name
+    display: flex
+    align-items: center
+    gap: 8px
+
+  &__uncollapse-trigger
+    display: inline-block
+    width: 0
+    height: 0
+    border-top: 5px solid transparent
+    border-bottom: 5px solid transparent
+
+    border-right: 10px solid #4f46e5
+    cursor: pointer
+    transition: transform 0.2s
+    &--uncollapsed
+      transform: rotate(-90deg)
   &__roles
     display: flex
     flex-direction: row

@@ -22,7 +22,9 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
 
   const [focusRemark, setFocusRemark] = useState(false)
 
+  // const [selectedUser, setSelectedUser] = useState<string | null >(null);
   const [insertedUserName, setInsertedUserName] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
 
   const users = useSelector((state: State) => state.data.users);
 
@@ -31,13 +33,13 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
     return fullName.includes(insertedUserName);
   });
 
-  const [userId, setUserId] = useState<string | null>(null);
 
   // const userId = users.find(u => u.firstName === insertedUserName || u.secondName === insertedUserName)?.id;
 
   const dispatch = useDispatch();
 
   const resetForm = () => {
+    setUserId(null);
     setSelectedPost(null);
     setDate(new Date());
     setStartTime("");
@@ -152,34 +154,6 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
 
           <h2 className="form__title">הוספת משמרת</h2>
 
-          <label className="form__label" htmlFor='user'>בחר העובד</label>
-          <div className="form__list form__list--users">
-            <input
-              className="form__list-item form__list-item--search-user"
-              type="text"
-              id="user"
-              onChange={(e) => setInsertedUserName(e.target.value)}
-              value={insertedUserName}
-              placeholder="הכנס שם עובד..."
-              autoFocus
-            />
-            {
-              filteredUsers.length === 0
-              ?
-              <p className='form__message'>לא נמצאו עובדים</p>
-              :
-              filteredUsers.map(u => (
-                <div
-                  key={u.id}
-                  className={`form__list-item ${selectedPost === u.id ? 'form__list-item--selected' : ''}`}
-                  onClick={() => setUserId(u.id)}
-                >
-                  <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
-                </div>
-              ))
-            }
-          </div>
-
           <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
           <input
             type="date"
@@ -189,18 +163,52 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
             onChange={(e) => setDate(new Date(e.target.value))}
           />
 
-          <span className="form__label">בחר עמדה</span>
-          <div className="form__list">
-            {Posts.map(p => (
-              <div
-                key={p.id}
-                className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
-                onClick={() => handlePostSelect(p.id)}
-              >
-                <span style={{textAlign: 'right'}}>{p.title}</span>
+          <div className="form__columns">
+            <div className="form__column">
+              <label className="form__label" htmlFor='user'>בחר עובד</label>
+              <div className="form__list form__list--users">
+                <input
+                  className="form__list-item form__list-item--search-user"
+                  type="text"
+                  id="user"
+                  onChange={(e) => setInsertedUserName(e.target.value)}
+                  value={insertedUserName}
+                  placeholder="הכנס שם עובד..."
+                  autoFocus
+                />
+                {
+                  filteredUsers.length === 0
+                  ?
+                  <p className='form__message'>לא נמצאו עובדים</p>
+                  :
+                  filteredUsers.map(u => (
+                    <div
+                      key={u.id}
+                      className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
+                      onClick={() => u.id === userId ? setUserId(null) : setUserId(u.id)}
+                    >
+                      <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                    </div>
+                  ))
+                }
               </div>
-            ))}
+            </div>
+            <div className="form__column">
+              <span className="form__label">בחר עמדה</span>
+              <div className="form__list">
+                {Posts.map(p => (
+                  <div
+                    key={p.id}
+                    className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
+                    onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
+                  >
+                    <span style={{textAlign: 'right'}}>{p.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
 
           <div className="form__time-row">
             <div className="form__time-column">
@@ -208,8 +216,8 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
               <input
                 type="time"
                 className="form__input"
-                value={endTime}
-                onChange={(e) => handleEndTimeChange(e.target.value)}
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
               />
             </div>
 
@@ -218,8 +226,8 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
               <input
                 type="time"
                 className="form__input"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                value={endTime}
+                onChange={(e) => handleEndTimeChange(e.target.value)}
               />
             </div>
           </div>

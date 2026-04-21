@@ -18,7 +18,7 @@ export function App() {
           <button className='button' onClick={() => setOpenedForm('newShift')}>הוסף משמרת</button>
           <button className='button'>אישור בקשות</button>
           <button className='button'>ביצוע שינוים בסידור</button>
-          <Link to={AppRoute.Employees} className='button'>שינוי סטטוס עובדים</Link>
+          <Link to={AppRoute.Employees} className='button'>רשימת עובדים</Link>
         </div>
         {
           openedForm === 'protocol'
