@@ -120,7 +120,7 @@
 
   &__list
     position: relative
-    max-height: 300px
+    height: 300px
     border: 1px solid #ccc
     padding: 8px
     border-radius: 24px
@@ -142,10 +142,19 @@
     cursor: pointer
     transition: 0.2s
     outline: none
-    &:hover
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
-    &:focus-within
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+    // box-shadow: 0 0px 8px rgba(0, 0, 0, 0.25)
+    transition: box-shadow 0.3s ease
+    box-shadow: 0 0 6px rgba(0,0,0,0.2),inset 0 0 0 rgba(0,0,0,0)
+
+    &:hover:not(&--search-user)
+      box-shadow: 0 0 0 rgba(0,0,0,0), inset 0 0px 10px rgba(0,0,0,0.2)
+
+
+
+    // &:hover
+    //   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+    // &:focus-within
+    //   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
 
     &--search-user
       position: sticky
