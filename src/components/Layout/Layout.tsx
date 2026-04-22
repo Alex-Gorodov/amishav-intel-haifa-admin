@@ -4,6 +4,7 @@ import ExcellentIcon from '../../assets/img/icons/Excellent-header-icon.png'
 import ExcellentTitle from '../../assets/img/icons/Excellent-title.svg'
 import { useLocation } from 'react-router-dom';
 import { Titles } from '../../const';
+import SideBar from '../SideBar/SideBar';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -20,12 +21,13 @@ export default function Layout({children}: LayoutProps) {
 
   return (
     <div className="page">
-      <div className="page__content">
         <Header/>
         <main className='main'>
+          <SideBar/>
+      <div className="page__content">
           {children}
-        </main>
       </div>
+        </main>
     </div>
   )
 }

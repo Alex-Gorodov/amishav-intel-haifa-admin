@@ -62,13 +62,18 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div className="page">
-        <h1 className="page__title">בקשות לשינויים</h1>
-        <div className="toggle__container">
+      <div className="">
+        <div className="page__header">
+          <h1 className="page__title">בקשות לשינויים</h1>
           <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
         </div>
 
         <div className="requests__grid">
+          {
+            requestsWithShifts.length === 0 && (
+              <p className="requests__message">לא נמצאו בקשות {active === 'swap' ? 'להחלפה' : 'למסירה'}</p>
+            )
+          }
           {requestsWithShifts.map(req => {
             const firstUser = users.find(u => u.id === req.firstUserId);
             const secondUser = users.find(u => u.id === req.secondUserId);

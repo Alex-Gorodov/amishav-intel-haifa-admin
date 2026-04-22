@@ -1,0 +1,121 @@
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../../services/firebase';
+import { Roles } from '../../const';
+import Layout from '../../components/Layout/Layout';
+
+export default function NewEmployeePage() {
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
+  const [passport, setPassport] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const toggleRole = (value: string) => {
+    setSelectedRoles(prev =>
+      prev.includes(value)
+        ? prev.filter(r => r !== value)
+        : [...prev, value]
+    );
+  };
+
+  const resetForm = () => {
+    setFirstName('');
+    setSecondName('');
+    setPassport('');
+    setEmail('');
+    setPhone('');
+    setPassword('');
+    setSelectedRoles([]);
+  };
+
+  const handleCreateUser = async () => {
+    setError(null);
+
+    if (!email || !password || !firstName || !secondName) {
+      setError('Fill required fields');
+      return;
+    }
+
+    if (selectedRoles.length === 0) {
+      setError('Select at least one role');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCred.user.uid;
+
+      await setDoc(doc(db, 'users', uid), {
+        id: uid,
+        passportId: passport,
+        firstName,
+        secondName,
+        email,
+        roles: selectedRoles,
+        shifts: [],
+        isAdmin: false,
+        phoneNumber: phone,
+        avatarUrl: null,
+        createdAt: serverTimestamp(),
+      });
+
+      resetForm();
+
+    } catch (err: any) {
+      setError(err.message || 'Error creating user');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Layout>
+      <form onSubmit={handleCreateUser} method="post">
+        <div className="page__header">
+          <h2 className='form__title'>עובד חדש</h2>
+        </div>
+        <div className="form__wrapper form__wrapper--fullscreen">
+
+
+          {error && <p className='form__error'>{error}</p>}
+
+          <div className='form__wrapper'>
+            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus/>
+            <input className='form__input' placeholder="שם משפחה" value={secondName} onChange={e => setSecondName(e.target.value)}/>
+            <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
+            <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>
+            <input className='form__input' placeholder="טלפון" value={phone} onChange={e => setPhone(e.target.value)}/>
+            <input className='form__input' placeholder="סיסמט (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+          </div>
+
+          <div className="form__wrapper">
+            <p>תפקיד:</p>
+            <div className='form__roles'>
+              {Roles.map(role => (
+                <button
+                  key={role.value}
+                  onClick={() => toggleRole(role.value)}
+                  className={`form__role-item ${selectedRoles.includes(role.value) ? 'form__role-item--selected' : ''}`}
+                >
+                  {role.label}
+                </button>
+              ))}
+            </div>
+            <button className='button button--wide' onClick={handleCreateUser} type='submit'>
+              {loading ? 'שולח...' : 'הוסף עובד'}
+            </button>
+          </div>
+        </div>
+      </form>
+    </Layout>
+  );
+}

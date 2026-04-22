@@ -27,12 +27,18 @@ export enum AppRoute {
   Root = "/amishav-intel-haifa-admin",
   Employees = "/amishav-intel-haifa-admin/employees",
   Requests = "/amishav-intel-haifa-admin/requests",
+  NewEmployee = "/amishav-intel-haifa-admin/new-employee",
+  NewProtocol = "/amishav-intel-haifa-admin/new-protocol",
+  AddShift = "/amishav-intel-haifa-admin/add-shift",
 }
 
 export const Titles: Record<string, string> = {
   [AppRoute.Root]: "עמישב אינטל חיפה | מערכת ניהול",
   [AppRoute.Employees]: "עמישב אינטל חיפה | רשימת עובדים",
   [AppRoute.Requests]: "עמישב אינטל חיפה | בקשות לשינויים",
+  [AppRoute.NewEmployee]: "עמישב אינטל חיפה | עובד חדש",
+  [AppRoute.NewProtocol]: "עמישב אינטל חיפה | נוהל חדש",
+  [AppRoute.AddShift]: "עמישב אינטל חיפה | משמרת חדשה",
 };
 
 export const StatusLabels: Record<RequestStatus, string> = {
