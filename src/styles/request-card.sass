@@ -1,0 +1,63 @@
+.request-card
+  width: 100%
+  padding: 8px
+  background-color: white
+  border-radius: 15px
+  display: flex
+  flex-direction: column
+  gap: 12px
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
+  &__users
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 8px
+
+  &__icon
+    font-size: 28px
+
+  &__text
+    text-align: right
+    color: #333
+    &--bold
+      font-weight: 600
+
+  &__shifts
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+  &__shift
+    display: flex
+    flex-direction: column
+
+  &__buttons
+    display: flex
+    flex-direction: row
+    gap: 12px
+    margin-top: 8px
+
+  &__button
+    flex: 1
+    border-radius: 8px
+    padding: 8px
+    border: none
+    cursor: pointer
+    transition: opacity 0.2s
+    &:hover
+      opacity: 0.8
+    &--confirm
+      background-color: #4caf50
+    &--reject
+      background-color: #f44336
+    &--delete
+      background-color: #f44336
+      flex: none
+      width: auto
+      padding: 8px 12px
+
+  &__button-text
+    text-align: center
+    font-weight: 600
+    color: white

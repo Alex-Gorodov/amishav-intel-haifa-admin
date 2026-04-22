@@ -14,7 +14,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
 
   const removeRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(removeUserRole({userId: user.id, role})); // userId will be handled in the popup component
+    dispatch(removeUserRole({userId: user.id, role}));
     updateEmployeeData(user.id, {
       roles: user.roles.filter(r => r !== role.value)
     });
@@ -22,7 +22,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
 
   const addRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(addUserRole({userId: user.id, role})); // userId will be handled in the popup component
+    dispatch(addUserRole({userId: user.id, role}));
     updateEmployeeData(user.id, {
       roles: [...user.roles, role.value]
     });

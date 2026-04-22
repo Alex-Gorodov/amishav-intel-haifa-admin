@@ -1,6 +1,7 @@
 import { collection } from "firebase/firestore";
 import { db } from "./services/firebase";
 import { Post } from "./types/Post";
+import { RequestStatus } from "./types/Request";
 
 export type Forms = "protocol" | "newEmployee" | "newShift";
 
@@ -33,6 +34,14 @@ export const Titles: Record<string, string> = {
   [AppRoute.Employees]: "עמישב אינטל חיפה | רשימת עובדים",
   [AppRoute.Requests]: "עמישב אינטל חיפה | בקשות לשינויים",
 };
+
+export const StatusLabels: Record<RequestStatus, string> = {
+  [RequestStatus.PendingUser]: 'ממתין לאישור עובד',
+  [RequestStatus.PendingAdmin]: 'ממתין לאישור מנהל',
+  [RequestStatus.Approved]: 'אושר',
+  [RequestStatus.Rejected]: 'נדחה',
+};
+
 
 export const trainingIcons: Record<string, string> = {
   "הדרכת בטיחות": "🛡️",
