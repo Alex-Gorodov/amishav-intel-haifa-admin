@@ -24,12 +24,14 @@ export const Roles = [
 
 export enum AppRoute {
   Root = "/amishav-intel-haifa-admin",
-  Employees = "/amishav-intel-haifa-admin/employees"
+  Employees = "/amishav-intel-haifa-admin/employees",
+  Requests = "/amishav-intel-haifa-admin/requests",
 }
 
 export const Titles: Record<string, string> = {
   [AppRoute.Root]: "עמישב אינטל חיפה | מערכת ניהול",
   [AppRoute.Employees]: "עמישב אינטל חיפה | רשימת עובדים",
+  [AppRoute.Requests]: "עמישב אינטל חיפה | בקשות לשינויים",
 };
 
 export const trainingIcons: Record<string, string> = {

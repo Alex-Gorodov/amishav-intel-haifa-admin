@@ -29,10 +29,15 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     }
   }, [isRolesPopupOpen]);
 
+  const handleOpenRoles = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsRolesPopupOpen(!isRolesPopupOpen);
+  }
+
   return (
-    <tr className="employee" key={user.id}>
+    <tr className="employee" key={user.id} onClick={() => setIsCollapsed(!isCollapsed)}>
       <td className="employee__name">
-        <span className={`employee__uncollapse-trigger ${isCollapsed ? '' : 'employee__uncollapse-trigger--uncollapsed'}`} onClick={() => setIsCollapsed(!isCollapsed)}></span>
+        <span className={`employee__uncollapse-trigger ${isCollapsed ? '' : 'employee__uncollapse-trigger--uncollapsed'}`}></span>
         <span>
           {user.firstName} {user.secondName}
         </span>
@@ -46,7 +51,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
           <button
             className="employee__role-label employee__role-label--add roles-list__trigger"
             title="הוסף תפקיד"
-            onClick={() => setIsRolesPopupOpen(!isRolesPopupOpen)}
+            onClick={handleOpenRoles}
           >
             +
           </button>

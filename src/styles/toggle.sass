@@ -1,0 +1,46 @@
+.toggle
+  &__container
+    margin: 0 auto
+  &__wrapper
+    display: flex
+    border: 2px solid #ccc
+    border-radius: 22px
+    width: 320px
+    height: 44px
+    padding: 2px
+    position: relative
+    cursor: pointer
+    background-color: #e6e6e6
+    overflow: hidden
+    transition: background-color 0.3s ease
+
+  &__slider
+    position: absolute
+    top: 2px
+    left: 2px
+    width: calc(320px / 2 - 4px)
+    height: 36px
+    border-radius: 20px
+    background-color: #fff
+    transition: transform 0.3s ease
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+
+    &--active
+      transform: translateX(calc(320px / 2 - 4px))
+
+  &__item
+    flex: 1
+    display: flex
+    justify-content: center
+    align-items: center
+
+  &__text
+    font-weight: 600
+    font-size: 16px
+    color: #666666
+    z-index: 1
+    user-select: none
+    transition: color 0.3s ease
+
+    &--active
+      color: #000

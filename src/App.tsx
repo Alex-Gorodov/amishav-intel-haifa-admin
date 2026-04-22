@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import Main from "./components/Main/Main";
 import { AppRoute } from "./const";
 import EmployeesPage from "./pages/Employees/EmployeesPage";
+import RequestsPage from "./pages/Requests/RequestsPage";
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
         <Routes>
           <Route path={AppRoute.Root} element={<Main />} />
           <Route path={AppRoute.Employees} element={<EmployeesPage />} />
+          <Route path={AppRoute.Requests} element={<RequestsPage />} />
         </Routes>
       </Provider>
     </HistoryRouter>

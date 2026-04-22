@@ -12,14 +12,16 @@ interface RoleLabelProps {
 export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   const dispatch = useDispatch();
 
-  const removeRole = () => {
+  const removeRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     dispatch(removeUserRole({userId: user.id, role})); // userId will be handled in the popup component
     updateEmployeeData(user.id, {
       roles: user.roles.filter(r => r !== role.value)
     });
   };
 
-  const addRole = () => {
+  const addRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
     dispatch(addUserRole({userId: user.id, role})); // userId will be handled in the popup component
     updateEmployeeData(user.id, {
       roles: [...user.roles, role.value]
@@ -31,7 +33,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
       <button
         className="employee__role-label employee__role-label--add"
         title="הוסף תפקיד"
-        onClick={() => addRole()}
+        onClick={addRole}
       >
         {role.label}
       </button>
@@ -41,7 +43,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
       <button
         className="employee__role-remove-btn"
         title="הסר תפקיד"
-        onClick={() => removeRole()}
+        onClick={removeRole}
       >
         ×
       </button>
