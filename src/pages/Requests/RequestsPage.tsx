@@ -62,8 +62,8 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div className="">
-        <div className="page__header">
+      <div>
+        <div className="page__header page__header--requests">
           <h1 className="page__title">בקשות לשינויים</h1>
           <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
         </div>

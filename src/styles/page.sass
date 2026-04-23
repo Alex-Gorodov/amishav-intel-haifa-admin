@@ -11,6 +11,11 @@
     padding: 0 12px
     justify-content: space-between
     align-items: center
+    &--requests
+      flex-direction: column
+      gap: 12px
+      @media (min-width: 600px)
+        flex-direction: row
   &__content
     width: 100%
     overflow: scroll

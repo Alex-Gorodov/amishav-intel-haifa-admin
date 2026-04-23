@@ -151,7 +151,6 @@ export default function AddShiftPage() {
         </div>
         <div className="form__wrapper form__wrapper--fullscreen">
 
-
           <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
           <input
             type="date"
@@ -208,7 +207,7 @@ export default function AddShiftPage() {
           </div>
 
 
-          <div className="form__time-row">
+          <div className="form__columns">
             <div className="form__time-column">
               <span className="form__label">שעת התחלה</span>
               <input

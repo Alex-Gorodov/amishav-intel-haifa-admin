@@ -44,6 +44,8 @@
     display: flex
     flex-direction: row
     gap: 8px
+    @media (max-width: 560px)
+      flex-direction: column
 
   &__column
     display: flex
@@ -74,7 +76,7 @@
 
   &__images-wrapper
     display: grid
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))
     align-items: flex-start
     gap: 8px
 
