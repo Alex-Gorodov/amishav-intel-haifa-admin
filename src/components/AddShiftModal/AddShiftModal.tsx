@@ -260,5 +260,3 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
       </div>
   );
 }
-
-

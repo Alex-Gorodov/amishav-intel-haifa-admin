@@ -75,7 +75,7 @@ export default function NewProtocolPage() {
             required
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="form__input input--textarea"
+            className="form__input form__input--textarea"
           />
 
           <div className="form__images-wrapper">

@@ -3,22 +3,55 @@ import { AppRoute, Forms } from '../../const';
 import CreateEmployeeForm from '../CreateEmployeeForm/CreateEmployeeForm';
 import CreateProtocolForm from '../CreateProtocolForm/CreateProtocolForm';
 import { Link } from 'react-router-dom';
-import Layout from '../Layout/Layout';
+import { CalendarClock, Users, FilePlus2, UserPlus, CalendarPlus, CheckCircle2, Home, ChevronRight, ChevronLeft } from 'lucide-react';
 import AddShiftModal from '../AddShiftModal/AddShiftModal';
 
-export default function SideBar() {
-  const [openedForm, setOpenedForm] = useState<Forms | null>(null)
+interface SideBarProps {
+  isCollapsed: boolean;
+}
+
+export default function SideBar({ isCollapsed }: SideBarProps) {
+  const [openedForm, setOpenedForm] = useState<Forms | null>(null);
 
   return (
-      <div className="bar__wrapper">
+      <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''}`}>
         <div className='buttons-wrapper'>
-          <Link to={AppRoute.Employees} className='button'>רשימת עובדים</Link>
-          <Link to={AppRoute.NewProtocol} className='button'>הוסף נוהל</Link>
-          <Link to={AppRoute.NewEmployee} className='button'>הוסף עובד חדש</Link>
-          <Link to={AppRoute.AddShift} className='button'>הוסף משמרת</Link>
-          <Link to={AppRoute.Requests} className='button'>אישור בקשות</Link>
-          <button className='button'>ביצוע שינוים בסידור</button>
-          <Link to={AppRoute.Root} className='button button--home'>דף הבית</Link>
+
+          <Link to={AppRoute.Employees} className='button button--menu'>
+            <Users size={18} />
+            {!isCollapsed && <span>רשימת עובדים</span>}
+          </Link>
+
+          <Link to={AppRoute.NewProtocol} className='button button--menu'>
+            <FilePlus2 size={18} />
+            {!isCollapsed && <span>הוסף נוהל</span>}
+          </Link>
+
+          <Link to={AppRoute.NewEmployee} className='button button--menu'>
+            <UserPlus size={18} />
+            {!isCollapsed && <span>הוסף עובד חדש</span>}
+          </Link>
+
+          <Link to={AppRoute.AddShift} className='button button--menu'>
+            <CalendarPlus size={18} />
+            {!isCollapsed && <span>הוסף משמרת</span>}
+          </Link>
+
+          <Link to={AppRoute.Requests} className='button button--menu'>
+            <CheckCircle2 size={18} />
+            {!isCollapsed && <span>אישור בקשות</span>}
+          </Link>
+
+          <button className='button button--menu'>
+            <CalendarClock size={18} />
+            {!isCollapsed && <span>ביצוע שינוים בסידור</span>}
+          </button>
+
+          <Link to={AppRoute.Root} className='button button--menu button--home'>
+            <Home size={18} />
+            {!isCollapsed && <span>דף הבית</span>}
+          </Link>
+
         </div>
         {
           openedForm === 'protocol'
