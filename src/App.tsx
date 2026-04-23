@@ -3,13 +3,13 @@ import browserHistory from "./browser-history";
 import { HistoryRouter } from "./components/HistoryRoute/HistoryRoute";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import Main from "./components/Main/Main";
 import { AppRoute } from "./const";
 import EmployeesPage from "./pages/Employees/EmployeesPage";
 import RequestsPage from "./pages/Requests/RequestsPage";
 import NewEmployeePage from "./pages/NewEmployeePage/NewEmployeePage";
 import AddShiftPage from "./pages/AddShiftPage/AddShiftPage";
 import NewProtocolPage from "./pages/NewProtocolPage/NewProtocolPage";
+import Main from "./components/Main/Main";
 
 export function App() {
   return (

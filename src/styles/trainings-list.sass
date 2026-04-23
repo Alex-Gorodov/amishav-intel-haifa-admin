@@ -1,0 +1,22 @@
+.trainings-list
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 0.5rem
+  transition: 0.3s
+  &--uncollapsed
+    flex-direction: column
+    align-items: flex-start
+  &__item
+    display: flex
+    flex-direction: row
+    jcustify-content: flex-start
+    gap: 0.5rem
+    padding: 0.25rem 0.5rem
+    border-radius: 0.5rem
+    background-color: #f0f0f0
+    font-size: 0.875rem
+    color: #333
+    &--completed
+      background-color: #d0e8ff
+      color: #007bff

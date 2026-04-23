@@ -18,6 +18,7 @@ export default function SideBar() {
           <Link to={AppRoute.AddShift} className='button'>הוסף משמרת</Link>
           <Link to={AppRoute.Requests} className='button'>אישור בקשות</Link>
           <button className='button'>ביצוע שינוים בסידור</button>
+          <Link to={AppRoute.Root} className='button button--home'>דף הבית</Link>
         </div>
         {
           openedForm === 'protocol'
