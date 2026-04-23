@@ -66,57 +66,57 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     //   <td>{user.phoneNumber || '-'}</td>
     // </tr>
     <tr
-  className="employee"
-  onClick={() => setIsCollapsed(!isCollapsed)}
->
-  <td colSpan={4}>
-    <div
-      className={`employee__content ${
-        !isCollapsed ? 'employee__content--open' : ''
-      }`}
+      className="employee"
+      onClick={() => setIsCollapsed(!isCollapsed)}
     >
-      <div className="employee__grid">
-        <div className="employee__name">
-          <span
-            className={`employee__uncollapse-trigger ${
-              !isCollapsed
-                ? 'employee__uncollapse-trigger--uncollapsed'
-                : ''
-            }`}
-          />
-          <span>
-            {user.firstName} {user.secondName}
-          </span>
-        </div>
+      <td colSpan={4}>
+        <div
+          className={`employee__content ${
+            !isCollapsed ? 'employee__content--open' : ''
+          }`}
+        >
+          <div className="employee__grid">
+            <div className="employee__name">
+              <span
+                className={`employee__uncollapse-trigger ${
+                  !isCollapsed
+                    ? 'employee__uncollapse-trigger--uncollapsed'
+                    : ''
+                }`}
+              />
+              <span>
+                {user.firstName} {user.secondName}
+              </span>
+            </div>
 
-        <div className="employee__roles">
-          {user.roles?.map((roleValue: any) => {
-            const roleObj = getRoleObject(roleValue);
-            return roleObj ? (
-              <RoleLabel key={roleValue} role={roleObj} user={user} />
-            ) : null;
-          })}
+            <div className="employee__roles">
+              {user.roles?.map((roleValue: any) => {
+                const roleObj = getRoleObject(roleValue);
+                return roleObj ? (
+                  <RoleLabel key={roleValue} role={roleObj} user={user} />
+                ) : null;
+              })}
 
-          <div className="roles-droplist__wrapper" ref={wrapperRef}>
-            <button
-              className="employee__role-label employee__role-label--add"
-              onClick={handleOpenRoles}
-            >
-              +
-            </button>
+              <div className="roles-droplist__wrapper" ref={wrapperRef}>
+                <button
+                  className="employee__role-label employee__role-label--add"
+                  onClick={handleOpenRoles}
+                >
+                  +
+                </button>
 
-            {isRolesPopupOpen && <RolesListPopup user={user} />}
+                {isRolesPopupOpen && <RolesListPopup user={user} />}
+              </div>
+            </div>
+
+            <div className="employee__trainings">
+              <TrainingsList user={user} isCollapsed={isCollapsed} />
+            </div>
+
+            <div>{user.phoneNumber || '-'}</div>
           </div>
         </div>
-
-        <div className="employee__trainings">
-          <TrainingsList user={user} isCollapsed={isCollapsed} />
-        </div>
-
-        <div>{user.phoneNumber || '-'}</div>
-      </div>
-    </div>
-  </td>
-</tr>
+      </td>
+    </tr>
   )
 }
