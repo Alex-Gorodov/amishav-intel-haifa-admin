@@ -28,7 +28,7 @@ export default function Layout({children}: LayoutProps) {
 
   return (
     <div className="page">
-      <div className="header__wrapper" style={{paddingRight: isCollapsed ? '72px' : '142px'}}>
+      <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`}>
         <button
           className={`bar__toggle ${isCollapsed ? 'bar__toggle--collapsed' : ''}`}
           onClick={() => setIsCollapsed(prev => !prev)}
