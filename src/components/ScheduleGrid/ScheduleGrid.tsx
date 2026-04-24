@@ -37,7 +37,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
     <div className="schedule">
 
       {/* HEADER */}
-      <div className="schedule__header">
+      {/* <div className="schedule__header">
         <div className="schedule__header-scroll" ref={headerRef}>
           {[...dates].reverse().map((d, i) => (
             <div key={i} className="schedule__cell grid__cell--header" >
@@ -48,6 +48,21 @@ export default function ScheduleGrid({ dates, rows }: Props) {
           ))}
         </div>
 
+      </div> */}
+
+      <div className="schedule__header">
+        <div className="schedule__header-scroll" ref={headerRef}>
+          {[...dates].reverse().map((d, i) => (
+            <div key={i} className="schedule__cell grid__cell--header">
+              <p>{d}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* NEW: fixed right header */}
+        <div className="schedule__right-header">
+
+        </div>
       </div>
 
       {/* BODY */}

@@ -5,9 +5,16 @@
   direction: ltr
 
   /* HEADER */
+  // &__header
+  //   width: 100%
+  //   border-bottom: 1px solid #c6c6c6
+
   &__header
-    width: 100%
-    border-bottom: 1px solid #c6c6c6
+    display: grid
+    grid-template-columns: auto 160px
+
+    @media (max-width: 560px)
+      grid-template-columns: auto 80px
 
   &__navigation-buttons
     display: flex
@@ -15,11 +22,11 @@
 
   &__header-scroll
     display: grid
-    grid-template-columns: repeat(7, 1fr) 160px
+    grid-template-columns: repeat(7, 1fr)
     background-color: #dddddd
     overflow-x: auto
-    @media (max-width: 560px)
-      grid-template-columns: repeat(7, 1fr) 80px
+    // @media (max-width: 560px)
+    //   grid-template-columns: repeat(7, 1fr) 80px
 
 
   &__right-header
