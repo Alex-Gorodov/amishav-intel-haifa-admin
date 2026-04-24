@@ -67,7 +67,7 @@ export default function NewProtocolPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="form__input"
-            autoFocus={isTouchDevice()}
+            autoFocus={!isTouchDevice()}
           />
 
           <textarea

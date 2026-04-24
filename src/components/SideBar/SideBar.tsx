@@ -18,37 +18,37 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
         <div className='buttons-wrapper'>
 
           <Link to={AppRoute.Root} className='button button--menu' title="דף הבית">
-            <Home size={18} />
+            <Home size={18}/>
             {!isCollapsed && <span>דף הבית</span>}
           </Link>
 
           <Link to={AppRoute.Employees} className='button button--menu' title="רשימת עובדים">
-            <Users size={18} />
+            <Users size={18}/>
             {!isCollapsed && <span>רשימת עובדים</span>}
           </Link>
 
           <Link to={AppRoute.NewProtocol} className='button button--menu' title="הוסף נוהל">
-            <FilePlus2 size={18} />
+            <FilePlus2 size={18}/>
             {!isCollapsed && <span>הוסף נוהל</span>}
           </Link>
 
           <Link to={AppRoute.NewEmployee} className='button button--menu' title="הוסף עובד חדש">
-            <UserPlus size={18} />
+            <UserPlus size={18}/>
             {!isCollapsed && <span>הוסף עובד חדש</span>}
           </Link>
 
           <Link to={AppRoute.AddShift} className='button button--menu' title="הוסף משמרת">
-            <CalendarPlus size={18} />
+            <CalendarPlus size={18}/>
             {!isCollapsed && <span>הוסף משמרת</span>}
           </Link>
 
           <Link to={AppRoute.Requests} className='button button--menu' title="אישור בקשות">
-            <CheckCircle2 size={18} />
+            <CheckCircle2 size={18}/>
             {!isCollapsed && <span>אישור בקשות</span>}
           </Link>
 
           <button className='button button--menu' title="ביצוע שינוים בסידור">
-            <CalendarClock size={18} />
+            <CalendarClock size={18}/>
             {!isCollapsed && <span>ביצוע שינוים בסידור</span>}
           </button>
 

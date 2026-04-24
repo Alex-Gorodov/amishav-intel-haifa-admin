@@ -172,7 +172,7 @@ export default function AddShiftPage() {
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}
                   placeholder="הכנס שם עובד..."
-                  autoFocus={isTouchDevice()}
+                  autoFocus={!isTouchDevice()}
                 />
                 {
                   filteredUsers.length === 0

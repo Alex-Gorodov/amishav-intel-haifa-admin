@@ -90,7 +90,7 @@ export default function NewEmployeePage() {
           {error && <p className='form__error'>{error}</p>}
 
           <div className='form__wrapper'>
-            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus={isTouchDevice()}/>
+            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus={!isTouchDevice()}/>
             <input className='form__input' placeholder="שם משפחה" value={secondName} onChange={e => setSecondName(e.target.value)}/>
             <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
             <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>

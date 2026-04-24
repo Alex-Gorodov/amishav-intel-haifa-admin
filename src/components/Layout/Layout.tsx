@@ -34,7 +34,7 @@ export default function Layout({children}: LayoutProps) {
           onClick={() => setIsCollapsed(prev => !prev)}
         >
           <div className="bar__toggle-icon">
-            {isCollapsed ? <ChevronLeft size={18}/> : <ChevronRight size={18}/>}
+            {isCollapsed ? <ChevronLeft size={18} color={'#000000'}/> : <ChevronRight size={18} color={'#000000'}/>}
           </div>
         </button>
         <Header/>

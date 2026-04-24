@@ -176,7 +176,7 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}
                   placeholder="הכנס שם עובד..."
-                  autoFocus={isTouchDevice()}
+                  autoFocus={!isTouchDevice()}
                 />
                 {
                   filteredUsers.length === 0
