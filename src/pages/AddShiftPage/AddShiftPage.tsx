@@ -7,6 +7,7 @@ import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import Layout from "../../components/Layout/Layout";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 
 export default function AddShiftPage() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
@@ -171,7 +172,7 @@ export default function AddShiftPage() {
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}
                   placeholder="הכנס שם עובד..."
-                  autoFocus
+                  autoFocus={isTouchDevice()}
                 />
                 {
                   filteredUsers.length === 0

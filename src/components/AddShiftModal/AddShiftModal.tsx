@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
 import { setError, setSuccess } from "../../store/actions";
@@ -6,6 +6,7 @@ import { arrayUnion, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 
 interface Props {
   isOpened: boolean;
@@ -147,6 +148,7 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
     onClose();
   };
 
+
   return (
     <div className="form__overlay" onClick={closeModal}>
       <div className="form__modal form__modal--shift" onClick={(e) => e.stopPropagation()}>
@@ -174,7 +176,7 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}
                   placeholder="הכנס שם עובד..."
-                  autoFocus
+                  autoFocus={isTouchDevice()}
                 />
                 {
                   filteredUsers.length === 0

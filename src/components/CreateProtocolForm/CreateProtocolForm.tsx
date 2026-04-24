@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createProtocol } from '../../store/api/createProtocol.api';
 import { useImageUpload } from '../../hooks/useImageUpload';
+import { isTouchDevice } from '../../utils/isTouchDevice';
 
 interface Props {
   onClose: () => void;
@@ -68,7 +69,7 @@ export default function CreateProtocolForm({ onClose }: Props) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="form__input"
-            autoFocus
+            autoFocus={isTouchDevice()}
           />
 
           <textarea

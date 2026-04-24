@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createProtocol } from '../../store/api/createProtocol.api';
 import { useImageUpload } from '../../hooks/useImageUpload';
 import Layout from '../../components/Layout/Layout';
+import { isTouchDevice } from '../../utils/isTouchDevice';
 
 type Group = 'controller' | 'emergency' | 'security';
 
@@ -66,7 +67,7 @@ export default function NewProtocolPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="form__input"
-            autoFocus
+            autoFocus={isTouchDevice()}
           />
 
           <textarea

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
 import { Roles } from '../../const';
+import { isTouchDevice } from '../../utils/isTouchDevice';
 
 interface Props {
   onClose: () => void;
@@ -90,7 +91,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
           {error && <p className='form__error'>{error}</p>}
 
           <div className='form__wrapper'>
-            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus/>
+            <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus={isTouchDevice()}/>
             <input className='form__input' placeholder="שם משפחה" value={secondName} onChange={e => setSecondName(e.target.value)}/>
             <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
             <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>
