@@ -17,49 +17,52 @@ export default function ScheduleGrid({ dates, rows }: Props) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
 
-  const [isMarked, setIsMarked] = useState(false);
-
-  // sync horizontal scroll
   const handleScroll = () => {
     if (headerRef.current && bodyRef.current) {
       headerRef.current.scrollLeft = bodyRef.current.scrollLeft;
     }
   };
 
-  // sync vertical scroll
   const handleVerticalScroll = () => {
     if (rightRef.current && bodyRef.current) {
       rightRef.current.scrollTop = bodyRef.current.scrollTop;
     }
   };
 
+
   return (
     <div className="schedule">
 
       {/* HEADER */}
-      {/* <div className="schedule__header">
-        <div className="schedule__header-scroll" ref={headerRef}>
-          {[...dates].reverse().map((d, i) => (
-            <div key={i} className="schedule__cell grid__cell--header" >
-              <p>
-                {d}
-              </p>
-            </div>
-          ))}
-        </div>
-
-      </div> */}
-
       <div className="schedule__header">
         <div className="schedule__header-scroll" ref={headerRef}>
-          {[...dates].reverse().map((d, i) => (
-            <div key={i} className="schedule__cell grid__cell--header">
-              <p>{d}</p>
-            </div>
-          ))}
+          {/* {[...dates].reverse().map((d, i) => {
+
+            return (
+              <div key={i} className="schedule__cell grid__cell--header">
+                <p>{d}</p>
+              </div>
+            )
+          }
+          )} */}
+          {[...dates].reverse().map((d, i) => {
+            const dateObj = new Date(d);
+
+            const weekday = dateObj.toLocaleDateString('he-IL', {
+              weekday: 'long',
+            });
+
+            const day = dateObj.getDate();
+            const month = dateObj.getMonth();
+
+            return (
+              <div key={i} className="schedule__cell grid__cell--header">
+                <p>{weekday} {day}.{month}</p>
+              </div>
+            );
+          })}
         </div>
 
-        {/* NEW: fixed right header */}
         <div className="schedule__right-header">
 
         </div>
