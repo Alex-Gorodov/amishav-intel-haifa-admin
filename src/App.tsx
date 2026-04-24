@@ -10,6 +10,7 @@ import NewEmployeePage from "./pages/NewEmployeePage/NewEmployeePage";
 import AddShiftPage from "./pages/AddShiftPage/AddShiftPage";
 import NewProtocolPage from "./pages/NewProtocolPage/NewProtocolPage";
 import Main from "./components/Main/Main";
+import SchedulePage from "./pages/SchedulePage/SchedulePage";
 
 export function App() {
   return (
@@ -22,6 +23,8 @@ export function App() {
           <Route path={AppRoute.NewEmployee} element={<NewEmployeePage />} />
           <Route path={AppRoute.NewProtocol} element={<NewProtocolPage />} />
           <Route path={AppRoute.AddShift} element={<AddShiftPage />} />
+          <Route path={AppRoute.Schedule} element={<SchedulePage />} />
+
         </Routes>
       </Provider>
     </HistoryRouter>

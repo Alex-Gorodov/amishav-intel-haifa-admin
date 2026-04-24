@@ -36,3 +36,10 @@ body
   clip-path: inset(100%)
   clip: rect(0 0 0 0)
   overflow: hidden
+
+@mixin remove-scroll-bar
+  &::-webkit-scrollbar
+    display: none
+
+  scrollbar-width: none
+  -ms-overflow-style: none

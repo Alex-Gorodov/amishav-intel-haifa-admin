@@ -30,6 +30,7 @@ export enum AppRoute {
   NewEmployee = "/amishav-intel-haifa-admin/new-employee",
   NewProtocol = "/amishav-intel-haifa-admin/new-protocol",
   AddShift = "/amishav-intel-haifa-admin/add-shift",
+  Schedule = "/amishav-intel-haifa-admin/schedule",
 }
 
 export const Titles: Record<string, string> = {
@@ -39,6 +40,7 @@ export const Titles: Record<string, string> = {
   [AppRoute.NewEmployee]: "עמישב אינטל חיפה | עובד חדש",
   [AppRoute.NewProtocol]: "עמישב אינטל חיפה | נוהל חדש",
   [AppRoute.AddShift]: "עמישב אינטל חיפה | משמרת חדשה",
+  [AppRoute.Schedule]: "עמישב אינטל חיפה | סידור עבודה",
 };
 
 export const StatusLabels: Record<RequestStatus, string> = {
