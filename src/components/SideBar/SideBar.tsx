@@ -47,9 +47,9 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
             {!isCollapsed && <span>אישור בקשות</span>}
           </Link>
 
-          <Link to={AppRoute.Schedule} className='button button--menu' title="ביצוע שינוים בסידור">
+          <Link to={AppRoute.Schedule} className='button button--menu' title="סידור עבודה">
             <CalendarClock size={18}/>
-            {!isCollapsed && <span>ביצוע שינוים בסידור</span>}
+            {!isCollapsed && <span>סידור עבודה</span>}
           </Link>
 
         </div>

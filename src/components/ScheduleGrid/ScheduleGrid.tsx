@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import ScheduleCell from "../ui/ScheduleCell";
 
 type ShiftRow = {
   id: string;
@@ -36,15 +37,6 @@ export default function ScheduleGrid({ dates, rows }: Props) {
       {/* HEADER */}
       <div className="schedule__header">
         <div className="schedule__header-scroll" ref={headerRef}>
-          {/* {[...dates].reverse().map((d, i) => {
-
-            return (
-              <div key={i} className="schedule__cell grid__cell--header">
-                <p>{d}</p>
-              </div>
-            )
-          }
-          )} */}
           {[...dates].reverse().map((d, i) => {
             const dateObj = new Date(d);
 
@@ -53,7 +45,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
             });
 
             const day = dateObj.getDate();
-            const month = dateObj.getMonth();
+            const month = dateObj.getMonth() + 1;
 
             return (
               <div key={i} className="schedule__cell grid__cell--header">
@@ -86,14 +78,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
                 const value = row.shifts[d];
 
                 return (
-                  <div
-                    key={i}
-                    className="schedule__cell"
-                  >
-                    <p className="schedule__cell-text">
-                      {value}
-                    </p>
-                  </div>
+                  <ScheduleCell value={value} key={i}/>
                 );
               })}
             </div>

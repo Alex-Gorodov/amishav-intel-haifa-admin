@@ -47,7 +47,7 @@ export default function SchedulePage() {
             onClick={() => setWeekOffset(prev => prev - 1)}
           >
             <ArrowRight size={18} color={'#ffffff'}/>
-            שבוע שעבר
+            שבוע הקודם
           </button>
 
           <button

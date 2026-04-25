@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
 import { setError, setSuccess } from "../../store/actions";
@@ -8,6 +8,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
+import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 
 export default function AddShiftPage() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
@@ -139,10 +140,12 @@ export default function AddShiftPage() {
     }
   };
 
-  const closeModal = () => {
-    resetForm();
+  const user = users.find((u) => u.id === userId)
 
-  };
+  const availablePosts = useMemo(() => {
+    if (!user) return Posts;
+    return getAvailablePostsByRole(user);
+  }, [user, userId]);
 
   return (
     <Layout>
@@ -194,7 +197,7 @@ export default function AddShiftPage() {
             <div className="form__column">
               <span className="form__label">בחר עמדה</span>
               <div className="form__list">
-                {Posts.map(p => (
+                {availablePosts.map(p => (
                   <div
                     key={p.id}
                     className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}

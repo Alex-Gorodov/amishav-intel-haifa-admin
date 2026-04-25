@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
 import { setError, setSuccess } from "../../store/actions";
@@ -7,6 +7,7 @@ import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
+import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 
 interface Props {
   isOpened: boolean;
@@ -33,9 +34,6 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
     const fullName = `${u.firstName} ${u.secondName}`;
     return fullName.includes(insertedUserName);
   });
-
-
-  // const userId = users.find(u => u.firstName === insertedUserName || u.secondName === insertedUserName)?.id;
 
   const dispatch = useDispatch();
 
@@ -148,7 +146,6 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
     onClose();
   };
 
-
   return (
     <div className="form__overlay" onClick={closeModal}>
       <div className="form__modal form__modal--shift" onClick={(e) => e.stopPropagation()}>
@@ -198,6 +195,7 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
             <div className="form__column">
               <span className="form__label">בחר עמדה</span>
               <div className="form__list">
+                {/* {availablePosts.map(p => ( */}
                 {Posts.map(p => (
                   <div
                     key={p.id}
