@@ -31,9 +31,6 @@ export default function AddShiftPage() {
     return fullName.includes(insertedUserName);
   });
 
-
-  // const userId = users.find(u => u.firstName === insertedUserName || u.secondName === insertedUserName)?.id;
-
   const dispatch = useDispatch();
 
   const resetForm = () => {

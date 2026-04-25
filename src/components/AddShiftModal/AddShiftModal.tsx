@@ -33,13 +33,9 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
 
   const users = useSelector((state: State) => state.data.users);
 
+  const activePostId = selectedPost || initialPostId;
 
-    const availableUsers = useMemo(() => {
-      if (!initialPostId) return users;
-      return getAvailableUsersByPost(users, initialPostId);
-    }, [users, initialPostId]);
-
-  const filteredUsers = availableUsers.filter(u => {
+  const filteredUsers = users.filter(u => {
     const fullName = `${u.firstName} ${u.secondName}`;
     return fullName.includes(insertedUserName);
   });
@@ -75,8 +71,6 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
       setEndTime(post?.defaultEndTime || "");
     }
   }, [initialDate, initialPostId]);
-
-
 
   function validateShift(start: string, end: string) {
     const errors: string[] = [];
@@ -171,6 +165,25 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
     onClose();
   };
 
+  const roleFilteredUsers = useMemo(() => {
+    if (!activePostId) return users;
+    return getAvailableUsersByPost(users, activePostId);
+  }, [users, activePostId]);
+
+  const user = users.find((u) => u.id === userId)
+
+  const availablePosts = useMemo(() => {
+    if (!user) return Posts;
+    return getAvailablePostsByRole(user);
+  }, [user, userId]);
+
+  const availableUsers = useMemo(() => {
+    return roleFilteredUsers.filter(u => {
+      const fullName = `${u.firstName} ${u.secondName}`;
+      return fullName.includes(insertedUserName);
+    });
+  }, [roleFilteredUsers, insertedUserName]);
+
   return (
     <div className="form__overlay" onClick={closeModal}>
       <div className="form__modal form__modal--shift" onClick={(e) => e.stopPropagation()}>
@@ -201,11 +214,11 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
                   autoFocus={!isTouchDevice()}
                 />
                 {
-                  filteredUsers.length === 0
+                  availableUsers.length === 0
                   ?
                   <p className='form__message'>לא נמצאו עובדים</p>
                   :
-                  filteredUsers.map(u => (
+                  availableUsers.map(u => (
                     <div
                       key={u.id}
                       className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
@@ -220,8 +233,8 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
             <div className="form__column">
               <span className="form__label">בחר עמדה</span>
               <div className="form__list">
-                {/* {availablePosts.map(p => ( */}
-                {Posts.map(p => (
+                {availablePosts.map(p => (
+                // {Posts.map(p => (
                   <div
                     key={p.id}
                     className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
