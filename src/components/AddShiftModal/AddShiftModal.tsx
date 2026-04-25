@@ -8,13 +8,16 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
+import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 
 interface Props {
   isOpened: boolean;
   onClose: () => void;
+  initialDate?: string;
+  initialPostId?: string;
 }
 
-export default function AddShiftModal({ isOpened, onClose }: Props) {
+export default function AddShiftModal({ isOpened, onClose, initialDate, initialPostId }: Props) {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState("");
@@ -30,7 +33,13 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
 
   const users = useSelector((state: State) => state.data.users);
 
-  const filteredUsers = users.filter(u => {
+
+    const availableUsers = useMemo(() => {
+      if (!initialPostId) return users;
+      return getAvailableUsersByPost(users, initialPostId);
+    }, [users, initialPostId]);
+
+  const filteredUsers = availableUsers.filter(u => {
     const fullName = `${u.firstName} ${u.secondName}`;
     return fullName.includes(insertedUserName);
   });
@@ -52,6 +61,22 @@ export default function AddShiftModal({ isOpened, onClose }: Props) {
     setStartTime(post?.defaultStartTime || "");
     setEndTime(post?.defaultEndTime || "");
   };
+
+  useEffect(() => {
+    if (initialDate) {
+      setDate(new Date(initialDate));
+    }
+
+    if (initialPostId) {
+      setSelectedPost(initialPostId);
+
+      const post = Posts.find(p => p.id === initialPostId);
+      setStartTime(post?.defaultStartTime || "");
+      setEndTime(post?.defaultEndTime || "");
+    }
+  }, [initialDate, initialPostId]);
+
+
 
   function validateShift(start: string, end: string) {
     const errors: string[] = [];

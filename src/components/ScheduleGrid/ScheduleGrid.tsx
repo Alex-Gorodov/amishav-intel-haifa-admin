@@ -1,5 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
+import DynamicForm from "../DynamicForm/DynamicForm";
+import AddShiftModal from "../AddShiftModal/AddShiftModal";
 
 type ShiftRow = {
   id: string;
@@ -31,8 +33,33 @@ export default function ScheduleGrid({ dates, rows }: Props) {
   };
 
 
+  const [formState, setFormState] = useState<{
+    type: 'add' | 'change' | 'remove' | null;
+    cellData?: {
+      date: string;
+      postId: string;
+      rowId: string;
+    };
+  }>({ type: null });
+
   return (
-    <div className="schedule">
+    <div className="page__content schedule">
+
+      {formState.type && formState.type !== 'add' && (
+        <DynamicForm
+          type={formState.type}
+          onClose={() => setFormState({ type: null })}
+        />
+      )}
+
+      {formState.type === 'add' && formState.cellData && (
+        <AddShiftModal
+          isOpened={true}
+          onClose={() => setFormState({ type: null })}
+          initialDate={formState.cellData.date}
+          initialPostId={formState.cellData.postId}
+        />
+      )}
 
       {/* HEADER */}
       <div className="schedule__header">
@@ -78,7 +105,20 @@ export default function ScheduleGrid({ dates, rows }: Props) {
                 const value = row.shifts[d];
 
                 return (
-                  <ScheduleCell value={value} key={i}/>
+                  <ScheduleCell
+                    key={i}
+                    value={value}
+                    onAction={(type) =>
+                      setFormState({
+                        type,
+                        cellData: {
+                          date: d,
+                          postId: row.id,   // or whatever represents the post
+                          rowId: row.id,
+                        },
+                      })
+                    }
+                  />
                 );
               })}
             </div>

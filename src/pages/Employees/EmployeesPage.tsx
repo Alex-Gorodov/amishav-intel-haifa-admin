@@ -2,14 +2,21 @@ import EmployeeItem from "../../components/EmployeeItem/EmployeeItem";
 import Layout from "../../components/Layout/Layout";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateEmployeeForm from "../../components/CreateEmployeeForm/CreateEmployeeForm";
+import { getShiftsStreak } from "../../utils/getShiftsStreak";
 
 
 
 export default function EmployeesPage() {
   const users = useSelector((state: RootState) => state.data.users);
   const [isFormOpened, setFormOpened] = useState(false);
+
+  useEffect(() => {
+    console.log(
+      users.forEach((u) => `${u.secondName}'s shifts streak: ${getShiftsStreak(u)}`)
+    )
+  }, [users])
 
   return (
     <Layout>
@@ -18,7 +25,7 @@ export default function EmployeesPage() {
         <button className="button button--header" onClick={() => setFormOpened(true)}>+</button>
       </div>
 
-      <table className="employees-table">
+      <table className="page__content employees-table">
         <thead>
           <tr>
             <th>שם</th>

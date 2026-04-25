@@ -58,7 +58,7 @@ export default function NewProtocolPage() {
           <h2 className="form__title">הוסף נוהל חדש</h2>
         </div>
 
-        <div className="form__wrapper form__wrapper--fullscreen">
+        <div className="page__content form__wrapper form__wrapper--fullscreen">
 
           <input
             id="title"

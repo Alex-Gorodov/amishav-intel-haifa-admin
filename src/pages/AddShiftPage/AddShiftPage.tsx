@@ -88,7 +88,8 @@ export default function AddShiftPage() {
     setEndTime(newEnd);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!selectedPost) {
       dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
       return;
@@ -153,7 +154,8 @@ export default function AddShiftPage() {
         <div className="page__header">
           <h2 className="form__title">הוספת משמרת</h2>
         </div>
-        <div className="form__wrapper form__wrapper--fullscreen">
+
+        <div className="page__content form__wrapper form__wrapper--fullscreen">
 
           <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
           <input

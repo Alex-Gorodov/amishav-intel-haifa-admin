@@ -4,12 +4,15 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
 import { Roles } from '../../const';
 import { isTouchDevice } from '../../utils/isTouchDevice';
+import { fetchUsers } from '../../store/api/fetchUsers.api';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   onClose: () => void;
 }
 
 export default function CreateEmployeeForm({ onClose }: Props) {
+  const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [passport, setPassport] = useState('');
@@ -39,7 +42,8 @@ export default function CreateEmployeeForm({ onClose }: Props) {
     setSelectedRoles([]);
   };
 
-  const handleCreateUser = async () => {
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError(null);
 
     if (!email || !password || !firstName || !secondName) {
@@ -77,6 +81,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
     } catch (err: any) {
       setError(err.message || 'Error creating user');
     } finally {
+      fetchUsers(dispatch);
       setLoading(false);
     }
   };

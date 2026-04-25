@@ -68,7 +68,7 @@ export default function RequestsPage() {
           <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
         </div>
 
-        <div className="requests__grid">
+        <div className="page__content requests__grid">
           {
             requestsWithShifts.length === 0 && (
               <p className="requests__message">לא נמצאו בקשות {active === 'swap' ? 'להחלפה' : 'למסירה'}</p>

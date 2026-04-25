@@ -5,8 +5,11 @@ import { auth, db } from '../../services/firebase';
 import { Roles } from '../../const';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
+import { fetchUsers } from '../../store/api/fetchUsers.api';
+import { useDispatch } from 'react-redux';
 
 export default function NewEmployeePage() {
+  const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [passport, setPassport] = useState('');
@@ -36,7 +39,8 @@ export default function NewEmployeePage() {
     setSelectedRoles([]);
   };
 
-  const handleCreateUser = async () => {
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError(null);
 
     if (!email || !password || !firstName || !secondName) {
@@ -75,6 +79,7 @@ export default function NewEmployeePage() {
       setError(err.message || 'Error creating user');
     } finally {
       setLoading(false);
+      fetchUsers(dispatch)
     }
   };
 
@@ -84,7 +89,7 @@ export default function NewEmployeePage() {
         <div className="page__header">
           <h2 className='form__title'>עובד חדש</h2>
         </div>
-        <div className="form__wrapper form__wrapper--fullscreen">
+        <div className="page__content form__wrapper form__wrapper--fullscreen">
 
 
           {error && <p className='form__error'>{error}</p>}
