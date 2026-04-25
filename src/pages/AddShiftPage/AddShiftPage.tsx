@@ -9,6 +9,7 @@ import { State } from "../../types/State";
 import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
+import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 
 export default function AddShiftPage() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
@@ -140,10 +141,22 @@ export default function AddShiftPage() {
 
   const user = users.find((u) => u.id === userId)
 
+    const roleFilteredUsers = useMemo(() => {
+      if (!selectedPost) return users;
+      return getAvailableUsersByPost(users, selectedPost);
+    }, [users, selectedPost]);
+
   const availablePosts = useMemo(() => {
     if (!user) return Posts;
     return getAvailablePostsByRole(user);
   }, [user, userId]);
+
+    const availableUsers = useMemo(() => {
+      return roleFilteredUsers.filter(u => {
+        const fullName = `${u.firstName} ${u.secondName}`;
+        return fullName.includes(insertedUserName);
+      });
+    }, [roleFilteredUsers, insertedUserName]);
 
   return (
     <Layout>
@@ -177,11 +190,11 @@ export default function AddShiftPage() {
                   autoFocus={!isTouchDevice()}
                 />
                 {
-                  filteredUsers.length === 0
+                  availableUsers.length === 0
                   ?
                   <p className='form__message'>לא נמצאו עובדים</p>
                   :
-                  filteredUsers.map(u => (
+                  availableUsers.map(u => (
                     <div
                       key={u.id}
                       className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}

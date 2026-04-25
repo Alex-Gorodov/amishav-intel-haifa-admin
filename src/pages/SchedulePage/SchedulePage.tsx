@@ -7,26 +7,53 @@ import ScheduleGrid from "../../components/ScheduleGrid/ScheduleGrid";
 import { Posts } from "../../const";
 import { getIsoLocalDateKey, getWeekByOffset, isSameDay } from "../../utils/getWeekDates";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Shift } from "../../types/Shift";
 
 export default function SchedulePage() {
   const users = useSelector((state: RootState) => state.data.users);
-  const [isFormOpened, setFormOpened] = useState(false);
+
   const [weekOffset, setWeekOffset] = useState(0);
 
   const weekDates = useMemo(() => getWeekByOffset(weekOffset), [weekOffset]);
 
   const dateKeys = useMemo(() => weekDates.map(getIsoLocalDateKey), [weekDates]);
 
+  // const rows = useMemo(() => {
+  //   return Posts.map((post) => {
+  //     const shiftsMap: Record<string, string | null> = {};
+  //     dateKeys.forEach((key, idx) => {
+  //       const day = weekDates[idx];
+
+  //       const names = users
+  //         .filter((u) => u.shifts?.some((s) => isSameDay(s.date.toDate(), day) && s.post?.id === post.id))
+  //         .map((u) => `${u.firstName} ${u.secondName}`);
+  //       shiftsMap[key] = names.length ? names.join(', ') : null;
+  //     });
+
+  //     return {
+  //       id: post.id,
+  //       name: post.title,
+  //       shifts: shiftsMap,
+  //     };
+  //   });
+  // }, [users, dateKeys]);
+
   const rows = useMemo(() => {
     return Posts.map((post) => {
-      const shiftsMap: Record<string, string | null> = {};
+      const shiftsMap: Record<string, Shift | null> = {};
+
       dateKeys.forEach((key, idx) => {
         const day = weekDates[idx];
 
-        const names = users
-          .filter((u) => u.shifts?.some((s) => isSameDay(s.date.toDate(), day) && s.post?.id === post.id))
-          .map((u) => `${u.firstName} ${u.secondName}`);
-        shiftsMap[key] = names.length ? names.join(', ') : null;
+        const shift = users
+          .flatMap((u) => u.shifts || [])
+          .find(
+            (s) =>
+              isSameDay(s.date.toDate(), day) &&
+              s.post?.id === post.id
+          );
+
+        shiftsMap[key] = shift || null;
       });
 
       return {

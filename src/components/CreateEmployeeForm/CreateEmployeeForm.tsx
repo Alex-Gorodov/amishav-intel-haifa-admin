@@ -101,7 +101,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
             <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
             <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>
             <input className='form__input' placeholder="טלפון" value={phone} onChange={e => setPhone(e.target.value)}/>
-            <input className='form__input' placeholder="סיסמט (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+            <input className='form__input' placeholder="סיסמה (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
           </div>
 
           <div className="form__wrapper">

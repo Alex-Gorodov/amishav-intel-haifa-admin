@@ -9,15 +9,15 @@ import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
+import { createShift } from "../../store/api/createShift.api";
 
 interface Props {
-  isOpened: boolean;
   onClose: () => void;
   initialDate?: string;
   initialPostId?: string;
 }
 
-export default function AddShiftModal({ isOpened, onClose, initialDate, initialPostId }: Props) {
+export default function AddShiftModal({ onClose, initialDate, initialPostId }: Props) {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState("");
@@ -25,7 +25,7 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
   const [remark, setRemark] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [focusRemark, setFocusRemark] = useState(false)
+  // const [focusRemark, setFocusRemark] = useState(false)
 
   // const [selectedUser, setSelectedUser] = useState<string | null >(null);
   const [insertedUserName, setInsertedUserName] = useState("");
@@ -35,10 +35,10 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
 
   const activePostId = selectedPost || initialPostId;
 
-  const filteredUsers = users.filter(u => {
-    const fullName = `${u.firstName} ${u.secondName}`;
-    return fullName.includes(insertedUserName);
-  });
+  // const filteredUsers = users.filter(u => {
+  //   const fullName = `${u.firstName} ${u.secondName}`;
+  //   return fullName.includes(insertedUserName);
+  // });
 
   const dispatch = useDispatch();
 
@@ -133,30 +133,23 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
       return;
     }
 
-    const dateToSet = new Date(date);
-
-    const newShift = {
-      id: `${dateToSet.getTime()}_${post.id}`,
-      date: Timestamp.fromDate(dateToSet),
-      post,
-      startTime,
-      endTime,
-      remark,
-    };
-
     try {
-      const userRef = doc(db, "users", userId);
-      await setDoc(userRef, { shifts: arrayUnion(newShift) }, { merge: true });
+      await createShift({
+        userId,
+        date,
+        postId: selectedPost,
+        startTime,
+        endTime,
+        remark,
+      });
 
       resetForm();
-
       await fetchUsers(dispatch);
-      dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED}));
+
+      dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
       onClose();
     } catch (err) {
       dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -277,8 +270,8 @@ export default function AddShiftModal({ isOpened, onClose, initialDate, initialP
             className="form__input"
             value={remark}
             onChange={(e) => setRemark(e.target.value)}
-            onFocus={() => setFocusRemark(true)}
-            onBlur={() => setFocusRemark(false)}
+            // onFocus={() => setFocusRemark(true)}
+            // onBlur={() => setFocusRemark(false)}
           />
 
           <div className="form__actions">

@@ -2,17 +2,17 @@ import { useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
 import DynamicForm from "../DynamicForm/DynamicForm";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
+import { Shift } from "../../types/Shift";
 
 type ShiftRow = {
   id: string;
   name: string;
-  shifts: Record<string, string | null>;
+  shifts: Record<string, Shift | null>;
 };
 
 type Props = {
   dates: string[];
   rows: ShiftRow[];
-  cellWidth?: number;
 };
 
 export default function ScheduleGrid({ dates, rows }: Props) {
@@ -54,7 +54,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
 
       {formState.type === 'add' && formState.cellData && (
         <AddShiftModal
-          isOpened={true}
+
           onClose={() => setFormState({ type: null })}
           initialDate={formState.cellData.date}
           initialPostId={formState.cellData.postId}
@@ -102,18 +102,18 @@ export default function ScheduleGrid({ dates, rows }: Props) {
           {rows.map((row) => (
             <div key={row.id} className="schedule__row">
               {[...dates].reverse().map((d, i) => {
-                const value = row.shifts[d];
+                const shift = row.shifts[d];
 
                 return (
                   <ScheduleCell
                     key={i}
-                    value={value}
+                    shift={shift}
                     onAction={(type) =>
                       setFormState({
                         type,
                         cellData: {
                           date: d,
-                          postId: row.id,   // or whatever represents the post
+                          postId: row.id,
                           rowId: row.id,
                         },
                       })
