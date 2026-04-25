@@ -94,6 +94,13 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
 
   }
 
+  const formattedDate = shift?.date.toDate().toLocaleDateString('he-IL', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
   return (
     <div
       className="schedule__cell"
@@ -144,6 +151,9 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
       {shiftFormOpened && (
         <DynamicForm
           type={shiftFormOpened}
+          post={shift?.post.title}
+          date={formattedDate}
+          userName={user ? getFullUserName(user) : ''}
           onAccept={handleDelete}
           onClose={() => setShiftForm(null)}
         />

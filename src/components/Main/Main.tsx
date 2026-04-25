@@ -27,7 +27,6 @@ export default function App() {
     year: 'numeric',
   });
 
-
   return (
     <Layout>
       <div className="home">

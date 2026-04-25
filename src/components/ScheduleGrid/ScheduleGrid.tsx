@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
-import DynamicForm from "../DynamicForm/DynamicForm";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
 import { Shift } from "../../types/Shift";
 
@@ -44,13 +43,6 @@ export default function ScheduleGrid({ dates, rows }: Props) {
 
   return (
     <div className="page__content schedule">
-
-      {formState.type && formState.type !== 'add' && (
-        <DynamicForm
-          type={formState.type}
-          onClose={() => setFormState({ type: null })}
-        />
-      )}
 
       {formState.type === 'add' && formState.cellData && (
         <AddShiftModal

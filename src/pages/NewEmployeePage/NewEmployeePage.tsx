@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 
 export default function NewEmployeePage() {
   const dispatch = useDispatch();
+
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [passport, setPassport] = useState('');
