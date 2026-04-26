@@ -260,7 +260,7 @@ export default function AddShiftPage() {
             onClick={handleSave}
             className='button'
             >
-            {loading ? <span>Loading...</span> : <span>הוסף משמרת</span>}
+            {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
 
           </button>
         </div>

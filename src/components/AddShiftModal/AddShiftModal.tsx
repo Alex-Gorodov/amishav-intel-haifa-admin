@@ -35,11 +35,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const activePostId = selectedPost || initialPostId;
 
-  // const filteredUsers = users.filter(u => {
-  //   const fullName = `${u.firstName} ${u.secondName}`;
-  //   return fullName.includes(insertedUserName);
-  // });
-
   const dispatch = useDispatch();
 
   const resetForm = () => {
@@ -227,7 +222,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
               <span className="form__label">בחר עמדה</span>
               <div className="form__list">
                 {availablePosts.map(p => (
-                // {Posts.map(p => (
                   <div
                     key={p.id}
                     className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
@@ -270,8 +264,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
             className="form__input"
             value={remark}
             onChange={(e) => setRemark(e.target.value)}
-            // onFocus={() => setFocusRemark(true)}
-            // onBlur={() => setFocusRemark(false)}
           />
 
           <div className="form__actions">
@@ -279,7 +271,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
               onClick={handleSave}
               className='button'
               >
-              {loading ? <span>Loading...</span> : <span>הוסף משמרת</span>}
+              {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
 
             </button>
 

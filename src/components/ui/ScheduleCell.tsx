@@ -72,6 +72,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
 
   const handleChangeShift = () => {
     setMenuVisible(false);
+    setShiftForm('change');
     onAction('change');
   };
 
@@ -93,13 +94,6 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
     fetchUsers(dispatch);
 
   }
-
-  const formattedDate = shift?.date.toDate().toLocaleDateString('he-IL', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
 
   return (
     <div
@@ -132,7 +126,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
             הוסף
           </button>
           <button
-            className="schedule__menu-btn button"
+            className="schedule__menu-btn button button--change"
             onClick={handleChangeShift}
           >
             <RefreshCw size={18}/>
@@ -148,12 +142,10 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
         </div>
       )}
 
-      {shiftFormOpened && (
+      {shift && shiftFormOpened && (
         <DynamicForm
           type={shiftFormOpened}
-          post={shift?.post.title}
-          date={formattedDate}
-          userName={user ? getFullUserName(user) : ''}
+          shift={shift}
           onAccept={handleDelete}
           onClose={() => setShiftForm(null)}
         />
