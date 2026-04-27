@@ -216,40 +216,51 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <h3>עריכת עובד</h3>
-
+                    <label htmlFor="first-name" className="form__label form__label--secondary">שם פרטי:</label>
                     <input
                       className="form__input"
                       placeholder="שם פרטי"
                       value={editData.firstName}
+                      id="first-name"
+                      name="change-user-first-name"
                       onChange={(e) =>
                         setEditData(prev => ({ ...prev, firstName: e.target.value }))
                       }
                     />
 
+                    <label htmlFor="second-name" className="form__label form__label--secondary">שם משפחה:</label>
                     <input
                       className="form__input"
                       placeholder="שם משפחה"
                       value={editData.secondName}
+                      id="second-name"
+                      name="change-user-second-name"
                       onChange={(e) =>
                         setEditData(prev => ({ ...prev, secondName: e.target.value }))
                       }
                     />
 
+                    <label htmlFor="telephone" className="form__label form__label--secondary">טלפון:</label>
                     <input
                       className="form__input"
                       placeholder="טלפון"
                       value={editData.phoneNumber}
                       type="tel"
+                      id="telephone"
+                      name="change-user-telephone"
                       onChange={(e) =>
                         setEditData(prev => ({ ...prev, phoneNumber: e.target.value }))
                       }
                     />
 
+                    <label htmlFor="passport" className="form__label form__label--secondary">מספר תעודת זהות</label>
                     <input
                       className="form__input"
                       placeholder="ת.ז."
                       value={editData.passport}
-                      type="tel"
+                      type="number"
+                      id="passport"
+                      name="change-user-passport"
                       onChange={(e) =>
                         setEditData(prev => ({ ...prev, phoneNumber: e.target.value }))
                       }
