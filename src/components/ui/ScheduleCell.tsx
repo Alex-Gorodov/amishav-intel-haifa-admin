@@ -1,4 +1,4 @@
-import { CirclePlus, CircleX, DeleteIcon, EllipsisVertical, RefreshCw, ReplaceIcon } from "lucide-react";
+import { CirclePlus, CircleX, DeleteIcon, EllipsisVertical, Pencil, RefreshCw, ReplaceIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DynamicForm from "../DynamicForm/DynamicForm";
 import { deleteShift } from "../../store/api/deleteShift.api";
@@ -10,7 +10,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 
 interface ScheduleCellProps {
   shift: Shift | null;
-  onAction: (type: 'add' | 'change' | 'remove', shift?: Shift | null) => void;
+  onAction: (type: 'add' | 'swap' | 'remove' | 'edit', shift?: Shift | null) => void;
 }
 
 export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
@@ -19,7 +19,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
   const [isTriggerVisible, setTriggerVisible] = useState(false);
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [openUp, setOpenUp] = useState(false);
-  const [shiftFormOpened, setShiftForm] = useState<'add' | 'change' | 'remove' | null>(null);
+  const [shiftFormOpened, setShiftForm] = useState<'add' | 'swap' | 'remove' | 'edit' | null>(null);
 
   const users = useSelector((state: RootState) => state.data.users);
   const user = users.find((u) => u.id === shift?.userId);
@@ -65,6 +65,12 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
     };
   }, []);
 
+  const handleEditShift = () => {
+    setMenuVisible(false);
+    setShiftForm('edit');
+    onAction('edit');
+  }
+
   const handleAddShift = () => {
     setMenuVisible(false);
     onAction('add');
@@ -72,14 +78,19 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
 
   const handleChangeShift = () => {
     setMenuVisible(false);
-    setShiftForm('change');
-    onAction('change');
+    setShiftForm('swap');
+    onAction('swap');
   };
 
   const handleDeleteClick = () => {
-  setMenuVisible(false);
-  setShiftForm('remove');
-};
+    setMenuVisible(false);
+    setShiftForm('remove');
+  };
+
+  const onReset = () => {
+    setShiftForm(null);
+    setTriggerVisible(false);
+  }
 
   const handleDelete = async () => {
     if (shift && shiftFormOpened === 'remove') {
@@ -88,9 +99,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
         shiftId: shift.id,
       });
     }
-
-    setShiftForm(null);
-    setTriggerVisible(false);
+    onReset();
     fetchUsers(dispatch);
 
   }
@@ -118,27 +127,41 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
           }`}
           ref={menuRef}
         >
-          <button
-            className="schedule__menu-btn button button--add"
-            onClick={handleAddShift}
-          >
-            <CirclePlus size={18}/>
-            הוסף
-          </button>
-          <button
-            className="schedule__menu-btn button button--change"
-            onClick={handleChangeShift}
-          >
-            <RefreshCw size={18}/>
-            חילוף
-          </button>
-          <button
-            className="schedule__menu-btn button button--delete"
-            onClick={handleDeleteClick}
-          >
-            <CircleX size={18}/>
-            מחיקה
-          </button>
+          {
+            shift
+            ?
+            <>
+              <button
+                className="schedule__menu-btn button button--edit"
+                onClick={handleEditShift}
+              >
+                <Pencil size={18}/>
+                ערך
+              </button>
+              <button
+                className="schedule__menu-btn button button--change"
+                onClick={handleChangeShift}
+              >
+                <RefreshCw size={18}/>
+                חילוף
+              </button>
+              <button
+                className="schedule__menu-btn button button--delete"
+                onClick={handleDeleteClick}
+              >
+                <CircleX size={18}/>
+                מחיקה
+              </button>
+            </>
+            :
+            <button
+              className="schedule__menu-btn button button--add"
+              onClick={handleAddShift}
+            >
+              <CirclePlus size={18}/>
+              הוסף
+            </button>
+          }
         </div>
       )}
 
@@ -147,7 +170,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
           type={shiftFormOpened}
           shift={shift}
           onAccept={handleDelete}
-          onClose={() => setShiftForm(null)}
+          onClose={onReset}
         />
       )}
 

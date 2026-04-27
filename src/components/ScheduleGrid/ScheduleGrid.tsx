@@ -33,7 +33,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
 
 
   const [formState, setFormState] = useState<{
-    type: 'add' | 'change' | 'remove' | null;
+    type: 'add' | 'swap' | 'remove' | 'edit' | null;
     cellData?: {
       date: string;
       postId: string;
@@ -46,7 +46,6 @@ export default function ScheduleGrid({ dates, rows }: Props) {
 
       {formState.type === 'add' && formState.cellData && (
         <AddShiftModal
-
           onClose={() => setFormState({ type: null })}
           initialDate={formState.cellData.date}
           initialPostId={formState.cellData.postId}

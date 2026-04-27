@@ -11,9 +11,10 @@ import { getFormattedDate } from "../../utils/getFormattedDate";
 import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft } from "lucide-react";
+import { updateShiftData } from "../../store/api/updateShiftData.api";
 
 interface FormProps {
-  type: 'add' | 'change' | 'remove' | null;
+  type: 'add' | 'swap' | 'remove' | 'edit' | null;
   onAccept?: () => void;
   onClose: () => void;
   shift: Shift;
@@ -28,14 +29,17 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
   };
   const users = useSelector((state: RootState) => state.data.users);
 
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
-  const [search, setSearch] = useState("");
+
+  const [formData, setFormData] = useState({
+    date: shift.date.toDate().toISOString().split("T")[0],
+    startTime: shift.startTime || "",
+    endTime: shift.endTime || "",
+    remark: shift.remark || "",
+  });
 
 
   const triggeredUser = users.find((u) => u.id === shift.userId);
-
-  const [insertedUserName, setInsertedUserName] = useState("");
 
   const currentDate = new Date();
 
@@ -47,41 +51,6 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 7);
 
-
-  const availableUsers = useMemo(() => {
-    const filtered = shift.post?.id
-      ? getAvailableUsersByPost(users, shift.post.id)
-      : users;
-
-    return filtered.filter(u =>
-      getFullUserName(u).toLowerCase().includes(search.toLowerCase())
-    );
-  }, [users, shift.post?.id, search]);
-
-  // const availableShifts = useMemo(() => {
-  //   return availableUsers.flatMap(user =>
-  //     (user.shifts || [])
-  //       .filter(s => {
-  //         if (!s?.date) return false;
-
-  //         const shiftDate =
-  //           typeof s.date === "object" && "toDate" in s.date
-  //             ? s.date.toDate()
-  //             : new Date(s.date);
-
-  //         return (
-  //           s.id !== shift.id &&                 // not same shift
-  //           user.id !== shift.userId &&          // ❌ NOT SAME USER
-  //           shiftDate >= startOfWeek &&          // same week
-  //           shiftDate < endOfWeek
-  //         );
-  //       })
-  //       .map(s => ({
-  //         ...s,
-  //         user,
-  //       }))
-  //   );
-  // }, [users, shift, startOfWeek, endOfWeek]);
 
   const canSwap = (userA: User, userB: User, shiftA: Shift, shiftB: Shift) => {
     // same user ❌
@@ -143,6 +112,22 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
     });
   }, [users, shift, startOfWeek, endOfWeek]);
 
+  const groupedShifts = useMemo(() => {
+    return availableShifts.reduce((acc, s) => {
+      const date =
+        "toDate" in s.date
+          ? s.date.toDate()
+          : new Date(s.date);
+
+      const key = date.toISOString().split("T")[0]; // YYYY-MM-DD
+
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(s);
+
+      return acc;
+    }, {} as Record<string, typeof availableShifts>);
+  }, [availableShifts]);
+
   const handleSwap = async () => {
     if (!selectedShift) return;
 
@@ -158,10 +143,28 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
     onClose();
   };
 
+  const handleUpdate = async () => {
+    if (!shift?.userId || !shift?.id) return;
+
+    await updateShiftData({
+      userId: shift.userId,
+      shiftId: shift.id,
+      data: {
+        ...formData,
+        date: new Date(formData.date), // important
+      },
+    });
+
+    await fetchUsers(dispatch);
+
+    onClose();
+  };
+
   return (
     <div className="form__overlay" onClick={onClose}>
       <div className="form__modal form__modal--dynamic" onClick={(e) => e.stopPropagation()}>
         <form onSubmit={handleSubmit} className="form__wrapper">
+
           {
             type === 'remove'
             &&
@@ -181,10 +184,13 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
               </div>
             </div>
           }
+
           {
-            type === 'change'
+            type === 'swap'
             &&
             <div className="form__wrapper">
+
+              <h2 className="form__title">בחר משמרת לחילוף</h2>
 
               <div className="form__list-item form__list-item--self">
                 <p>{getFullUserName(triggeredUser!)}</p>
@@ -196,53 +202,128 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
               <ArrowRightLeft size={20} className="form__swap-icon"/>
 
               <div className="form__list">
-                {availableShifts.map(s => {
-                  const isSelected = selectedShift?.id === s.id;
+                {Object.entries(groupedShifts)
+                  .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
+                  .map(([dateKey, shifts]) => (
+                    <div key={dateKey} className="form__date-group">
 
-                  return (
-                    <div
-                      key={s.id}
-                      className={`form__list-item ${
-                        selectedShift?.id === s.id ? 'form__list-item--selected' : ''
-                      }`}
-                      onClick={() => setSelectedShift(isSelected ? null : s)}
-                    >
-                      <p>{getFullUserName(s.user)}</p>
-                      <p>{s.post.title}</p>
-                      <p>{getFormattedDate(s.date.toDate())}</p>
-                      <p>{s.startTime} - {s.endTime}</p>
+                      {/* DATE HEADER */}
+                      <p className="form__date-title">
+                        {getFormattedDate(new Date(dateKey))}
+                      </p>
+
+                      {/* SHIFTS */}
+                      {shifts.map(s => {
+                        const isSelected = selectedShift?.id === s.id;
+
+                        return (
+                          <div
+                            key={s.id}
+                            className={`form__list-item ${
+                              isSelected ? "form__list-item--selected" : ""
+                            }`}
+                            onClick={() => setSelectedShift(isSelected ? null : s)}
+                          >
+                            <p>{getFullUserName(s.user)}</p>
+                            <p>{s.post.title}</p>
+                            <p>{s.startTime} - {s.endTime}</p>
+                          </div>
+                        );
+                      })}
+
                     </div>
-                  );
-                })}
+                  ))}
               </div>
 
-
-
               <div className="buttons-wrapper">
-                {/* <button className="button button--change" onClick={onAccept} type="button">להחליף</button> */}
                 <button
                   className="button button--change"
                   type="button"
                   onClick={handleSwap}
-                  // onClick={async () => {
-                  //   if (!selectedUser || !selectedShift) return;
-
-                  //   await swapShifts({
-                  //     firstUserId: shift.userId,
-                  //     firstShiftId: shift.id,
-                  //     secondUserId: selectedUser.id,
-                  //     secondShiftId: selectedShift.id,
-                  //   });
-
-                  //   onClose();
-                  // }}
                 >
                   להחליף
                 </button>
                 <button className="button button--cancel" onClick={onClose} type="button">ביטול</button>
               </div>
+
             </div>
           }
+
+          {
+            type === 'edit' &&
+            <div className="form__wrapper">
+
+              <h2 className="form__title">עריכת משמרת</h2>
+
+              <div className="form__column">
+
+                {/* DATE */}
+                <label className="form__label">תאריך</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) =>
+                    setFormData(prev => ({ ...prev, date: e.target.value }))
+                  }
+                  className="form__input"
+                />
+
+                {/* START TIME */}
+                <label className="form__label">שעת התחלה</label>
+                <input
+                  type="time"
+                  value={formData.startTime}
+                  onChange={(e) =>
+                    setFormData(prev => ({ ...prev, startTime: e.target.value }))
+                  }
+                  className="form__input"
+                />
+
+                {/* END TIME */}
+                <label className="form__label">שעת סיום</label>
+                <input
+                  type="time"
+                  value={formData.endTime}
+                  onChange={(e) =>
+                    setFormData(prev => ({ ...prev, endTime: e.target.value }))
+                  }
+                  className="form__input"
+                />
+
+                {/* REMARK */}
+                <label className="form__label">הערה</label>
+                <textarea
+                  value={formData.remark}
+                  onChange={(e) =>
+                    setFormData(prev => ({ ...prev, remark: e.target.value }))
+                  }
+                  className="form__input"
+                  placeholder="הוסף הערה..."
+                />
+
+              </div>
+
+              <div className="buttons-wrapper">
+                <button
+                  className="button button--change"
+                  type="button"
+                  onClick={handleUpdate}
+                >
+                  שמור שינויים
+                </button>
+
+                <button
+                  className="button button--cancel"
+                  type="button"
+                  onClick={onClose}
+                >
+                  ביטול
+                </button>
+              </div>
+
+            </div>
+          }
+
         </form>
       </div>
     </div>
