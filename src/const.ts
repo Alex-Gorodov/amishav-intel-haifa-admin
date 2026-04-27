@@ -108,6 +108,7 @@ export const ErrorMessages = {
   USER_NOT_SELECTED: "שגיאה! לא נבחר משתמש",
   CHECK_LOGIN_AND_PASSWORD: "תוודא שהנתונים תקינים",
   PASSWORD_MIN_LENGTH_ERROR: "הסיסמה חייבת להכיל 6 ספרות",
+  CHECK_EMAIL_FOR_RESET_LINK: "בדוק את האימייל שלך - שלחנו לך קישור לאיפוס הסיסמה! ייתכן שהקישור הגיע לתיקיית הספאם",
 
   // camera
   CAMERA_OPEN_ERROR: "שגיאה בפתיחת המצלמה",
@@ -128,11 +129,15 @@ export const ErrorMessages = {
 
 export const SuccessMessages = {
   SHIFT_ADDED: "משמרת נוספה בהצלחה!",
+  SHIFT_DELETED: "משמרת נמחקה בהצלחה!",
   PROFILE_IMAGE_UPDATED: "תמונת פרופיל חודשה בהצלחה!",
   USER_CREATED: "המשתמש נוצר בהצלחה",
+  USER_DELETED: "המשתמש נמחק בהצלחה",
+  POST_CREATED: "העמדה נוצרה בהצלחה",
   DATA_SAVED: "הנתונים נשמרו בהצלחה",
   SHIFT_SWAP_REQUEST_SENT: "בקשת החלפה נשלחה בהצלחה",
   SHIFT_GIVE_REQUEST_SENT: "בקשת מסירת משמרת נשלחה בהצלחה",
-  CHECK_EMAIL_FOR_RESET_LINK: "בדוק את האימייל שלך - שלחנו לך קישור לאיפוס הסיסמה! ייתכן שהקישור הגיע לתיקיית הספאם"
-
+  SHIFT_SWAP_COMPLETED: "חילןף בין המשמרות בוצע בהצלחה!",
+  SHIFT_GIVE_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
+  SHIFT_EDIT_COMPLETED: "עדכון פרטי המשמרת בוצע בהצלחה!",
 };

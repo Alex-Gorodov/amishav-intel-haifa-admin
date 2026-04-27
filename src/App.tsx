@@ -24,7 +24,6 @@ export function App() {
           <Route path={AppRoute.NewProtocol} element={<NewProtocolPage />} />
           <Route path={AppRoute.AddShift} element={<AddShiftPage />} />
           <Route path={AppRoute.Schedule} element={<SchedulePage />} />
-
         </Routes>
       </Provider>
     </HistoryRouter>

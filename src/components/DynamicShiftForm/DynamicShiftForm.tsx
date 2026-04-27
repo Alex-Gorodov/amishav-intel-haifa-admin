@@ -12,6 +12,8 @@ import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";
 import { updateShiftData } from "../../store/api/updateShiftData.api";
+import { setSuccess } from "../../store/actions";
+import { SuccessMessages } from "../../const";
 
 interface FormProps {
   type: 'add' | 'swap' | 'remove' | 'edit' | null;
@@ -27,6 +29,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
     e.preventDefault();
     onAccept?.();
   };
+
   const users = useSelector((state: RootState) => state.data.users);
 
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
@@ -38,11 +41,9 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
     remark: shift.remark || "",
   });
 
-
   const triggeredUser = users.find((u) => u.id === shift.userId);
 
   const currentDate = new Date();
-
 
   const startOfWeek = new Date(currentDate);
   startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Sunday
@@ -138,6 +139,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
       secondShiftId: selectedShift.id,
     });
 
+    dispatch(setSuccess({message: SuccessMessages.SHIFT_SWAP_COMPLETED}))
     await fetchUsers(dispatch);
 
     onClose();
@@ -155,6 +157,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
       },
     });
 
+    dispatch(setSuccess({message: SuccessMessages.SHIFT_EDIT_COMPLETED}))
     await fetchUsers(dispatch);
 
     onClose();

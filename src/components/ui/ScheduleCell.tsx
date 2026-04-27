@@ -8,6 +8,8 @@ import { RootState } from "../../store/root-reducer";
 import { getFullUserName } from "../../utils/getFullUserName";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { getPostTimeRange } from "../../utils/getPostTimeRange";
+import { setSuccess } from "../../store/actions";
+import { SuccessMessages } from "../../const";
 
 interface ScheduleCellProps {
   shift: Shift | null;
@@ -102,6 +104,7 @@ export default function ScheduleCell({ onAction, shift, searchFor }: ScheduleCel
       });
     }
     onReset();
+    dispatch(setSuccess({message: SuccessMessages.SHIFT_DELETED}))
     fetchUsers(dispatch);
 
   }

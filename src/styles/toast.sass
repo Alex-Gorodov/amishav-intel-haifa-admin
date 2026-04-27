@@ -1,0 +1,31 @@
+.toast
+  position: fixed
+  top: 50px
+  left: 50%
+  transform: translateX(-50%) translateY(-20px)
+  padding: 12px 20px
+  border-radius: 10px
+  max-width: 90%
+  font-weight: 600
+  color: #fff
+  text-align: center
+  z-index: 9999
+
+  opacity: 0
+  pointer-events: none
+
+  transition: opacity 0.3s ease, transform 0.3s ease
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25)
+
+  &--show
+    opacity: 1
+    transform: translateX(-50%) translateY(0)
+
+
+  &--success
+    background: #4bb543
+
+
+  &--error
+    background: #ff4d4d
+

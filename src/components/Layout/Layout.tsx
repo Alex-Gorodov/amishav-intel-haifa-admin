@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Titles } from '../../const';
 import SideBar from '../SideBar/SideBar';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ToastMessage from '../ui/ToastMessage';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -45,6 +46,7 @@ export default function Layout({children}: LayoutProps) {
             {children}
         </div>
       </main>
+      <ToastMessage/>
     </div>
   )
 }

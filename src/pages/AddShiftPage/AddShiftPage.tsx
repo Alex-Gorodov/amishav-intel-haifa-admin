@@ -10,6 +10,7 @@ import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
+import ToastMessage from "../../components/ui/ToastMessage";
 
 export default function AddShiftPage() {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
@@ -121,6 +122,7 @@ export default function AddShiftPage() {
       startTime,
       endTime,
       remark,
+      userId
     };
 
     try {
