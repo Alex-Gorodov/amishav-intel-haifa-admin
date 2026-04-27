@@ -9,4 +9,5 @@ export type Post = {
   defaultStartTime: string;
   defaultEndTime: string;
   role: RoleValue;
+  isMultiple?: boolean;
 }

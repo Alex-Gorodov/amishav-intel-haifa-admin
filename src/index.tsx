@@ -6,12 +6,14 @@ import { App } from './App';
 import { store } from './store';
 import { fetchUsers } from './store/api/fetchUsers.api';
 import { fetchSwapRequests, fetchGiveRequests } from './store/api/fetchRequests.api';
+import { fetchPosts } from './store/api/fetchPosts.api';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 fetchUsers(store.dispatch);
+fetchPosts(store.dispatch);
 fetchSwapRequests(store.dispatch);
 fetchGiveRequests(store.dispatch);
 

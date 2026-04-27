@@ -10,7 +10,7 @@ import { getFullUserName } from "../../utils/getFullUserName";
 import { getFormattedDate } from "../../utils/getFormattedDate";
 import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
-import { ArrowRightLeft } from "lucide-react";
+import { ArrowRightLeft, Save } from "lucide-react";
 import { updateShiftData } from "../../store/api/updateShiftData.api";
 
 interface FormProps {
@@ -20,7 +20,7 @@ interface FormProps {
   shift: Shift;
 }
 
-export default function DynamicForm({type, shift, onClose, onAccept}: FormProps) {
+export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormProps) {
   const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -305,10 +305,11 @@ export default function DynamicForm({type, shift, onClose, onAccept}: FormProps)
 
               <div className="buttons-wrapper">
                 <button
-                  className="button button--change"
+                  className="button button--with-icon button--change"
                   type="button"
                   onClick={handleUpdate}
                 >
+                  <Save color={'#ffffff'} size={18}/>
                   שמור שינויים
                 </button>
 

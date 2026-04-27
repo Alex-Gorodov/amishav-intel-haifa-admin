@@ -11,6 +11,8 @@ export const USERS = collection(db, 'users');
 export const SWAP_REQUESTS = collection(db, 'swapRequests');
 export const GIVE_REQUESTS = collection(db, 'giveRequests');
 
+export const POSTS = collection(db, 'posts');
+
 export const PROTOCOLS_HEADERS = collection(db, 'protocolsHeaders')
 
 export const Roles = [

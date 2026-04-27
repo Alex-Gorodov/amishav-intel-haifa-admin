@@ -182,7 +182,7 @@ export default function AddShiftPage() {
               <div className="form__list form__list--users">
                 <input
                   className="form__list-item form__list-item--search-user"
-                  type="text"
+                  type="search"
                   id="user"
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}

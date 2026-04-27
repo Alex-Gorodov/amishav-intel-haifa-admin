@@ -7,6 +7,7 @@ import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from "../types/Requ
 import { Shift } from "../types/Shift";
 import { Training } from "../types/Training";
 import { ProtocolPreview } from "../types/Protocol";
+import { Post } from "../types/Post";
 
 export const setUsersDataLoading = createAction<{isUsersDataLoading: boolean}>('data/setUsersDataLoading');
 export const loadUsers = createAction<{users: User[]}>('data/loadUsers');
@@ -15,6 +16,9 @@ export const loadProtocolsPreview = createAction<{protocolsPreview: ProtocolPrev
 
 export const setRequestsDataLoading = createAction<{isRequestsDataLoading: boolean}>('data/setRequestsDataLoading');
 export const loadRequests = createAction<{type: 'swap' | 'give', requests: SwapShiftRequest[] | GiveShiftRequest[]}>('data/loadRequests');
+
+export const setPostsDataLoading = createAction<{isPostsDataLoading: boolean}>('data/setPostsDataLoading');
+export const loadPosts = createAction<{posts: Post[]}>('data/loadPosts');
 
 export const updateAvailability = createAction<{user: User, availability: Availability[]}>('data/updateAvailability');
 

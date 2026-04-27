@@ -17,37 +17,37 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
       <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''}`}>
         <div className='buttons-wrapper'>
 
-          <Link to={AppRoute.Root} className='button button--menu' title="דף הבית">
+          <Link to={AppRoute.Root} className='button button--with-icon' title="דף הבית">
             <Home size={18}/>
             {!isCollapsed && <span>דף הבית</span>}
           </Link>
 
-          <Link to={AppRoute.Employees} className='button button--menu' title="רשימת עובדים">
+          <Link to={AppRoute.Employees} className='button button--with-icon' title="רשימת עובדים">
             <Users size={18}/>
             {!isCollapsed && <span>רשימת עובדים</span>}
           </Link>
 
-          <Link to={AppRoute.NewProtocol} className='button button--menu' title="הוסף נוהל">
+          <Link to={AppRoute.NewProtocol} className='button button--with-icon' title="הוסף נוהל">
             <FilePlus2 size={18}/>
             {!isCollapsed && <span>הוסף נוהל</span>}
           </Link>
 
-          <Link to={AppRoute.NewEmployee} className='button button--menu' title="הוסף עובד חדש">
+          <Link to={AppRoute.NewEmployee} className='button button--with-icon' title="הוסף עובד חדש">
             <UserPlus size={18}/>
             {!isCollapsed && <span>הוסף עובד חדש</span>}
           </Link>
 
-          <Link to={AppRoute.AddShift} className='button button--menu' title="הוסף משמרת">
+          <Link to={AppRoute.AddShift} className='button button--with-icon' title="הוסף משמרת">
             <CalendarPlus size={18}/>
             {!isCollapsed && <span>הוסף משמרת</span>}
           </Link>
 
-          <Link to={AppRoute.Requests} className='button button--menu' title="אישור בקשות">
+          <Link to={AppRoute.Requests} className='button button--with-icon' title="אישור בקשות">
             <CheckCircle2 size={18}/>
             {!isCollapsed && <span>אישור בקשות</span>}
           </Link>
 
-          <Link to={AppRoute.Schedule} className='button button--menu' title="סידור עבודה">
+          <Link to={AppRoute.Schedule} className='button button--with-icon' title="סידור עבודה">
             <CalendarClock size={18}/>
             {!isCollapsed && <span>סידור עבודה</span>}
           </Link>

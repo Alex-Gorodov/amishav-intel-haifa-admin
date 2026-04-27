@@ -1,19 +1,21 @@
 import { CirclePlus, CircleX, DeleteIcon, EllipsisVertical, Pencil, RefreshCw, ReplaceIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import DynamicForm from "../DynamicForm/DynamicForm";
+import DynamicShiftForm from "../DynamicShiftForm/DynamicShiftForm";
 import { deleteShift } from "../../store/api/deleteShift.api";
 import { Shift } from "../../types/Shift";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
 import { getFullUserName } from "../../utils/getFullUserName";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
+import { getPostTimeRange } from "../../utils/getPostTimeRange";
 
 interface ScheduleCellProps {
   shift: Shift | null;
+  searchFor: string;
   onAction: (type: 'add' | 'swap' | 'remove' | 'edit', shift?: Shift | null) => void;
 }
 
-export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
+export default function ScheduleCell({ onAction, shift, searchFor }: ScheduleCellProps) {
   const dispatch = useDispatch();
 
   const [isTriggerVisible, setTriggerVisible] = useState(false);
@@ -104,9 +106,16 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
 
   }
 
+  const isMatch = searchFor
+    ? userName.toLowerCase().includes(searchFor.toLowerCase())
+    : false;
+
+  const range = getPostTimeRange(shift);
+
   return (
     <div
-      className="schedule__cell"
+      className={`schedule__cell ${isMatch ? 'schedule__cell--active' : ''}`}
+      style={{ flexDirection: range ? 'column' : 'row' }}
       onMouseEnter={() => setTriggerVisible(true)}
       onMouseLeave={() => setTriggerVisible(false)}
     >
@@ -166,7 +175,7 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
       )}
 
       {shift && shiftFormOpened && (
-        <DynamicForm
+        <DynamicShiftForm
           type={shiftFormOpened}
           shift={shift}
           onAccept={handleDelete}
@@ -174,7 +183,15 @@ export default function ScheduleCell({ onAction, shift }: ScheduleCellProps) {
         />
       )}
 
-      <p className="schedule__cell-text">{userName}</p>
+      <p className={`schedule__cell-text ${isMatch ? 'schedule__cell-text--active' : ''}`}>{userName}</p>
+      {
+        range
+        &&
+        <>
+          <hr style={{ width: '100%', opacity: 0.2 }}/>
+          <p className={`schedule__cell-text ${isMatch ? 'schedule__cell-text--active' : ''}`}>{range?.from} - {range?.to}</p>
+        </>
+      }
     </div>
   );
 }

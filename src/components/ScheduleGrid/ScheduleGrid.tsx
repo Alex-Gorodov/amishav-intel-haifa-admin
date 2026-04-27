@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
 import { Shift } from "../../types/Shift";
+import { getPostTimeRange } from "../../utils/getPostTimeRange";
 
 type ShiftRow = {
   id: string;
@@ -12,9 +13,10 @@ type ShiftRow = {
 type Props = {
   dates: string[];
   rows: ShiftRow[];
+  searchFor: string;
 };
 
-export default function ScheduleGrid({ dates, rows }: Props) {
+export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
@@ -99,6 +101,7 @@ export default function ScheduleGrid({ dates, rows }: Props) {
                   <ScheduleCell
                     key={i}
                     shift={shift}
+                    searchFor={searchFor}
                     onAction={(type) =>
                       setFormState({
                         type,
@@ -118,13 +121,16 @@ export default function ScheduleGrid({ dates, rows }: Props) {
 
         {/* RIGHT COLUMN */}
         <div className="schedule__right" ref={rightRef}>
-          {rows.map((row) => (
-            <div key={row.id} className="schedule__right-cell">
-              <p className="schedule__cell-text">
-                {row.name}
-              </p>
-            </div>
-          ))}
+          {rows.map((row) => {
+
+            return (
+              <div key={row.id} className="schedule__right-cell">
+                <p className="schedule__cell-text">
+                  {row.name}
+                </p>
+              </div>
+            )
+          })}
         </div>
 
       </div>

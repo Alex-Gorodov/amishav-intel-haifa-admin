@@ -4,12 +4,12 @@ import TrainingsList from "../TrainingsList/TrainingsList";
 import { getRoleObject } from "../../utils/getRoleObject";
 import { useState, useEffect, useRef } from "react";
 import RolesListPopup from "../RolesListPopup/RolesListPopup";
-import DynamicForm from "../DynamicForm/DynamicForm";
+import DynamicShiftForm from "../DynamicShiftForm/DynamicShiftForm";
 import { deleteUser } from "../../store/api/deleteUser.api";
 import { getFullUserName } from "../../utils/getFullUserName";
 import { useDispatch } from "react-redux";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
-import { Pencil } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
 import { updateEmployeeData } from "../../store/api/updateEmployeeData.api";
 
 interface EmployeeItemProps {
@@ -133,7 +133,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               <div className="employee__buttons">
 
                 <button
-                  className="button button--edit button--menu"
+                  className="button button--edit button--with-icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsEditOpen(true);
@@ -144,7 +144,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                 </button>
 
                 <button
-                  className="button button--delete button--menu"
+                  className="button button--delete button--with-icon"
                   disabled={hasFutureShifts}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -268,7 +268,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
                     <div className="buttons-wrapper">
                       <button
-                        className="button button--add"
+                        className="button button--with-icon button--add"
                         onClick={async () => {
                           await updateEmployeeData(user.id, editData);
                           setIsEditOpen(false);
@@ -276,6 +276,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                         }}
                       >
                         שמור
+                        <Save color={'#ffffff'} size={18}/>
                       </button>
 
                       <button

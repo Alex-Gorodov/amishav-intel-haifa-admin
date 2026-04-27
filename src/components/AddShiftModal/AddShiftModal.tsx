@@ -25,9 +25,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
   const [remark, setRemark] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // const [focusRemark, setFocusRemark] = useState(false)
-
-  // const [selectedUser, setSelectedUser] = useState<string | null >(null);
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
 
@@ -194,7 +191,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
               <div className="form__list form__list--users">
                 <input
                   className="form__list-item form__list-item--search-user"
-                  type="text"
+                  type="search"
                   id="user"
                   onChange={(e) => setInsertedUserName(e.target.value)}
                   value={insertedUserName}
