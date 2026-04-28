@@ -16,6 +16,8 @@
   &__content--open
     max-height: 500px
     padding: 12px 0
+    @media (max-width: 768px)
+      max-height: unset
 
 
   &__grid
@@ -25,6 +27,8 @@
     &--rows
       grid-template-rows: auto 1fr
       row-gap: 28px
+      @media (max-width: 768px)
+        grid-template-rows: unset
 
     @media (max-width: 768px)
       gap: 1rem
