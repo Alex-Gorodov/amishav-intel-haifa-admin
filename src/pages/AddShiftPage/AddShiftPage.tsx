@@ -162,112 +162,114 @@ export default function AddShiftPage() {
 
   return (
     <Layout>
-      <form onSubmit={handleSave} method="post">
-        <div className="page__header">
-          <h2 className="form__title">הוספת משמרת</h2>
-        </div>
+      <div className="page__content">
+        <form onSubmit={handleSave} method="post">
+          <div className="page__header">
+            <h2 className="form__title">הוספת משמרת</h2>
+          </div>
 
-        <div className="page__content form__wrapper form__wrapper--fullscreen">
+          <div className="form__wrapper form__wrapper--fullscreen">
 
-          <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
-          <input
-            type="date"
-            className="form__input"
-            id='date'
-            value={date.toISOString().split('T')[0]}
-            onChange={(e) => setDate(new Date(e.target.value))}
-          />
+            <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
+            <input
+              type="date"
+              className="form__input"
+              id='date'
+              value={date.toISOString().split('T')[0]}
+              onChange={(e) => setDate(new Date(e.target.value))}
+            />
 
-          <div className="form__columns">
-            <div className="form__column">
-              <label className="form__label" htmlFor='user'>בחר עובד</label>
-              <div className="form__list form__list--users">
-                <input
-                  className="form__list-item form__list-item--search-user"
-                  type="search"
-                  id="user"
-                  onChange={(e) => setInsertedUserName(e.target.value)}
-                  value={insertedUserName}
-                  placeholder="הכנס שם עובד..."
-                  autoFocus={!isTouchDevice()}
-                />
-                {
-                  availableUsers.length === 0
-                  ?
-                  <p className='form__message'>לא נמצאו עובדים</p>
-                  :
-                  availableUsers.map(u => (
+            <div className="form__columns">
+              <div className="form__column">
+                <label className="form__label" htmlFor='user'>בחר עובד</label>
+                <div className="form__list form__list--users">
+                  <input
+                    className="form__list-item form__list-item--search-user"
+                    type="search"
+                    id="user"
+                    onChange={(e) => setInsertedUserName(e.target.value)}
+                    value={insertedUserName}
+                    placeholder="הכנס שם עובד..."
+                    autoFocus={!isTouchDevice()}
+                  />
+                  {
+                    availableUsers.length === 0
+                    ?
+                    <p className='form__message'>לא נמצאו עובדים</p>
+                    :
+                    availableUsers.map(u => (
+                      <div
+                        key={u.id}
+                        className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
+                        onClick={() => u.id === userId ? setUserId(null) : setUserId(u.id)}
+                      >
+                        <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+              <div className="form__column">
+                <span className="form__label">בחר עמדה</span>
+                <div className="form__list">
+                  {availablePosts.map(p => (
                     <div
-                      key={u.id}
-                      className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
-                      onClick={() => u.id === userId ? setUserId(null) : setUserId(u.id)}
+                      key={p.id}
+                      className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
+                      onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
                     >
-                      <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                      <span style={{textAlign: 'right'}}>{p.title}</span>
                     </div>
-                  ))
-                }
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="form__column">
-              <span className="form__label">בחר עמדה</span>
-              <div className="form__list">
-                {availablePosts.map(p => (
-                  <div
-                    key={p.id}
-                    className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
-                    onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
-                  >
-                    <span style={{textAlign: 'right'}}>{p.title}</span>
-                  </div>
-                ))}
+
+
+            <div className="form__columns">
+              <div className="form__time-column">
+                <span className="form__label">שעת התחלה</span>
+                <input
+                  type="time"
+                  className="form__input"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </div>
+
+              <div className="form__time-column">
+                <span className="form__label">שעת סיום</span>
+                <input
+                  type="time"
+                  className="form__input"
+                  value={endTime}
+                  onChange={(e) => handleEndTimeChange(e.target.value)}
+                />
               </div>
             </div>
+
+            <label className="form__label">הערות (אופציונלי)</label>
+            <input
+              type="text"
+              placeholder="הערות..."
+              className="form__input"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+              onFocus={() => setFocusRemark(true)}
+              onBlur={() => setFocusRemark(false)}
+            />
+
+            <button
+              onClick={handleSave}
+              className='button'
+              >
+              {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
+
+            </button>
           </div>
 
-
-          <div className="form__columns">
-            <div className="form__time-column">
-              <span className="form__label">שעת התחלה</span>
-              <input
-                type="time"
-                className="form__input"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </div>
-
-            <div className="form__time-column">
-              <span className="form__label">שעת סיום</span>
-              <input
-                type="time"
-                className="form__input"
-                value={endTime}
-                onChange={(e) => handleEndTimeChange(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <label className="form__label">הערות (אופציונלי)</label>
-          <input
-            type="text"
-            placeholder="הערות..."
-            className="form__input"
-            value={remark}
-            onChange={(e) => setRemark(e.target.value)}
-            onFocus={() => setFocusRemark(true)}
-            onBlur={() => setFocusRemark(false)}
-          />
-
-          <button
-            onClick={handleSave}
-            className='button'
-            >
-            {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
-
-          </button>
-        </div>
-
-      </form>
+        </form>
+      </div>
     </Layout>
 
   );
