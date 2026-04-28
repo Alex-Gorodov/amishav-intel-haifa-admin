@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { Pencil, Save } from "lucide-react";
 import { updateEmployeeData } from "../../store/api/updateEmployeeData.api";
+import DocumentsList from "../DocumentList/DocumentsList";
 
 interface EmployeeItemProps {
   user: User;
@@ -21,6 +22,9 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const [openUp, setOpenUp] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -46,11 +50,26 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     passport: user.passportId || '',
   });
 
-  const handleOpenRoles = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleOpenRoles = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsRolesPopupOpen(!isRolesPopupOpen);
-  }
 
+    if (!isRolesPopupOpen && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      const menuHeight = 200; // adjust if needed
+
+      if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
+        setOpenUp(true);
+      } else {
+        setOpenUp(false);
+      }
+    }
+
+    setIsRolesPopupOpen(prev => !prev);
+  };
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const [deletingPas, setDeletingPas] = useState('');
@@ -113,20 +132,25 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                 ) : null;
               })}
 
-              <div className="roles-droplist__wrapper" ref={wrapperRef}>
+              <div className="roles-popup__wrapper" ref={wrapperRef}>
                 <button
+                  ref={triggerRef}
                   className="employee__role-label employee__role-label--add"
                   onClick={handleOpenRoles}
                 >
                   +
                 </button>
 
-                {isRolesPopupOpen && <RolesListPopup user={user} />}
+                {isRolesPopupOpen && <RolesListPopup user={user} openUp={openUp} />}
               </div>
             </div>
 
             <div className="employee__trainings">
               <TrainingsList user={user} isCollapsed={isCollapsed} />
+            </div>
+
+            <div className="employee__documents">
+              <DocumentsList user={user} isCollapsed={isCollapsed}/>
             </div>
 
             {!isCollapsed && (

@@ -1,6 +1,6 @@
-import { trainingIcons } from "../../const";
 import { Training } from "../../types/Training";
 import { User } from "../../types/User";
+import { getIcon } from "../../utils/getIcon";
 
 interface TrainingsListProps {
   user: User;
@@ -8,10 +8,6 @@ interface TrainingsListProps {
 }
 
 export default function TrainingsList({user, isCollapsed = true}: TrainingsListProps) {
-
-  const getTrainingIcon = (trainingTitle: string): string => {
-    return trainingIcons[trainingTitle] || "📋";
-  };
 
   const getExpirationDate = (training: Training) => {
     if (!training.executionDate) return null;
@@ -27,7 +23,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
   };
 
   return (
-    <div className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''}`}>
+    <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''}`}>
       {
         user.trainings && Object.values(user.trainings).map((training: Training) => {
           return (
@@ -39,18 +35,18 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                   key={training.id}
                   title={`${training.title} - ${new Date(training.executionDate.toDate()).toLocaleDateString('he-IL')}`}
                 >
-                  {getTrainingIcon(training.title)}
+                  {getIcon(training.title)}
                 </span>
                 :
-                <div className="trainings-list__item" key={training.id}>
+                <li className="trainings-list__item" key={training.id}>
                   <span
                     key={training.id}
                     title={`${training.title} - ${new Date(training.executionDate.toDate()).toLocaleDateString('he-IL')}`}
                   >
-                    {getTrainingIcon(training.title)}
+                    {getIcon(training.title)}
                   </span>
                   <span>{training.title} - {getExpirationDate(training)?.toLocaleDateString('he-IL')}</span>
-                </div>
+                </li>
 
             ) : null
 
@@ -58,6 +54,6 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
         }
         )
       }
-    </div>
+    </ul>
   );
 }

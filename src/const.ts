@@ -53,7 +53,7 @@ export const StatusLabels: Record<RequestStatus, string> = {
 };
 
 
-export const trainingIcons: Record<string, string> = {
+export const icons: Record<string, string> = {
   "הדרכת בטיחות": "🛡️",
   "רענון רוני": "🔄",
   "רענון נשק": "🔫",

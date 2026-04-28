@@ -31,6 +31,7 @@ export default function EmployeesPage() {
             <th>שם</th>
             <th>תפקידים</th>
             <th>הדרכות</th>
+            <th>מסמכים</th>
             <th>טלפון</th>
           </tr>
         </thead>
