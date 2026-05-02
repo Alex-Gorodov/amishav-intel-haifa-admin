@@ -8,14 +8,11 @@
   &__header
     min-height: 60px
     display: flex
-    padding: 0 12px
+    padding: 0 8px
     justify-content: space-between
     align-items: center
     &--requests
-      flex-direction: column
-      gap: 12px
-      @media (min-width: 600px)
-        flex-direction: row
+      justify-content: center
   &__wrapper
     width: 100%
     overflow: scroll
@@ -30,8 +27,6 @@
     margin-bottom: 60px
 
   &__title
-    font-size: 24px
+    font-size: clamp(0.875rem, 0.6528rem + 1.1111vw, 1.625rem)
     font-weight: bold
     text-align: center
-    @media (max-width: 568px)
-      font-size: 16px

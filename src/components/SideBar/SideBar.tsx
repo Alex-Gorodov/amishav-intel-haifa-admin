@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AppRoute, Forms } from '../../const';
 import CreateEmployeeForm from '../CreateEmployeeForm/CreateEmployeeForm';
 import CreateProtocolForm from '../CreateProtocolForm/CreateProtocolForm';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { CalendarClock, Users, FilePlus2, UserPlus, CalendarPlus, CheckCircle2, Home, ChevronRight, ChevronLeft } from 'lucide-react';
 import AddShiftModal from '../AddShiftModal/AddShiftModal';
 
@@ -13,44 +13,51 @@ interface SideBarProps {
 export default function SideBar({ isCollapsed }: SideBarProps) {
   const [openedForm, setOpenedForm] = useState<Forms | null>(null);
 
+  const getNavClass = ({ isActive }: { isActive: boolean }) =>
+    `button button--side-bar ${isActive ? "button--active" : ""}`;
+
   return (
       <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''}`}>
         <div className='buttons-wrapper'>
 
-          <Link to={AppRoute.Root} className='button button--with-icon' title="דף הבית">
+          <NavLink
+            to={AppRoute.Root}
+            className={getNavClass}
+            end
+          >
             <Home size={18}/>
             {!isCollapsed && <span>דף הבית</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.Employees} className='button button--with-icon' title="רשימת עובדים">
+          <NavLink to={AppRoute.Employees} className={getNavClass} title="רשימת עובדים">
             <Users size={18}/>
             {!isCollapsed && <span>רשימת עובדים</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.NewProtocol} className='button button--with-icon' title="הוסף נוהל">
+          <NavLink to={AppRoute.NewProtocol} className={getNavClass} title="הוסף נוהל">
             <FilePlus2 size={18}/>
             {!isCollapsed && <span>הוסף נוהל</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.NewEmployee} className='button button--with-icon' title="הוסף עובד חדש">
+          <NavLink to={AppRoute.NewEmployee} className={getNavClass} title="הוסף עובד חדש">
             <UserPlus size={18}/>
             {!isCollapsed && <span>הוסף עובד חדש</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.AddShift} className='button button--with-icon' title="הוסף משמרת">
+          <NavLink to={AppRoute.AddShift} className={getNavClass} title="הוסף משמרת">
             <CalendarPlus size={18}/>
             {!isCollapsed && <span>הוסף משמרת</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.Requests} className='button button--with-icon' title="אישור בקשות">
+          <NavLink to={AppRoute.Requests} className={getNavClass} title="אישור בקשות">
             <CheckCircle2 size={18}/>
             {!isCollapsed && <span>אישור בקשות</span>}
-          </Link>
+          </NavLink>
 
-          <Link to={AppRoute.Schedule} className='button button--with-icon' title="סידור עבודה">
+          <NavLink to={AppRoute.Schedule} className={getNavClass} title="סידור עבודה">
             <CalendarClock size={18}/>
             {!isCollapsed && <span>סידור עבודה</span>}
-          </Link>
+          </NavLink>
 
         </div>
         {
@@ -70,7 +77,7 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
         {
           openedForm === 'newShift'
           ?
-          <AddShiftModal onClose={() => setOpenedForm(null)} isOpened={false}/>
+          <AddShiftModal onClose={() => setOpenedForm(null)}/>
           :
           null
         }

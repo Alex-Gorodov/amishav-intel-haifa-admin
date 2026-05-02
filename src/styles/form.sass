@@ -42,6 +42,7 @@
       padding: 12px
 
   &__title
+    font-size: clamp(0.875rem, 0.6528rem + 1.1111vw, 1.625rem)
     text-align: center
 
   &__columns
@@ -113,6 +114,8 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
     &:focus-within
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+    &--content
+      padding: 24px 0
 
   &__upload-title
     text-align: center
@@ -121,6 +124,8 @@
 
   &__image-wrapper
     position: relative
+    flex: 0 0 auto
+    // scroll-snap-align: start
 
     &:hover &__delete-btn
       opacity: 1
@@ -129,15 +134,26 @@
     width: 100%
     border: 1px solid black
     border-radius: 16px
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25)
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25)
 
     &--small
       max-width: 180px
+      min-width: 100px
 
   &__small-images-wrapper
+    @include remove-scroll-bar
     display: flex
-    flex-wrap: wrap
+    max-width: 100%
+    padding: 8px 24px
+    flex-direction: row
     gap: 8px
+    overflow-x: auto
+    overflow-y: visible
+    scroll-snap-type: x mandatory
+    scroll-behavior: smooth
+    user-select: none
+    // -webkit-overflow-scrolling: touch
+
 
   &__list
     position: relative

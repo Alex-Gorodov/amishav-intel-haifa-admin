@@ -164,9 +164,9 @@ export default function AddShiftPage() {
     <Layout>
       <div className="page__content">
         <form onSubmit={handleSave} method="post">
-          <div className="page__header">
+          {/* <div className="page__header">
             <h2 className="form__title">הוספת משמרת</h2>
-          </div>
+          </div> */}
 
           <div className="form__wrapper form__wrapper--fullscreen">
 

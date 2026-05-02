@@ -76,6 +76,8 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
   const validated = deletingPas === user.passportId;
 
+  const isUserHasDocuments = user.documents.length > 0
+
   const hasFutureShifts = user.shifts?.some((s) => {
     if (!s?.date || !s?.startTime) return false;
 
@@ -99,6 +101,20 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     :
     'למחוק את העובד'
 
+  const hasAnyTraining = (user: User) => {
+    return Object.values(user.trainings).some(
+      (training) => training.executionDate !== null
+    );
+  };
+
+  const trainingLabels: Record<string, string> = {
+    safety: 'בטיחות',
+    roni: 'רוני',
+    weapon: 'נשק',
+    mada: 'מד״א',
+    rights: 'זכויות',
+  };
+
   return (
     <tr
       className="employee"
@@ -107,10 +123,10 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
       <td colSpan={4}>
         <div
           className={`employee__content ${
-            !isCollapsed ? 'employee__content--open' : ''
+            !isCollapsed ? 'employee__content--uncollapsed' : ''
           }`}
         >
-          <div className={`employee__grid ${!isCollapsed ? 'employee__grid--rows' : ''}`}>
+          <div className={`employee__grid ${!isCollapsed ? 'employee__grid--uncollapsed' : ''}`}>
             <div className="employee__name">
               <span
                 className={`employee__uncollapse-trigger ${
@@ -146,10 +162,13 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
             </div>
 
             <div className="employee__trainings">
-              <TrainingsList user={user} isCollapsed={isCollapsed} />
+                <TrainingsList user={user} isCollapsed={isCollapsed} />
             </div>
 
             <div className="employee__documents">
+              {
+                isUserHasDocuments
+              }
               <DocumentsList user={user} isCollapsed={isCollapsed}/>
             </div>
 
@@ -315,7 +334,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </div>
             )}
 
-            <div>{user.phoneNumber || '-'}</div>
+            <div className="employee__phone">{user.phoneNumber || '-'}</div>
           </div>
         </div>
       </td>

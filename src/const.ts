@@ -36,13 +36,13 @@ export enum AppRoute {
 }
 
 export const Titles: Record<string, string> = {
-  [AppRoute.Root]: "עמישב אינטל חיפה | מערכת ניהול",
-  [AppRoute.Employees]: "עמישב אינטל חיפה | רשימת עובדים",
-  [AppRoute.Requests]: "עמישב אינטל חיפה | בקשות לשינויים",
-  [AppRoute.NewEmployee]: "עמישב אינטל חיפה | עובד חדש",
-  [AppRoute.NewProtocol]: "עמישב אינטל חיפה | נוהל חדש",
-  [AppRoute.AddShift]: "עמישב אינטל חיפה | משמרת חדשה",
-  [AppRoute.Schedule]: "עמישב אינטל חיפה | סידור עבודה",
+  [AppRoute.Root]: "עמישב אינטל חיפה\u00A0|\u00A0מערכת ניהול",
+  [AppRoute.Employees]: "עמישב אינטל חיפה\u00A0|\u00A0רשימת עובדים",
+  [AppRoute.Requests]: "עמישב אינטל חיפה\u00A0|\u00A0בקשות לשינויים",
+  [AppRoute.NewEmployee]: "עמישב אינטל חיפה\u00A0|\u00A0עובד חדש",
+  [AppRoute.NewProtocol]: "עמישב אינטל חיפה\u00A0|\u00A0נוהל חדש",
+  [AppRoute.AddShift]: "עמישב אינטל חיפה\u00A0|\u00A0משמרת חדשה",
+  [AppRoute.Schedule]: "עמישב אינטל חיפה\u00A0|\u00A0סידור עבודה",
 };
 
 export const StatusLabels: Record<RequestStatus, string> = {
@@ -140,4 +140,5 @@ export const SuccessMessages = {
   SHIFT_SWAP_COMPLETED: "חילןף בין המשמרות בוצע בהצלחה!",
   SHIFT_GIVE_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
   SHIFT_EDIT_COMPLETED: "עדכון פרטי המשמרת בוצע בהצלחה!",
+  PROTOCOL_ADDED: "נוהל נוצר בהצלחה",
 };

@@ -47,6 +47,7 @@ export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
               className="document"
               title={d.name}
               onClick={(e) => {
+                e.stopPropagation();
                 if (isImage(d.url)) {
                   e.stopPropagation();
                   setPreview(d.url);

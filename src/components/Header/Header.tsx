@@ -2,7 +2,11 @@ import { useLocation } from 'react-router-dom';
 import browserHistory from '../../browser-history';
 import { AppRoute } from '../../const';
 
-export default function Header() {
+interface HeaderProps {
+  title: string;
+}
+
+export default function Header({title}: HeaderProps) {
   const location = useLocation();
   const normalizedPath = location.pathname.replace(/\/$/, '');
   const isMainPage = normalizedPath === `${AppRoute.Root}`;
@@ -10,7 +14,7 @@ export default function Header() {
   return (
     <header className="header">
 
-      <p className="header__title">מערכת ניהול - עמישב אינטל חיפה</p>
+      <p className="header__title">{title}</p>
       {/* {!isMainPage && (
         <button
           className="button header__back-button"

@@ -87,9 +87,9 @@ export default function NewEmployeePage() {
   return (
     <Layout>
       <form onSubmit={handleCreateUser} method="post">
-        <div className="page__header">
+        {/* <div className="page__header">
           <h2 className='form__title'>עובד חדש</h2>
-        </div>
+        </div> */}
         <div className="page__content form__wrapper form__wrapper--fullscreen">
 
 

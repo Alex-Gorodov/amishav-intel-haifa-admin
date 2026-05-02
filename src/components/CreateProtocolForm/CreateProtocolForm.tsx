@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { createProtocol } from '../../store/api/createProtocol.api';
 import { useImageUpload } from '../../hooks/useImageUpload';
 import { isTouchDevice } from '../../utils/isTouchDevice';
+import { Cross } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { setSuccess } from '../../store/actions';
+import { SuccessMessages } from '../../const';
 
 interface Props {
   onClose: () => void;
@@ -10,6 +14,8 @@ interface Props {
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function CreateProtocolForm({ onClose }: Props) {
+
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -29,6 +35,14 @@ export default function CreateProtocolForm({ onClose }: Props) {
     setImages(prev => [...prev, url]);
   });
 
+  const resetForm = () => {
+    setTitle('');
+    setContent('');
+    setGroup('');
+    setHeaderImage('');
+    setImages([]);
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -36,11 +50,6 @@ export default function CreateProtocolForm({ onClose }: Props) {
       alert('Fill required fields');
       return;
     }
-
-    console.log('SENDING:', {
-      headerImage,
-      images,
-    });
 
     await createProtocol({
       title,
@@ -50,7 +59,9 @@ export default function CreateProtocolForm({ onClose }: Props) {
       group,
     });
 
-    alert('Created!');
+    resetForm();
+
+    dispatch(setSuccess({message: SuccessMessages.PROTOCOL_ADDED}))
 
   };
 
@@ -109,20 +120,22 @@ export default function CreateProtocolForm({ onClose }: Props) {
                     <button
                       className='form__delete-btn'
                       onClick={() => setHeaderImage('')}
-                    >×</button>
+                    >
+                      <Cross size={18}/>
+                    </button>
                   }
                 </div>
               )}
             </label>
 
             {/* CONTENT IMAGES */}
-            <label className="form__upload-wrapper" htmlFor="articleImages">
+            <label className="form__upload-wrapper" htmlFor="contentImages">
               <span className="form__upload-title" style={{ paddingBottom: images.length > 0 ? 24 : 0}}>בחר תמונות תוכן</span>
 
               <input
                 className="visually-hidden"
                 type="file"
-                id="articleImages"
+                id="contentImages"
                 multiple
                 accept="image/*"
                 onChange={(e) => uploadImages(e)}
@@ -136,6 +149,7 @@ export default function CreateProtocolForm({ onClose }: Props) {
                       className="form__image-wrapper"
                       onMouseEnter={() => setImageHoveredIndex(index)}
                       onMouseLeave={() => setImageHoveredIndex(null)}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <img
                         src={img}
@@ -157,6 +171,7 @@ export default function CreateProtocolForm({ onClose }: Props) {
                 </div>
               )}
             </label>
+
           </div>
 
           <select

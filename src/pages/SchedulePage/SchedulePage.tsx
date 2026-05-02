@@ -63,7 +63,7 @@ export default function SchedulePage() {
   return (
     <Layout>
       <div className="page__header">
-        <h1 className="page__title">סידור עבודה</h1>
+        {/* <h1 className="page__title">סידור עבודה</h1> */}
         <div className="schedule__navigation-buttons">
 
           <button className="button button--with-icon button--add" onClick={() => setIsPostFormOpen(true)}>

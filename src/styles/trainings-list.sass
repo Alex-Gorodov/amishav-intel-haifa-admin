@@ -1,22 +1,38 @@
-.trainings-list
-  @include list-reset
-  flex-direction: row
-  align-items: center
-  gap: 0.5rem
-  transition: 0.3s
-  &--uncollapsed
-    flex-direction: column
-    align-items: flex-start
+.trainings
+  &-list
+    @include list-reset
+    flex-direction: row
+    align-items: center
+    gap: 0.5rem
+    transition: 0.3s
+    &--uncollapsed
+      align-items: flex-start
+      flex-wrap: wrap
+  &__item-wrapper
+    position: relative
   &__item
     display: flex
     flex-direction: row
-    jcustify-content: flex-start
+    align-items: center
     gap: 0.5rem
-    padding: 0.25rem 0.5rem
-    border-radius: 0.5rem
+    padding: 10px
+    border-radius: 8px
     background-color: #f0f0f0
     font-size: 0.875rem
     color: #333
+    border: none
+    cursor: pointer
+    transition: 0.3s
+    &:hover
+      opacity: 0.6
+    &:active
+      opacity: 0.3
     &--completed
       background-color: #d0e8ff
       color: #007bff
+    &-menu
+      @include mini-menu
+      top: 44px
+      right: 0
+    &-btn
+      @include mini-menu-btn

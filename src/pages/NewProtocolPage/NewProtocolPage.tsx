@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { createProtocol } from '../../store/api/createProtocol.api';
 import { useImageUpload } from '../../hooks/useImageUpload';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
+import { useDispatch } from 'react-redux';
+import { setSuccess } from '../../store/actions';
+import { SuccessMessages } from '../../const';
 
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function NewProtocolPage() {
+  const dispatch = useDispatch();
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -18,6 +28,35 @@ export default function NewProtocolPage() {
   const [images, setImages] = useState<string[]>([]);
   const [imageHoveredIndex, setImageHoveredIndex] = useState<number | null>(null);
 
+  const onMouseDown = (e: React.MouseEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    isDragging.current = true;
+    startX.current = e.pageX - el.offsetLeft;
+    scrollLeft.current = el.scrollLeft;
+  };
+
+  const onMouseLeave = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    const el = scrollRef.current;
+    if (!el || !isDragging.current) return;
+
+    e.preventDefault();
+
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX.current) * 1.5; // speed multiplier
+
+    el.scrollLeft = scrollLeft.current - walk;
+  };
+
   const { handlePickImage: uploadHeader } = useImageUpload((url) => {
     setHeaderImage(url);
   });
@@ -26,39 +65,42 @@ export default function NewProtocolPage() {
     setImages(prev => [...prev, url]);
   });
 
+   const resetForm = () => {
+    setTitle('');
+    setContent('');
+    setGroup('');
+    setHeaderImage('');
+    setImages([]);
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    if ( !title || !content || !group) {
-      alert('Fill required fields');
-      return;
-    }
+      if ( !title || !content || !group) {
+        alert('Fill required fields');
+        return;
+      }
 
-    console.log('SENDING:', {
-      headerImage,
-      images,
-    });
+      await createProtocol({
+        title,
+        content,
+        headerImage,
+        images,
+        group,
+      });
 
-    await createProtocol({
-      title,
-      content,
-      headerImage,
-      images,
-      group,
-    });
+      resetForm();
 
-    alert('Created!');
+      dispatch(setSuccess({message: SuccessMessages.PROTOCOL_ADDED}))
 
-  };
+    };
+
 
   return (
     <Layout>
       <form onSubmit={handleSubmit} method="post">
-        <div className="page__header">
-          <h2 className="form__title">הוסף נוהל חדש</h2>
-        </div>
 
-        <div className="page__content form__wrapper form__wrapper--fullscreen">
+        <div className="form__wrapper form__wrapper--fullscreen page__content">
 
           <input
             id="title"
@@ -114,26 +156,41 @@ export default function NewProtocolPage() {
             </label>
 
             {/* CONTENT IMAGES */}
-            <label className="form__upload-wrapper" htmlFor="articleImages">
-              <span className="form__upload-title" style={{ paddingBottom: images.length > 0 ? 24 : 0}}>בחר תמונות תוכן</span>
+            <div className="form__upload-wrapper form__upload-wrapper--content">
+
+              <span
+                className="form__upload-title"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                בחר תמונות תוכן
+              </span>
 
               <input
+                ref={fileInputRef}
                 className="visually-hidden"
                 type="file"
-                id="articleImages"
                 multiple
                 accept="image/*"
                 onChange={(e) => uploadImages(e)}
               />
 
               {images.length > 0 && (
-                <div className="form__small-images-wrapper">
+                <div
+                  ref={scrollRef}
+                  className="form__small-images-wrapper"
+                  onMouseDown={onMouseDown}
+                  onMouseLeave={onMouseLeave}
+                  onMouseUp={onMouseUp}
+                  onMouseMove={onMouseMove}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   {images.map((img, index) => (
                     <div
                       key={index}
                       className="form__image-wrapper"
                       onMouseEnter={() => setImageHoveredIndex(index)}
                       onMouseLeave={() => setImageHoveredIndex(null)}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <img
                         src={img}
@@ -154,7 +211,7 @@ export default function NewProtocolPage() {
                   ))}
                 </div>
               )}
-            </label>
+            </div>
           </div>
 
           <select
