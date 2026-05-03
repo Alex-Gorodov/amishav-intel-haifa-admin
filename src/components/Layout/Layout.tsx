@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import { useLocation } from 'react-router-dom';
-import { Titles } from '../../const';
+import { Colors, Titles } from '../../const';
 import SideBar from '../SideBar/SideBar';
 import { ChevronLeft, ChevronRight, CircleChevronLeft, CircleChevronRight } from 'lucide-react';
 import ToastMessage from '../ui/ToastMessage';
@@ -37,7 +37,7 @@ export default function Layout({children}: LayoutProps) {
           onClick={() => setIsCollapsed(prev => !prev)}
         >
           <div className="bar__toggle-icon">
-            {isCollapsed ? <CircleChevronLeft size={32} color={'#000000'}/> : <CircleChevronRight size={32} color={'#000000'}/>}
+            {isCollapsed ? <CircleChevronLeft size={32} color={Colors.White}/> : <CircleChevronRight size={32} color={Colors.White}/>}
           </div>
         </button>
         <Header title={routeTitle}/>

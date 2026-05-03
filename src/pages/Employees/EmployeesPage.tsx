@@ -18,7 +18,7 @@ export default function EmployeesPage() {
     <Layout>
       <div className="page__header page__header--employees">
         <input
-          className="form__list-item form__list-item--search-user"
+          className="form__list-item form__list-item--search-user page__search-line"
           type="search"
           id="user"
           onChange={(e) => setSearch(e.target.value)}
@@ -26,7 +26,7 @@ export default function EmployeesPage() {
           placeholder="הכנס שם עובד..."
           autoFocus={!isTouchDevice()}
         />
-        <button className="button button--header button--wide" onClick={() => setFormOpened(true)}>
+        <button className="button button--header button--wide page__header-btn" onClick={() => setFormOpened(true)}>
           <span>הוסף עובד חדש</span>
         </button>
       </div>

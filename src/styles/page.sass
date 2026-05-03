@@ -14,7 +14,12 @@
     &--requests
       justify-content: center
     &--employees
-      flex-direction: column
+      display: grid
+      grid-template-columns: 3fr 1fr
+      gap: 8px
+      @media (max-width: 600px)
+        display: flex
+        flex-direction: column
   &__wrapper
     width: 100%
     overflow: scroll
@@ -32,3 +37,7 @@
     font-size: clamp(0.875rem, 0.6528rem + 1.1111vw, 1.625rem)
     font-weight: bold
     text-align: center
+
+  &__search-line
+    margin-bottom: 0
+    border-radius: 8px

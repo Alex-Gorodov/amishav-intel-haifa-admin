@@ -12,6 +12,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { Pencil, Save } from "lucide-react";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
+import { Colors } from "../../const";
 
 interface EmployeeItemProps {
   user: User;
@@ -307,7 +308,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                         }}
                       >
                         שמור
-                        <Save color={'#ffffff'} size={18}/>
+                        <Save color={Colors.White} size={18}/>
                       </button>
 
                       <button

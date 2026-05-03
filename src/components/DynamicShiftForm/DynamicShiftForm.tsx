@@ -13,7 +13,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";
 import { setShiftData } from "../../store/api/setShiftData.api";
 import { setSuccess } from "../../store/actions";
-import { SuccessMessages } from "../../const";
+import { Colors, SuccessMessages } from "../../const";
 
 interface FormProps {
   type: 'add' | 'swap' | 'remove' | 'edit' | null;
@@ -240,7 +240,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
 
               <div className="buttons-wrapper">
                 <button
-                  className="button button--change"
+                  className="button"
                   type="button"
                   onClick={handleSwap}
                 >
@@ -308,11 +308,11 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
 
               <div className="buttons-wrapper">
                 <button
-                  className="button button--with-icon button--change"
+                  className="button button--with-icon"
                   type="button"
                   onClick={handleUpdate}
                 >
-                  <Save color={'#ffffff'} size={18}/>
+                  <Save color={Colors.White} size={18}/>
                   שמור שינויים
                 </button>
 

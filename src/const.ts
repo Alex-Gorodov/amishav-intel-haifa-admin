@@ -15,6 +15,13 @@ export const POSTS = collection(db, 'posts');
 
 export const PROTOCOLS_HEADERS = collection(db, 'protocolsHeaders')
 
+export enum Colors {
+  IntelBlue = "#0078d4",
+  White = "#ffffff",
+  GrayLight = "#f5f5f5",
+  GrayDark = "#333333",
+}
+
 export const Roles = [
   { value: "shift_manager", label: "מנהל משמרת" },
   { value: "supervisor", label: "אחמ״ש בקרה" },

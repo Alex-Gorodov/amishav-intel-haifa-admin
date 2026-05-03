@@ -7,7 +7,7 @@ import { getIsoLocalDateKey, getWeekByOffset, isSameDay } from "../../utils/getW
 import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
 import { Shift } from "../../types/Shift";
 import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
-import { Posts } from "../../const";
+import { Colors, Posts } from "../../const";
 
 export default function SchedulePage() {
   const users = useSelector((state: RootState) => state.data.users);
@@ -68,7 +68,7 @@ export default function SchedulePage() {
 
           <button className="button button--with-icon button--add" onClick={() => setIsPostFormOpen(true)}>
             הוסף עמדה
-            <PlusCircle size={18} color={'#ffffff'}/>
+            <PlusCircle size={18} color={Colors.White}/>
           </button>
 
           <label htmlFor="search-in-schedule" className="visually-hidden"/>
@@ -78,7 +78,7 @@ export default function SchedulePage() {
             className="button button--with-icon"
             onClick={() => setWeekOffset(prev => prev - 1)}
           >
-            <ArrowRight size={18} color={'#ffffff'}/>
+            <ArrowRight size={18} color={Colors.White}/>
             שבוע הקודם
           </button>
 
@@ -88,7 +88,7 @@ export default function SchedulePage() {
             disabled={weekOffset >= 1}
           >
             שבוע הבא
-            <ArrowLeft size={18} color={weekOffset >= 1 ? '#444444' : '#ffffff'}/>
+            <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : Colors.White}/>
           </button>
         </div>
       </div>
