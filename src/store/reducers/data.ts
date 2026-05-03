@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { DataState } from "../../types/State";
-import { loadUsers, setUsersDataLoading, updateAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, updateRequestStatus, removeRequest, updateUserShifts, updateTrainingExecutionDate, loadProtocolsPreview, addUserRole, removeUserRole, setError, loadPosts } from "../actions";
+import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingExecutionDate, loadProtocolsPreview, addUserRole, removeUserRole, setError, loadPosts } from "../actions";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { regenerateShiftId } from "../../utils/regenerateShiftId";
 import { Timestamp } from "firebase/firestore";
@@ -29,7 +29,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
     .addCase(loadPosts, (state, action) => {
       state.posts = action.payload.posts;
     })
-    .addCase(updateAvailability, (state, action) => {
+    .addCase(setAvailability, (state, action) => {
       const userToUpdate = state.users.find((u) => u.id === action.payload.user.id);
 
       if (userToUpdate) {
@@ -47,7 +47,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
       userToUpdate.documents.push(action.payload.document);
     })
 
-    .addCase(updateTrainingExecutionDate, (state, action) => {
+    .addCase(setTrainingExecutionDate, (state, action) => {
       const { userId, training, date } = action.payload;
 
       const userToUpdate = state.users.find(u => u.id === userId);
@@ -138,7 +138,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
         state.giveRequests = state.giveRequests.filter(r => r.id !== req.id);
       }
     })
-    .addCase(updateRequestStatus, (state, action) => {
+    .addCase(setRequestStatus, (state, action) => {
       const req = state.giveRequests.find(r => r.id === action.payload.id) || state.swapRequests.find(r => r.id === action.payload.id);
       if (req) req.status = action.payload.status;
     })
@@ -146,7 +146,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
       state.swapRequests = state.swapRequests.filter(r => r.id !== action.payload);
       state.giveRequests = state.giveRequests.filter(r => r.id !== action.payload);
     })
-    .addCase(updateUserShifts, (state, action) => {
+    .addCase(setUserShifts, (state, action) => {
       const userToUpdate = state.users.find(u => u.id === action.payload.userId);
       if (userToUpdate) {
         userToUpdate.shifts = action.payload.shifts;

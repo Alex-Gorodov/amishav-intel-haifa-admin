@@ -57,7 +57,7 @@ export const icons: Record<string, string> = {
   "הדרכת בטיחות": "🛡️",
   "רענון רוני": "🔄",
   "רענון נשק": "🔫",
-  "רענון אזרה ראשונה": "🩹",
+  "רענון עזרה ראשונה": "🩹",
   "הדרכת סמכויות": "📜"
 };
 
@@ -141,4 +141,75 @@ export const SuccessMessages = {
   SHIFT_GIVE_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
   SHIFT_EDIT_COMPLETED: "עדכון פרטי המשמרת בוצע בהצלחה!",
   PROTOCOL_ADDED: "נוהל נוצר בהצלחה",
+};
+
+export const DEFAULT_TRAININGS = (userId: string) => ({
+  safety: {
+    id: `${userId}-safety`,
+    title: 'הדרכת בטיחות',
+    description: '',
+    executionDate: null,
+    validityPeriod: 365,
+  },
+  roni: {
+    id: `${userId}-roni`,
+    title: 'רענון רוני',
+    description: '',
+    executionDate: null,
+    validityPeriod: 365,
+  },
+  weapon: {
+    id: `${userId}-weapon`,
+    title: 'רענון נשק',
+    description: '',
+    executionDate: null,
+    validityPeriod: 182,
+  },
+  mada: {
+    id: `${userId}-mada`,
+    title: 'רענון עזרה ראשונה',
+    description: '',
+    executionDate: null,
+    validityPeriod: 730,
+  },
+  rights: {
+    id: `${userId}-rights`,
+    title: 'הדרכת סמכויות',
+    description: '',
+    executionDate: null,
+    validityPeriod: 365,
+  }
+});
+
+export type TrainingKey =
+  | "safety"
+  | "roni"
+  | "weapon"
+  | "mada"
+  | "rights";
+
+export const TRAINING_SCHEMA: Record<
+  TrainingKey,
+  { title: string; validityPeriod: number }
+> = {
+  safety: {
+    title: "הדרכת בטיחות",
+    validityPeriod: 365,
+  },
+  roni: {
+    title: "רענון רוני",
+    validityPeriod: 365,
+  },
+  weapon: {
+    title: "רענון נשק",
+    validityPeriod: 182,
+  },
+  mada: {
+    title: "רענון עזרה ראשונה",
+    validityPeriod: 730,
+  },
+  rights: {
+    title: "הדרכת סמכויות",
+    validityPeriod: 365,
+  },
 };

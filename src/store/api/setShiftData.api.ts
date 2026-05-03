@@ -1,4 +1,4 @@
-// store/api/updateShiftData.api.ts
+// store/api/setShiftData.api.ts
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
@@ -14,7 +14,7 @@ type UpdateShiftParams = {
   };
 };
 
-export const updateShiftData = async ({
+export const setShiftData = async ({
   userId,
   shiftId,
   data,

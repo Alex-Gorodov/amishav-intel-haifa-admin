@@ -5,21 +5,27 @@ import { RootState } from "../../store/root-reducer";
 import { useEffect, useState } from "react";
 import CreateEmployeeForm from "../../components/CreateEmployeeForm/CreateEmployeeForm";
 import { getShiftsStreak } from "../../utils/getShiftsStreak";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 
 export default function EmployeesPage() {
   const users = useSelector((state: RootState) => state.data.users);
   const [isFormOpened, setFormOpened] = useState(false);
+  const [search, setSearch] = useState('')
 
-  useEffect(() => {
-    console.log(
-      users.forEach((u) => `${u.secondName}'s shifts streak: ${getShiftsStreak(u)}`)
-    )
-  }, [users])
+  const filteredUsers = users.filter((u) => u.firstName.includes(search) || u.secondName.includes(search));
 
   return (
     <Layout>
-      <div className="page__header">
-        {/* <h1 className="page__title">רשימת עובדים</h1> */}
+      <div className="page__header page__header--employees">
+        <input
+          className="form__list-item form__list-item--search-user"
+          type="search"
+          id="user"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="הכנס שם עובד..."
+          autoFocus={!isTouchDevice()}
+        />
         <button className="button button--header button--wide" onClick={() => setFormOpened(true)}>
           <span>הוסף עובד חדש</span>
         </button>
@@ -37,7 +43,7 @@ export default function EmployeesPage() {
         </thead>
         <tbody>
           {
-            users?.map((user: any) => (
+            filteredUsers?.map((user: any) => (
               <EmployeeItem key={user.id} user={user} />
             ))
           }

@@ -2,7 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { User } from "../../types/User";
 
-export const updateEmployeeData = async (
+export const setEmployeeData = async (
   userId: string,
   data: Partial<User>
 ): Promise<void> => {

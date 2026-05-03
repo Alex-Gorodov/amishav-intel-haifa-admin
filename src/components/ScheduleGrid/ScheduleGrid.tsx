@@ -33,6 +33,12 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
     }
   };
 
+  const isToday = (date: string) => {
+    const d = new Date(date);
+    const today = new Date();
+
+    return d.toDateString() === today.toDateString();
+  };
 
   const [formState, setFormState] = useState<{
     type: 'add' | 'swap' | 'remove' | 'edit' | null;
@@ -68,7 +74,12 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
             const month = dateObj.getMonth() + 1;
 
             return (
-              <div key={i} className="schedule__cell grid__cell--header">
+              <div
+                key={i}
+                className={`schedule__cell grid__cell--header ${
+                  isToday(d) ? "schedule__cell--header-today" : ""
+                }`}
+              >
                 <p>{weekday} {day}.{month}</p>
               </div>
             );
@@ -101,6 +112,7 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
                   <ScheduleCell
                     key={i}
                     shift={shift}
+                    date={new Date(d)}
                     searchFor={searchFor}
                     onAction={(type) =>
                       setFormState({

@@ -20,7 +20,7 @@ export const loadRequests = createAction<{type: 'swap' | 'give', requests: SwapS
 export const setPostsDataLoading = createAction<{isPostsDataLoading: boolean}>('data/setPostsDataLoading');
 export const loadPosts = createAction<{posts: Post[]}>('data/loadPosts');
 
-export const updateAvailability = createAction<{user: User, availability: Availability[]}>('data/updateAvailability');
+export const setAvailability = createAction<{user: User, availability: Availability[]}>('data/setAvailability');
 
 export const uploadDocument = createAction<{user: User, document: Document}>('data/uploadDocument');
 
@@ -32,7 +32,7 @@ export const rejectShiftRequest = createAction<{request: SwapShiftRequest | Give
 
 export const sendGiveShiftRequest = createAction<{fromUser: User, toUser: User, shiftId: string}>('data/giveShiftRequest');
 
-export const updateRequestStatus = createAction<{id: string, status: RequestStatus}>('requests/updateStatus');
+export const setRequestStatus = createAction<{id: string, status: RequestStatus}>('requests/setStatus');
 
 export const removeRequest = createAction<string>('requests/remove');
 
@@ -40,9 +40,9 @@ export const setError = createAction<{message: string | null}>('app/setError')
 
 export const setSuccess = createAction<{message: string | null}>('app/setSuccess')
 
-export const updateUserShifts = createAction<{userId: string, shifts: Shift[]}>('data/updateUserShifts');
+export const setUserShifts = createAction<{userId: string, shifts: Shift[]}>('data/setUserShifts');
 
-export const updateTrainingExecutionDate = createAction<{userId: string, training: Training, date: Date}>('data/updateTrainingExecutionDate')
+export const setTrainingExecutionDate = createAction<{userId: string, training: Training, date: Date}>('data/setTrainingExecutionDate')
 
 export const addUserRole = createAction<{userId: string, role: Role}>('data/addUserRole');
 export const removeUserRole = createAction<{userId: string, role: Role}>('data/removeUserRole');

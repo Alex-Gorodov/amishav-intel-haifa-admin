@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Role, User } from "../../types/User";
 import { addUserRole, removeUserRole } from "../../store/actions";
-import { updateEmployeeData } from "../../store/api/updateEmployeeData.api";
+import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 
 interface RoleLabelProps {
   isButton?: boolean;
@@ -15,7 +15,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   const removeRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(removeUserRole({userId: user.id, role}));
-    updateEmployeeData(user.id, {
+    setEmployeeData(user.id, {
       roles: user.roles.filter(r => r !== role.value)
     });
   };
@@ -23,7 +23,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   const addRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(addUserRole({userId: user.id, role}));
-    updateEmployeeData(user.id, {
+    setEmployeeData(user.id, {
       roles: [...user.roles, role.value]
     });
   };

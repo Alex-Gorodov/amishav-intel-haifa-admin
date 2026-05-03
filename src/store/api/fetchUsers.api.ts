@@ -49,7 +49,7 @@ export const fetchUsers = async (dispatch: AppDispatch) => {
             },
             mada: {
               id: `${doc.id}-mada`,
-              title: 'רענון אזרה ראשונה',
+              title: 'רענון עזרה ראשונה',
               description: '',
               executionDate: null,
               validityPeriod: 730,
@@ -70,6 +70,7 @@ export const fetchUsers = async (dispatch: AppDispatch) => {
     );
 
     dispatch(loadUsers({ users }));
+    console.log(users)
   } catch (error) {
     console.error("Error fetching users:", error);
   } finally {

@@ -14,10 +14,11 @@ import { SuccessMessages } from "../../const";
 interface ScheduleCellProps {
   shift: Shift | null;
   searchFor: string;
+  date: Date;
   onAction: (type: 'add' | 'swap' | 'remove' | 'edit', shift?: Shift | null) => void;
 }
 
-export default function ScheduleCell({ onAction, shift, searchFor }: ScheduleCellProps) {
+export default function ScheduleCell({ onAction, shift, searchFor, date }: ScheduleCellProps) {
   const dispatch = useDispatch();
 
   const [isTriggerVisible, setTriggerVisible] = useState(false);
@@ -115,9 +116,30 @@ export default function ScheduleCell({ onAction, shift, searchFor }: ScheduleCel
 
   const range = getPostTimeRange(shift);
 
+  const isToday = (value: Date | string) => {
+    const d = new Date(value);
+    const today = new Date();
+
+    return (
+      d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() &&
+      d.getDate() === today.getDate()
+    );
+  };
+
+  const shiftDate = shift?.date.toDate();
+
+  const todayMatch = isToday(date);
+
+  console.log(shiftDate, todayMatch)
+
   return (
     <div
-      className={`schedule__cell ${isMatch ? 'schedule__cell--active' : ''}`}
+      className={`
+        schedule__cell
+        ${isMatch ? 'schedule__cell--active' : ''}
+        ${todayMatch ? 'schedule__cell--today' : ''}
+      `}
       style={{ flexDirection: range ? 'column' : 'row' }}
       onMouseEnter={() => setTriggerVisible(true)}
       onMouseLeave={() => setTriggerVisible(false)}

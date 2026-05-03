@@ -10,7 +10,7 @@ import { getFullUserName } from "../../utils/getFullUserName";
 import { useDispatch } from "react-redux";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { Pencil, Save } from "lucide-react";
-import { updateEmployeeData } from "../../store/api/updateEmployeeData.api";
+import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
 
 interface EmployeeItemProps {
@@ -47,7 +47,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     firstName: user.firstName,
     secondName: user.secondName,
     phoneNumber: user.phoneNumber || '',
-    passport: user.passportId || '',
+    passportId: user.passportId || '',
   });
 
   const handleOpenRoles = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -100,20 +100,6 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
     'לפני המחיקה יש למחוק את המשמרות העתידיות של העובד.'
     :
     'למחוק את העובד'
-
-  const hasAnyTraining = (user: User) => {
-    return Object.values(user.trainings).some(
-      (training) => training.executionDate !== null
-    );
-  };
-
-  const trainingLabels: Record<string, string> = {
-    safety: 'בטיחות',
-    roni: 'רוני',
-    weapon: 'נשק',
-    mada: 'מד״א',
-    rights: 'זכויות',
-  };
 
   return (
     <tr
@@ -221,7 +207,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                       <b>{' ' + user.passportId}</b>
                     </p>
 
-                    <input type="text" className="form__input" value={deletingPas} onChange={(e) => setDeletingPas(e.target.value)}/>
+                    <input type="text" className="form__input" value={deletingPas} minLength={8} maxLength={9} onChange={(e) => setDeletingPas(e.target.value)}/>
 
                     <div className="buttons-wrapper">
                       <button
@@ -300,12 +286,14 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                     <input
                       className="form__input"
                       placeholder="ת.ז."
-                      value={editData.passport}
+                      value={editData.passportId}
                       type="number"
+                      minLength={8}
+                      maxLength={9}
                       id="passport"
                       name="change-user-passport"
                       onChange={(e) =>
-                        setEditData(prev => ({ ...prev, phoneNumber: e.target.value }))
+                        setEditData(prev => ({ ...prev, passportId: e.target.value }))
                       }
                     />
 
@@ -313,7 +301,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                       <button
                         className="button button--with-icon button--add"
                         onClick={async () => {
-                          await updateEmployeeData(user.id, editData);
+                          await setEmployeeData(user.id, editData);
                           setIsEditOpen(false);
                           fetchUsers(dispatch);
                         }}

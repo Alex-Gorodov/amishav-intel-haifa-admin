@@ -1,3 +1,5 @@
+$employee-header-height: 65px
+
 .employee
   border-bottom: 1px solid #ddd
   cursor: pointer
@@ -7,15 +9,17 @@
 
 
   &__content
-    transition: max-height 0.35s ease, padding 0.3s ease
+    overflow: hidden
+    transition: max-height 0.35s ease
     max-height: 100px
+    &:has(.roles-popup)
+      overflow: unset
 
     @media (max-width: 768px)
       max-height: unset
 
   &__content--uncollapsed
     max-height: 500px
-    padding: 12px 0
     @media (max-width: 768px)
       max-height: unset
 
@@ -25,7 +29,6 @@
     grid-template-columns: 1fr 3fr 2fr 2fr 1fr
     padding: 8px
     &--uncollapsed
-      // grid-template-columns: repeat(3, 1fr)
       grid-template-rows: auto 1fr 1fr 1fr
       row-gap: 28px
       @media (max-width: 768px)
@@ -65,7 +68,6 @@
 
 
       & .employee__buttons
-        // flex-direction: column
         grid-column: 2
         grid-row: 4
         @media (max-width: 768px)
@@ -84,9 +86,6 @@
     @media (max-width: 768px)
       gap: 1rem
       grid-template-columns: 1fr
-
-  // @media (max-width: 768px)
-  //   grid-template-columns: 1fr 2fr 1fr 1fr 0.5fr
 
   &:hover
     background-color: #f9f9f9

@@ -11,7 +11,7 @@ import { getFormattedDate } from "../../utils/getFormattedDate";
 import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";
-import { updateShiftData } from "../../store/api/updateShiftData.api";
+import { setShiftData } from "../../store/api/setShiftData.api";
 import { setSuccess } from "../../store/actions";
 import { SuccessMessages } from "../../const";
 
@@ -148,7 +148,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
   const handleUpdate = async () => {
     if (!shift?.userId || !shift?.id) return;
 
-    await updateShiftData({
+    await setShiftData({
       userId: shift.userId,
       shiftId: shift.id,
       data: {

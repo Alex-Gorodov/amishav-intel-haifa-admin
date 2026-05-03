@@ -141,7 +141,7 @@ export default function NewProtocolPage() {
                   onMouseEnter={() => setHeaderImageHovered(true)}
                   onMouseLeave={() => setHeaderImageHovered(false)}
                 >
-                  <img className="form__uploaded-image" src={headerImage} />
+                  <img className="form__uploaded-image" src={headerImage} draggable={false} />
 
                   {
                     headerImageHovered
@@ -195,6 +195,7 @@ export default function NewProtocolPage() {
                       <img
                         src={img}
                         className="form__uploaded-image form__uploaded-image--small"
+                         draggable={false}
                       />
 
                       {imageHoveredIndex === index && (
