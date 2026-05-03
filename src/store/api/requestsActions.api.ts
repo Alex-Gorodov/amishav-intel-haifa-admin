@@ -93,8 +93,12 @@ export const rejectRequest = async (
   await deleteDoc(ref);
 };
 
-export const deleteRequest = async (req: GiveRequestWithShift | SwapRequestWithShifts) => {
-  const collection = req.type === 'give' ? 'giveRequests' : 'swapRequests';
+export const deleteRequest = async (
+  req: GiveShiftRequest | SwapShiftRequest
+) => {
+  const collection =
+    req.type === 'give' ? 'giveRequests' : 'swapRequests';
+
   const ref = doc(db, collection, req.id);
 
   await deleteDoc(ref);

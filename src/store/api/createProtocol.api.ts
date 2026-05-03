@@ -25,7 +25,6 @@ export const createProtocol = async (data: {
       group: data.group,
     });
 
-    console.log('✅ Protocol created');
   } catch (e) {
     console.error('❌ Error creating protocol:', e);
   }

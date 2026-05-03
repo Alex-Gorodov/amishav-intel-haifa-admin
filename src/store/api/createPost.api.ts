@@ -15,7 +15,6 @@ export const createPost = async (data: Omit<Post, "hourlyRate">) => {
     const ref = doc(collection(db, "posts"), data.id); // or auto-id if you want
     await setDoc(ref, post);
 
-    console.log("✅ Post created");
   } catch (err) {
     console.error("❌ Error creating post:", err);
     throw err;

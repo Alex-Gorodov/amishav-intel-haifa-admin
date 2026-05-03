@@ -25,8 +25,6 @@ export default function Layout({children}: LayoutProps) {
 
   useEffect(() => {
     document.title = routeTitle;
-    console.log('norm: ', normalizedPath)
-    console.log('routeTitle: ', routeTitle)
   }, [normalizedPath]);
 
   return (

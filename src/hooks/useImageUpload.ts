@@ -101,7 +101,6 @@ export const useImageUpload = (
       for (const file of Array.from(files)) {
         const url = await uploadToCloudinary(file);
         if (url) {
-          console.log('UPLOADED:', url);
           onImageUploaded(url);
         }
       }

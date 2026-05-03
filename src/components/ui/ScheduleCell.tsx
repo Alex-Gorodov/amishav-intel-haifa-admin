@@ -131,8 +131,6 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
 
   const todayMatch = isToday(date);
 
-  console.log(shiftDate, todayMatch)
-
   return (
     <div
       className={`

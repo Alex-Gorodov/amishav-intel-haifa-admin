@@ -70,7 +70,6 @@ export const fetchUsers = async (dispatch: AppDispatch) => {
     );
 
     dispatch(loadUsers({ users }));
-    console.log(users)
   } catch (error) {
     console.error("Error fetching users:", error);
   } finally {
