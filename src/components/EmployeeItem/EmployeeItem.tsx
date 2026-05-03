@@ -84,7 +84,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
     const baseDate =
       typeof s.date === "object" && "toDate" in s.date
-        ? s.date.toDate()
+        ? s.date
         : new Date(s.date);
 
     const [hours, minutes] = s.startTime.split(":").map(Number);

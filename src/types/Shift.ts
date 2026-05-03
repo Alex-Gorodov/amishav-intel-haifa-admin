@@ -4,7 +4,7 @@ import { Post } from "./Post";
 export type Shift = {
   id: string;
   userId: string;
-  date: Timestamp;
+  date: Date;
   post: Post;
   startTime: string;
   endTime: string;

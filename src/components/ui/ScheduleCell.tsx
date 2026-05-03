@@ -127,8 +127,6 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
     );
   };
 
-  const shiftDate = shift?.date.toDate();
-
   const todayMatch = isToday(date);
 
   return (
