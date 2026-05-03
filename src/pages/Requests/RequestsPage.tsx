@@ -80,7 +80,7 @@ export default function RequestsPage() {
         if (req.type === 'give') {
           if (!req.fromShift) return false;
 
-          const shiftDate = req.fromShift.date.toDate();
+          const shiftDate = req.fromShift.date;
 
           return shiftDate >= new Date();
         }
@@ -88,8 +88,8 @@ export default function RequestsPage() {
         // SWAP REQUEST
         if (!req.fromShift || !req.toShift) return false;
 
-        const firstDate = req.fromShift.date.toDate();
-        const secondDate = req.toShift.date.toDate();
+        const firstDate = req.fromShift.date;
+        const secondDate = req.toShift.date;
 
         // Keep request only if BOTH shifts are still upcoming
         return firstDate >= new Date() && secondDate >= new Date();
@@ -115,7 +115,7 @@ export default function RequestsPage() {
           if (!shift) {
             shouldDelete = true;
           } else {
-            shouldDelete = shift.date.toDate() < new Date();
+            shouldDelete = shift.date < new Date();
           }
         }
 
@@ -127,8 +127,8 @@ export default function RequestsPage() {
             shouldDelete = true;
           } else {
             shouldDelete =
-              firstShift.date.toDate() < new Date() ||
-              secondShift.date.toDate() < new Date();
+              firstShift.date < new Date() ||
+              secondShift.date < new Date();
           }
         }
 

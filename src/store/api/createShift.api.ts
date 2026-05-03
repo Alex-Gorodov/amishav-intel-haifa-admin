@@ -31,7 +31,7 @@ export const createShift = async ({
     const newShift: Shift = {
       id: `${date.getTime()}_${post.id}`,
       userId: userId,
-      date: Timestamp.fromDate(date),
+      date: date,
       post,
       startTime,
       endTime,
