@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 import { Post } from "./Post";
 
 export type Shift = {
