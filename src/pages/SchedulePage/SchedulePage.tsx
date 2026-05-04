@@ -45,7 +45,7 @@ export default function SchedulePage() {
             .flatMap((u) => u.shifts || [])
             .find(
               (s) =>
-                isSameDay(s.date.toDate(), day) &&
+                isSameDay(s.date, day) &&
                 s.post?.id === post.id
             );
 
@@ -63,19 +63,18 @@ export default function SchedulePage() {
   return (
     <Layout>
       <div className="page__header">
-        {/* <h1 className="page__title">סידור עבודה</h1> */}
         <div className="schedule__navigation-buttons">
 
-          <button className="button button--with-icon button--add" onClick={() => setIsPostFormOpen(true)}>
+          <button className="button button--with-icon button--add schedule__btn--add-post" onClick={() => setIsPostFormOpen(true)}>
             הוסף עמדה
             <PlusCircle size={18} color={Colors.White}/>
           </button>
 
           <label htmlFor="search-in-schedule" className="visually-hidden"/>
-          <input className="form__input form__input--self" id="search-in-schedule" type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
+          <input className="form__input form__input--self schedule__search-field" id="search-in-schedule" type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
 
           <button
-            className="button button--with-icon"
+            className="button button--with-icon schedule__btn--prev-week"
             onClick={() => setWeekOffset(prev => prev - 1)}
           >
             <ArrowRight size={18} color={Colors.White}/>
@@ -83,7 +82,7 @@ export default function SchedulePage() {
           </button>
 
           <button
-            className="button button--with-icon"
+            className="button button--with-icon schedule__btn--next-week"
             onClick={() => setWeekOffset(prev => prev + 1)}
             disabled={weekOffset >= 1}
           >

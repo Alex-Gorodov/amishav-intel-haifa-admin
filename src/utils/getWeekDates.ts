@@ -49,8 +49,18 @@ export function formatHeaderDate(dt: Date) {
   return dt.toLocaleDateString('he-IL', { weekday: 'short', day: 'numeric' });
 }
 
-export function isSameDay(a: Date, b: Date) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+export function isSameDay(
+  a: Date | { toDate: () => Date },
+  b: Date | { toDate: () => Date }
+) {
+  const dateA = a instanceof Date ? a : a.toDate();
+  const dateB = b instanceof Date ? b : b.toDate();
+
+  return (
+    dateA.getFullYear() === dateB.getFullYear() &&
+    dateA.getMonth() === dateB.getMonth() &&
+    dateA.getDate() === dateB.getDate()
+  );
 }
 
 export function getIsoLocalDateKey(d: Date) {
