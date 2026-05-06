@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Layout from '../Layout/Layout';
+import Layout from '../../components/Layout/Layout';
 
 export default function App() {
   const [date, setDate] = useState(new Date());
