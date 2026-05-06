@@ -5,6 +5,7 @@ import { Colors, Titles } from '../../const';
 import SideBar from '../SideBar/SideBar';
 import { ChevronLeft, ChevronRight, CircleChevronLeft, CircleChevronRight } from 'lucide-react';
 import ToastMessage from '../ui/ToastMessage';
+import { useAITheme } from '../../context/AIThemeContext';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -19,6 +20,8 @@ export default function Layout({children}: LayoutProps) {
     return localStorage.getItem('sidebar-collapsed') === 'true';
   });
 
+  const { isDesktop, isAI, setIsAI } = useAITheme();
+
   useEffect(() => {
     localStorage.setItem('sidebar-collapsed', String(isCollapsed));
   }, [isCollapsed]);
@@ -29,7 +32,7 @@ export default function Layout({children}: LayoutProps) {
 
   return (
     <div className="page">
-      <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`}>
+      <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`} style={{ background: isAI ? '#0a192f' : '#0068B5'}}>
         <button
           className={`bar__toggle ${isCollapsed ? 'bar__toggle--collapsed' : ''}`}
           onClick={() => setIsCollapsed(prev => !prev)}
