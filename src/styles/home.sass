@@ -4,11 +4,19 @@
   align-items: center
   gap: 24px
   padding: 32px
+  transition: 0.3s
 
   &__greeting
     font-size: 32px
     font-weight: 700
 
+  &__content
+    z-index: 1
+    width: 100%
+    max-width: 440px
+    display: flex
+    flex-direction: column
+    gap: 20px
 
   &__card
     width: 100%
@@ -36,3 +44,103 @@
     font-style: italic
     color: #555
 
+
+
+
+:root
+  --bg-morning: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)
+  --bg-afternoon: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)
+  --bg-night: linear-gradient(135deg, #243949 0%, #517fa4 100%)
+
+.home-ai
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 40px 20px
+  transition: background 1s ease
+  position: relative
+  overflow: hidden
+  font-family: 'Assistant', sans-serif
+
+  &--morning
+    background: var(--bg-morning)
+  &--afternoon
+    background: var(--bg-afternoon)
+  &--night
+    background: var(--bg-night)
+    color: white
+
+  &__blob
+    position: absolute
+    width: 300px
+    height: 300px
+    background: rgba(255, 255, 255, 0.2)
+    filter: blur(80px)
+    border-radius: 50%
+    top: -50px
+    left: -50px
+    z-index: 0
+
+  &__header
+    z-index: 1
+    text-align: center
+    margin-bottom: 40px
+
+  &__icon
+    font-size: 4rem
+    display: block
+    margin-bottom: 10px
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1))
+
+  &__greeting
+    font-size: 2.5rem
+    font-weight: 800
+    letter-spacing: -1px
+    margin: 0
+
+  &__time
+    font-size: 1.2rem
+    opacity: 0.8
+    font-weight: 300
+
+  &__content
+    z-index: 1
+    width: 100%
+    max-width: 440px
+    display: flex
+    flex-direction: column
+    gap: 20px
+
+  &__card
+    background: rgba(255, 255, 255, 0.15)
+    backdrop-filter: blur(12px)
+    -webkit-backdrop-filter: blur(12px)
+    border: 1px solid rgba(255, 255, 255, 0.2)
+    border-radius: 24px
+    padding: 24px
+    transition: transform 0.3s ease, box-shadow 0.3s ease
+
+    &:hover
+      transform: translateY(-5px)
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1)
+
+    &--accent
+      background: rgba(255, 255, 255, 0.25)
+
+  &__label
+    font-size: 0.85rem
+    text-transform: uppercase
+    letter-spacing: 1px
+    opacity: 0.7
+    margin-bottom: 8px
+
+  &__date
+    font-size: 1.4rem
+    font-weight: 600
+
+  &__tip
+    font-size: 1.1rem
+    line-height: 1.5
+    font-weight: 400

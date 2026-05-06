@@ -2,7 +2,7 @@
 .bar
   &__wrapper
     position: relative
-    top: -64px
+    top: -68px
     width: 200px
     height: calc(100% + 64px)
     display: flex
@@ -11,6 +11,8 @@
     box-shadow: 10px 0px 40px rgba(0, 0, 0, 0.25)
     z-index: 1
     transition: width 0.3s ease
+    @media (max-width: 600px)
+      top: -56px
 
     &--collapsed
       width: 64px

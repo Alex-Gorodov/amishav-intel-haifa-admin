@@ -1,29 +1,66 @@
 .header
+  // 1. POSITIONING (Restored your original logic)
+  display: flex
+  justify-content: space-between
+  align-items: center
+  width: 100%
+  transition: all 0.3s ease
 
   &__wrapper
     display: grid
-    grid-template-columns: 40px 1fr
-    justify-content: flex-start
+    grid-template-columns: auto 1fr // Changed to auto to fit back button + title
     align-items: center
-    padding: 12px
+    width: 100%
+    padding: 4px
     background-color: $intel-dark-blue
-    // gap: 12px
-    padding-right: 188px
+    padding-right: 188px // Your original constraint
+    gap: 16px
+
     @media (max-width: 468px)
       padding-right: 150px
+
     &--collapsed
       padding-right: 72px
+
+  // 2. AI DRESS UP (Visual only, doesn't move the boxes)
+  &--ai
+    .header__wrapper
+      background: rgba(10, 25, 47, 0.8)
+      backdrop-filter: blur(12px)
+      -webkit-backdrop-filter: blur(12px)
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+
+  &__left-section
+    display: flex
+    align-items: center
+    gap: 12px
 
   &__title
     font-size: clamp(0.88rem, calc(0.648rem + 1.136vw), 1.50rem)
     font-weight: bold
     color: #ffffff
-
-  &__back-button
-    background: none
-    border: none
-    cursor: pointer
-    font-size: 16px
-    color: #ffffff
-    padding: 0
     margin: 0
+
+  &__back-circle
+    width: 32px
+    height: 32px
+    border-radius: 50%
+    border: 1px solid rgba(255, 255, 255, 0.3)
+    background: transparent
+    color: white
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: center
+    transition: background 0.2s
+    &:hover
+      background: rgba(255, 255, 255, 0.1)
+
+  &__toggle-area
+    margin-right: auto // Pushes toggle to the left side (standard for LTR controls in RTL apps)
+    padding: 4px 12px
+    border-radius: 20px
+
+    &--ai
+      background: #0071c533
+      box-shadow: 0 0 15px rgba(0, 113, 197, 0.4)
