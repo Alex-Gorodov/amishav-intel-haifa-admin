@@ -123,12 +123,21 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
+          const currentTime = new Date().getTime();
+
+          console.log(firstShift?.date);
+          console.log(secondShift?.date);
+
+          console.log(currentTime);
+
+
+
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
             shouldDelete =
-              firstShift.date < new Date() ||
-              secondShift.date < new Date();
+              firstShift.date.getDate() < currentTime ||
+              secondShift.date.getDate() < currentTime;
           }
         }
 
