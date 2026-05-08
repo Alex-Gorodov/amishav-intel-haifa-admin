@@ -17,8 +17,13 @@ export const fetchSwapRequests = async (dispatch: AppDispatch) => {
         id: doc.id,
         type: 'swap',
         status: requestData.status || 'pending',
-        createdAt: requestData.createdAt?.toDate ? requestData.createdAt.toDate() : new Date(),
-        updatedAt: requestData.updatedAt?.toDate ? requestData.updatedAt.toDate() : new Date(),
+        createdAt: requestData.createdAt?.toDate
+          ? requestData.createdAt.toDate().toISOString()
+          : new Date().toISOString(),
+
+        updatedAt: requestData.updatedAt?.toDate
+          ? requestData.updatedAt.toDate().toISOString()
+          : new Date().toISOString(),
         details: requestData.details || '',
         firstUserId: requestData.firstUserId,
         secondUserId: requestData.secondUserId,
@@ -47,8 +52,13 @@ export const fetchGiveRequests = async (dispatch: AppDispatch) => {
         id: doc.id,
         type: 'give',
         status: requestData.status || 'pending',
-        createdAt: requestData.createdAt?.toDate ? requestData.createdAt.toDate() : new Date(),
-        updatedAt: requestData.updatedAt?.toDate ? requestData.updatedAt.toDate() : new Date(),
+        createdAt: requestData.createdAt?.toDate
+          ? requestData.createdAt.toDate().toISOString()
+          : new Date().toISOString(),
+
+        updatedAt: requestData.updatedAt?.toDate
+          ? requestData.updatedAt.toDate().toISOString()
+          : new Date().toISOString(),
         details: requestData.details || '',
         firstUserId: requestData.firstUserId,
         secondUserId: requestData.secondUserId,

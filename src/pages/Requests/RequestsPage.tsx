@@ -8,13 +8,19 @@ import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/R
 import { RequestCard } from '../../components/RequestCard/RequestCard';
 import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
+<<<<<<< HEAD
 import { useAITheme } from "../../hooks/useAIContext";
+=======
+import { normalizeDate } from "../../utils/normalizeDate";
+>>>>>>> master
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
   const { isAI } = useAITheme();
 
   const users = useSelector((state: RootState) => state.data.users);
+
+  const currentDate = new Date().getTime()
 
   const swapRequests = useSelector((state: RootState) => state.data.swapRequests);
   const giveRequests = useSelector((state: RootState) => state.data.giveRequests);
@@ -51,56 +57,123 @@ export default function RequestsPage() {
     }
   };
 
+  // const requestsWithShifts = useMemo(() => {
+  //   const source = active === 'swap' ? swapRequests : giveRequests;
+
+  //   // Build shifts map once
+  //   const shiftsMap = new Map(
+  //     users
+  //       .flatMap(user => user.shifts || [])
+  //       .map(shift => [shift.id, shift])
+  //   );
+
+  //   return source
+  //     .map(req => {
+  //       if (req.type === 'swap') {
+  //         const firstShift = shiftsMap.get(req.firstShiftId) || null;
+  //         const secondShift = shiftsMap.get(req.secondShiftId) || null;
+
+  //         return {
+  //           ...req,
+  //           fromShift: firstShift,
+  //           toShift: secondShift,
+  //         };
+  //       } else {
+  //         const firstShift = shiftsMap.get(req.shiftId) || null;
+
+  //         return {
+  //           ...req,
+  //           fromShift: firstShift,
+  //         };
+  //       }
+  //     })
+  //     .filter(req => {
+  //       // GIVE REQUEST
+  //       if (req.type === 'give') {
+  //         if (!req.fromShift) return false;
+
+  //         const shiftDate = req.fromShift.date;
+
+  //         return Number(shiftDate) >= currentDate;
+  //       }
+
+  //       // SWAP REQUEST
+  //       if (!req.fromShift || !req.toShift) return false;
+
+  //       const firstDate = req.fromShift.date;
+  //       const secondDate = req.toShift.date;
+
+  //       // Keep request only if BOTH shifts are still upcoming
+  //       return Number(firstDate) >= currentDate && Number(secondDate) >= currentDate;
+  //     });
+  // }, [active, swapRequests, giveRequests, users]);
+
   const requestsWithShifts = useMemo(() => {
-    const source = active === 'swap' ? swapRequests : giveRequests;
+  const source = active === 'swap' ? swapRequests : giveRequests;
 
-    // Build shifts map once
-    const shiftsMap = new Map(
-      users
-        .flatMap(user => user.shifts || [])
-        .map(shift => [shift.id, shift])
-    );
+  // 1. Build shifts map once
+  const shiftsMap = new Map(
+    users
+      .flatMap(user => user.shifts || [])
+      .map(shift => [shift.id, shift])
+  );
 
-    return source
-      .map(req => {
-        if (req.type === 'swap') {
-          const firstShift = shiftsMap.get(req.firstShiftId) || null;
-          const secondShift = shiftsMap.get(req.secondShiftId) || null;
+  // Helper to ensure we have a valid timestamp for comparison
+  const getTimestamp = (dateValue: any) => {
+    if (!dateValue) return 0;
+    // Handle Firebase Timestamps (.toDate()) or standard Date/Strings
+    const date = dateValue.seconds ? new Date(dateValue.seconds * 1000) : new Date(dateValue);
+    return date.getTime();
+  };
 
-          return {
-            ...req,
-            fromShift: firstShift,
-            toShift: secondShift,
-          };
-        } else {
-          const firstShift = shiftsMap.get(req.shiftId) || null;
+  // Get start of today (00:00:00) to avoid filtering out today's shifts
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const comparisonTime = startOfToday.getTime();
 
-          return {
-            ...req,
-            fromShift: firstShift,
-          };
-        }
-      })
-      .filter(req => {
-        // GIVE REQUEST
-        if (req.type === 'give') {
-          if (!req.fromShift) return false;
+  return source
+    .map(req => {
+      if (req.type === 'swap') {
+        const firstShift = shiftsMap.get((req as SwapShiftRequest).firstShiftId) || null;
+        const secondShift = shiftsMap.get((req as SwapShiftRequest).secondShiftId) || null;
 
-          const shiftDate = req.fromShift.date;
+        return {
+          ...req,
+          fromShift: firstShift,
+          toShift: secondShift,
+        };
+      } else {
+        const firstShift = shiftsMap.get((req as GiveShiftRequest).shiftId) || null;
 
-          return shiftDate >= new Date();
-        }
+        return {
+          ...req,
+          fromShift: firstShift,
+        };
+      }
+    })
+    .filter(req => {
+      // If we couldn't find the associated shift in the users array, don't show the request
+      if (!req.fromShift) return false;
 
-        // SWAP REQUEST
-        if (!req.fromShift || !req.toShift) return false;
+      // GIVE REQUEST logic
+      if (req.type === 'give') {
+        return getTimestamp(req.fromShift.date) >= comparisonTime;
+      }
 
-        const firstDate = req.fromShift.date;
-        const secondDate = req.toShift.date;
+      // SWAP REQUEST logic
+      if (req.type === 'swap') {
+        if (!req.toShift) return false;
 
-        // Keep request only if BOTH shifts are still upcoming
-        return firstDate >= new Date() && secondDate >= new Date();
-      });
-  }, [active, swapRequests, giveRequests, users]);
+        const firstDateTs = getTimestamp(req.fromShift.date);
+        const secondDateTs = getTimestamp(req.toShift.date);
+
+        // Show only if BOTH shifts are today or in the future
+        return firstDateTs >= comparisonTime && secondDateTs >= comparisonTime;
+      }
+
+      return false;
+    });
+}, [active, swapRequests, giveRequests, users]);
 
   useEffect(() => {
     const shiftsMap = new Map(
@@ -111,6 +184,9 @@ export default function RequestsPage() {
 
     const checkAndDeleteExpiredRequests = async () => {
       const allRequests = [...swapRequests, ...giveRequests];
+      const currentTime = new Date().getTime();
+
+
 
       for (const req of allRequests) {
         let shouldDelete = false;
@@ -121,7 +197,10 @@ export default function RequestsPage() {
           if (!shift) {
             shouldDelete = true;
           } else {
-            shouldDelete = shift.date < new Date();
+            const shiftDate = normalizeDate(shift.date);
+
+            shouldDelete =
+              shiftDate.getTime() < currentTime;
           }
         }
 
@@ -129,21 +208,32 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
+<<<<<<< HEAD
           const currentTime = new Date().getTime();
 
+=======
+>>>>>>> master
           console.log(firstShift?.date);
           console.log(secondShift?.date);
 
           console.log(currentTime);
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
             shouldDelete =
+<<<<<<< HEAD
               firstShift.date.getDate() < currentTime ||
               secondShift.date.getDate() < currentTime;
+=======
+              normalizeDate(firstShift.date).getTime() < currentTime ||
+              normalizeDate(secondShift.date).getTime() < currentTime;
+>>>>>>> master
           }
         }
 
