@@ -8,10 +8,12 @@ import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
 import { Shift } from "../../types/Shift";
 import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
 import { Colors, Posts } from "../../const";
+import { useAITheme } from "../../hooks/useAIContext";
 
 export default function SchedulePage() {
   const users = useSelector((state: RootState) => state.data.users);
 
+  const { isAI } = useAITheme();
   const [weekOffset, setWeekOffset] = useState(0);
 
   const weekDates = useMemo(() => getWeekByOffset(weekOffset), [weekOffset]);

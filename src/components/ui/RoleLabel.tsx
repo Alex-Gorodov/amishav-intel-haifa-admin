@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { Role, User } from "../../types/User";
 import { addUserRole, removeUserRole } from "../../store/actions";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface RoleLabelProps {
   isButton?: boolean;
@@ -11,6 +12,7 @@ interface RoleLabelProps {
 
 export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   const dispatch = useDispatch();
+  const { isAI } = useAITheme();
 
   const removeRole = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -31,21 +33,24 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   return (
     isButton ? (
       <button
-        className="employee__role-label employee__role-label--add"
+        className={`employee__role-label employee__role-label--add ${isAI ? 'role--ai' : ''}`}
         title="הוסף תפקיד"
         onClick={addRole}
       >
-        {role.label}
+        {isAI && <span className="ai-plus-icon">+</span>}
+        <span>
+          {role.label}
+        </span>
       </button>
     ) : (
-    <div className="employee__role-label">
+    <div className={`employee__role-label ${isAI ? 'role--ai' : ''}`}>
       <span>{role.label}</span>
       <button
         className="employee__role-remove-btn"
         title="הסר תפקיד"
         onClick={removeRole}
       >
-        ×
+        {isAI ? '×' : '×'}
       </button>
     </div>
   ));

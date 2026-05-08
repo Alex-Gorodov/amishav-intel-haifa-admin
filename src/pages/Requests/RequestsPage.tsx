@@ -8,14 +8,20 @@ import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/R
 import { RequestCard } from '../../components/RequestCard/RequestCard';
 import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
+import { useAITheme } from "../../hooks/useAIContext";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
+  const { isAI } = useAITheme();
 
   const users = useSelector((state: RootState) => state.data.users);
 
   const swapRequests = useSelector((state: RootState) => state.data.swapRequests);
   const giveRequests = useSelector((state: RootState) => state.data.giveRequests);
+
+  console.log('swap', swapRequests);
+  console.log('give', giveRequests);
+
 
   const [active, setActive] = useState<'give' | 'swap'>('swap')
 
@@ -123,12 +129,21 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
+          const currentTime = new Date().getTime();
+
+          console.log(firstShift?.date);
+          console.log(secondShift?.date);
+
+          console.log(currentTime);
+
+
+
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
             shouldDelete =
-              firstShift.date < new Date() ||
-              secondShift.date < new Date();
+              firstShift.date.getDate() < currentTime ||
+              secondShift.date.getDate() < currentTime;
           }
         }
 
@@ -152,7 +167,8 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div>
+      <div className={`page-content-wrapper ${isAI ? 'page--ai' : ''}`}>
+
         <div className="page__header page__header--requests">
           <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
         </div>

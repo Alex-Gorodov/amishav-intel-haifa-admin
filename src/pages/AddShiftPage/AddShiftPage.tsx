@@ -11,8 +11,12 @@ import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import ToastMessage from "../../components/ui/ToastMessage";
+import { useAITheme } from "../../hooks/useAIContext";
 
 export default function AddShiftPage() {
+  const dispatch = useDispatch();
+  const { isAI } = useAITheme();
+
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState("");
@@ -22,18 +26,10 @@ export default function AddShiftPage() {
 
   const [focusRemark, setFocusRemark] = useState(false)
 
-  // const [selectedUser, setSelectedUser] = useState<string | null >(null);
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
 
   const users = useSelector((state: State) => state.data.users);
-
-  const filteredUsers = users.filter(u => {
-    const fullName = `${u.firstName} ${u.secondName}`;
-    return fullName.includes(insertedUserName);
-  });
-
-  const dispatch = useDispatch();
 
   const resetForm = () => {
     setUserId(null);
@@ -163,10 +159,11 @@ export default function AddShiftPage() {
   return (
     <Layout>
       <div className="page__content">
-        <form onSubmit={handleSave} method="post">
-          {/* <div className="page__header">
-            <h2 className="form__title">הוספת משמרת</h2>
-          </div> */}
+        <form
+          onSubmit={handleSave}
+          method="post"
+          className={`form ${isAI ? 'form--ai-theme' : ''}`}
+        >
 
           <div className="form__wrapper form__wrapper--fullscreen">
 
@@ -184,7 +181,7 @@ export default function AddShiftPage() {
                 <label className="form__label" htmlFor='user'>בחר עובד</label>
                 <div className="form__list form__list--users">
                   <input
-                    className="form__list-item form__list-item--search-user"
+                    className="form__input form__list-item form__list-item--search-user"
                     type="search"
                     id="user"
                     onChange={(e) => setInsertedUserName(e.target.value)}
@@ -261,10 +258,10 @@ export default function AddShiftPage() {
 
             <button
               onClick={handleSave}
-              className='button'
-              >
+              className='button button--wide'
+              type='submit'
+            >
               {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
-
             </button>
           </div>
 

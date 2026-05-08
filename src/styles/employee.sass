@@ -1,95 +1,91 @@
 $employee-header-height: 65px
+$breakpoint-tablet: 768px
+$breakpoint-mobile: 600px
 
 .employee
   border-bottom: 1px solid #ddd
   cursor: pointer
+  transition: background-color 0.3s ease
 
   td
     padding: 0
 
+  &:hover
+    background-color: #f9f9f9
 
+  // --- Content Container ---
   &__content
     overflow: hidden
-    transition: max-height 0.35s ease
     max-height: 100px
+    transition: max-height 0.35s ease
+
     &:has(.roles-popup)
       overflow: unset
 
-    @media (max-width: 768px)
+    &--uncollapsed
+      max-height: 500px
+
+    @media (max-width: $breakpoint-tablet)
       max-height: unset
 
-  &__content--uncollapsed
-    max-height: 500px
-    @media (max-width: 768px)
-      max-height: unset
-
-
+  // --- Grid System ---
   &__grid
     display: grid
     grid-template-columns: 1fr 3fr 2fr 2fr 1fr
     padding: 8px
+    gap: 8px
+
+    @media (max-width: $breakpoint-tablet)
+      grid-template-columns: 1fr
+      gap: 1rem
+
     &--uncollapsed
       grid-template-rows: auto 1fr 1fr 1fr
       row-gap: 28px
-      @media (max-width: 768px)
+
+      @media (max-width: $breakpoint-tablet)
         grid-template-rows: unset
 
-      & .employee__name
+      .employee__name
         grid-row: 1
         grid-column: 1
-        @media (max-width: 768px)
-          grid-column: 1
-          grid-row: 1
 
-
-      & .employee__roles
+      .employee__roles
         grid-row: 1
         grid-column: 2
-        @media (max-width: 768px)
-          grid-column: 1
+        @media (max-width: $breakpoint-tablet)
           grid-row: 3
+          grid-column: 1
 
-
-      & .employee__trainings
-        grid-column: 2 / 5
+      .employee__trainings
         grid-row: 2
-        flex-wrap: wrap
-        @media (max-width: 768px)
-          grid-column: 1
-          grid-row: 4
-
-
-      & .employee__documents
         grid-column: 2 / 5
+        @media (max-width: $breakpoint-tablet)
+          grid-row: 4
+          grid-column: 1
+
+      .employee__documents
         grid-row: 3
-        @media (max-width: 768px)
-          grid-column: 1
+        grid-column: 2 / 5
+        @media (max-width: $breakpoint-tablet)
           grid-row: 5
+          grid-column: 1
 
-
-      & .employee__buttons
-        grid-column: 2
+      .employee__buttons
         grid-row: 4
-        @media (max-width: 768px)
-          grid-column: 1
+        grid-column: 2
+        @media (max-width: $breakpoint-tablet)
           grid-row: 6
-
-
-      & .employee__phone
-        grid-column: 5
-        grid-row: 1
-        @media (max-width: 768px)
           grid-column: 1
+
+      .employee__phone
+        grid-row: 1
+        grid-column: 5
+        @media (max-width: $breakpoint-tablet)
           grid-row: 2
+          grid-column: 1
 
-
-    @media (max-width: 768px)
-      gap: 1rem
-      grid-template-columns: 1fr
-
-  &:hover
-    background-color: #f9f9f9
-
+  // --- Elements ---
   &__name
     display: flex
     align-items: flex-start
@@ -100,50 +96,54 @@ $employee-header-height: 65px
     width: 0
     height: 0
     margin-top: 4px
-    border-right: 5px solid transparent
     border-left: 5px solid transparent
-
+    border-right: 5px solid transparent
     border-top: 10px solid $intel-dark-blue
-    cursor: pointer
     transition: transform 0.4s
+    cursor: pointer
+
     &--uncollapsed
       transform: rotateX(180deg)
 
-  &__roles
+  &__roles, &__trainings
     display: flex
-    flex-direction: row
-    align-items: flex-start
     flex-wrap: wrap
     gap: 0.5rem
-    // position: relative
-    @media (max-width: 600px)
+    @media (max-width: $breakpoint-mobile)
       flex-direction: column
 
-
+  // --- Labels & Buttons ---
   &__role-label
     position: relative
     display: flex
     align-items: flex-start
-    justify-content: center
     background-color: #f0f0f0
     border-radius: 0.5rem
-    padding: 0.25rem 0.5rem
-    padding-left: 24px
+    padding: 0.25rem 0.5rem 0.25rem 24px
     font-size: 0.875rem
     color: #333
+
+    @media (max-width: $breakpoint-mobile)
+      width: 100%
+
+
     &--add
       background-color: $intel-dark-blue
       color: $white
-      border: none
       font-weight: bold
-      padding: 0.25rem 0.5rem
+      border: none
       cursor: pointer
       transition: 0.3s
-      &:hover
-        background-color: #c0ddff
+      padding: 0.25rem 0.5rem
 
-    @media (max-width: 600px)
-      width: 100%
+      &:hover
+
+      &:hover
+        padding-right: 1.3rem
+        background-color: #81bcff
+
+    &--plus:hover
+      padding-right: 0.5rem
 
   &__role-remove-btn
     position: absolute
@@ -159,18 +159,98 @@ $employee-header-height: 65px
     &:hover
       color: $gray-dark
 
-  &__trainings
-    display: flex
-    flex-direction: row
-    align-items: flex-start
-    gap: 0.5rem
-    @media (max-width: 600px)
-      flex-direction: column
-
   &__buttons
     display: flex
-    flex-direction: row
     flex-wrap: wrap
     gap: 8px
-    grid-row: 2
-    grid-column: 1 / -1
+
+  // --- AI Overrides (Localized) ---
+  .role--ai
+    background-color: $ai-bg-glass
+    border: 1px solid $ai-border
+    color: $ai-cyan
+    border-radius: 4px
+    backdrop-filter: blur(4px)
+    padding-left: 28px
+    font-family: 'JetBrains Mono', monospace
+    transition: all 0.2s ease
+
+    &.employee__role-label--add
+      display: flex
+      flex-direction: row
+      align-items: center
+      gap: 0.65rem
+      background-color: transparent
+      border: 1px dashed $ai-cyan
+      padding-left: 12px
+
+      &:hover
+        background-color: rgba(0, 242, 255, 0.15)
+        border-style: solid
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.3)
+
+    .employee__role-remove-btn
+      height: 18px
+      width: 18px
+      color: $ai-cyan
+      top: 50%
+      transform: translateY(-55%)
+      opacity: 0.7
+
+      &:hover
+        opacity: 1
+        color: #ff4d4d
+        filter: drop-shadow(0 0 5px #ff4d4d)
+
+// --- AI Theme Row States ---
+.employee--ai
+  background: transparent
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05)
+  transition: 0.3s
+
+  &:hover
+    background: rgba(0, 113, 197, 0.05)
+
+  &.employee--uncollapsed-row
+    background: rgba(10, 25, 47, 0.4)
+    backdrop-filter: blur(10px)
+    border-left: 4px solid #00c6ff
+    box-shadow: inset 10px 0 20px rgba(0, 198, 255, 0.05)
+
+    .employee__uncollapse-trigger
+      border-top-color: #00c6ff
+      filter: drop-shadow(0 0 5px rgba(0, 198, 255, 0.5))
+
+  .employee__phone
+    color: #8892b0
+    font-family: 'Courier New', monospace
+
+// --- Table AI Global ---
+.page--ai .employees-table
+  background: transparent
+  border: none
+
+  thead
+    background: rgb(23 53 96)
+    th
+      color: #00c6ff // Restored to cyan; was red in your snippet
+      text-transform: uppercase
+      letter-spacing: 1.5px
+
+// Animations
+.ai-status-pulse
+  display: inline-block
+  width: 8px
+  height: 8px
+  margin-right: 10px
+  background: #64ffda
+  border-radius: 50%
+  animation: pulse 2s infinite
+
+@keyframes pulse
+  0%
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7)
+  70%
+    box-shadow: 0 0 0 10px rgba(100, 255, 218, 0)
+  100%
+    box-shadow: 0 0 0 0 rgba(100, 255, 218, 0)

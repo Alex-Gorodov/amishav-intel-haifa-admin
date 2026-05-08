@@ -1,32 +1,22 @@
 import { useLocation } from 'react-router-dom';
 import browserHistory from '../../browser-history';
 import { AppRoute } from '../../const';
-import { useAITheme } from '../../context/AIThemeContext';
 import { Toggle } from '../ui/Toggle';
+import { useAITheme } from '../../hooks/useAIContext';
 
 interface HeaderProps {
   title: string;
+  isAI: boolean;      // Added prop
+  setIsAI: (val: boolean) => void; // Added prop
 }
 
-export default function Header({ title }: HeaderProps) {
-  const location = useLocation();
-  const normalizedPath = location.pathname.replace(/\/$/, '');
-  const isMainPage = normalizedPath === `${AppRoute.Root}`;
-  const { isDesktop, isAI, setIsAI } = useAITheme();
+export default function Header({ title, isAI, setIsAI }: HeaderProps) {
+  const { isDesktop } = useAITheme();
 
   return (
-    // We keep 'header' and its wrapper logic exactly as you had it
     <header className={`header ${isAI ? 'header--ai' : ''}`}>
-      <div className={`header__wrapper ${/* add your collapsed logic here if needed */ ''}`}>
+      <div className="header__inner-content">
         <div className="header__left-section">
-          {!isMainPage && (
-            <button
-              className="header__back-circle"
-              onClick={() => browserHistory.back()}
-            >
-              ←
-            </button>
-          )}
           <p className="header__title">{title}</p>
         </div>
 

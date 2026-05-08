@@ -12,7 +12,7 @@ interface AIThemeContextType {
   setIsAI: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AIThemeContext = createContext<AIThemeContextType | undefined>(
+export const AIThemeContext = createContext<AIThemeContextType | undefined>(
   undefined
 );
 
@@ -44,16 +44,4 @@ export function AIThemeProvider({ children }: ProviderProps) {
       {children}
     </AIThemeContext.Provider>
   );
-}
-
-export function useAITheme() {
-  const context = useContext(AIThemeContext);
-
-  if (!context) {
-    throw new Error(
-      "useAITheme must be used inside AIThemeProvider"
-    );
-  }
-
-  return context;
 }

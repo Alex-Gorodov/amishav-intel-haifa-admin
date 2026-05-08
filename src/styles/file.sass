@@ -9,6 +9,7 @@
     align-items: center
 
   &__modal
+    @include remove-scroll-bar
     background: #fff
     padding: 24px
     border-radius: 20px
@@ -19,12 +20,6 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25)
     &--employee
       max-width: 420px
-    &::-webkit-scrollbar
-      display: none
-
-    scrollbar-width: none
-
-    -ms-overflow-style: none
 
   &__wrapper
     display: flex
@@ -97,17 +92,13 @@
     gap: 8px
 
   &__list
+    @include remove-scroll-bar
     max-height: 200px
     border: 1px solid #ccc
     padding: 8px
     border-radius: 24px
     overflow: scroll
     box-shadow: inset 0px -4px 10px 0px rgba(0,0,0,0.4)
-    &::-webkit-scrollbar
-      display: none
-
-    scrollbar-width: none
-    -ms-overflow-style: none
 
   &__list-item
     padding: 12px

@@ -13,12 +13,14 @@ import { Pencil, Save } from "lucide-react";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
 import { Colors } from "../../const";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface EmployeeItemProps {
   user: User;
 }
 
 export default function EmployeeItem({user}: EmployeeItemProps) {
+  const { isAI } = useAITheme();
   const dispatch = useDispatch();
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -104,7 +106,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
   return (
     <tr
-      className="employee"
+      className={`employee ${isAI ? 'employee--ai' : ''} ${!isCollapsed ? 'employee--uncollapsed-row' : ''}`}
       onClick={() => setIsCollapsed(!isCollapsed)}
     >
       <td colSpan={4}>
@@ -138,7 +140,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               <div className="roles-popup__wrapper" ref={wrapperRef}>
                 <button
                   ref={triggerRef}
-                  className="employee__role-label employee__role-label--add"
+                  className="button employee__role-label employee__role-label--add employee__role-label--plus"
                   onClick={handleOpenRoles}
                 >
                   +
