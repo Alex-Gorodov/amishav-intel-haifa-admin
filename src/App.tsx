@@ -9,7 +9,7 @@ import RequestsPage from "./pages/Requests/RequestsPage";
 import NewEmployeePage from "./pages/NewEmployeePage/NewEmployeePage";
 import AddShiftPage from "./pages/AddShiftPage/AddShiftPage";
 import NewProtocolPage from "./pages/NewProtocolPage/NewProtocolPage";
-import Main from "./pages/Main/Main";
+import Main from "./components/Main/Main";
 import SchedulePage from "./pages/SchedulePage/SchedulePage";
 
 export function App() {

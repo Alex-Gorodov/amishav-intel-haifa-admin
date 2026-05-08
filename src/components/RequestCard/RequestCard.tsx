@@ -23,6 +23,12 @@ export const RequestCard = ({
 
   const isSwap = req.type === 'swap';
 
+  const formatDate = (date: any) => {
+    if (!date) return 'לא ידוע';
+    const d = date.seconds ? new Date(date.seconds * 1000) : new Date(date);
+    return d.toLocaleDateString('he-IL');
+  };
+
   return (
     <div className="request-card">
 
@@ -48,7 +54,7 @@ export const RequestCard = ({
               {req.fromShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-              {req.fromShift?.date.toLocaleDateString('he-IL')}
+              {formatDate(req.fromShift?.date)}
             </span>
           </div>
           <div className="request-card__shift">
@@ -56,7 +62,7 @@ export const RequestCard = ({
               {req.toShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-              {req.toShift?.date.toLocaleDateString('he-IL')}
+              {formatDate(req.toShift?.date)}
             </span>
           </div>
         </div>
@@ -67,7 +73,7 @@ export const RequestCard = ({
               {req.fromShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-              {req.fromShift?.date.toLocaleDateString('he-IL')}
+              {formatDate(req.fromShift?.date)}
             </span>
           </div>
         </div>
