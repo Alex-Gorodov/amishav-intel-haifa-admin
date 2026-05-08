@@ -8,11 +8,8 @@ import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/R
 import { RequestCard } from '../../components/RequestCard/RequestCard';
 import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
-<<<<<<< HEAD
-import { useAITheme } from "../../hooks/useAIContext";
-=======
 import { normalizeDate } from "../../utils/normalizeDate";
->>>>>>> master
+import { useAITheme } from "../../hooks/useAIContext";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
@@ -208,32 +205,17 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
-<<<<<<< HEAD
-          const currentTime = new Date().getTime();
-
-=======
->>>>>>> master
           console.log(firstShift?.date);
           console.log(secondShift?.date);
 
           console.log(currentTime);
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
             shouldDelete =
-<<<<<<< HEAD
-              firstShift.date.getDate() < currentTime ||
-              secondShift.date.getDate() < currentTime;
-=======
               normalizeDate(firstShift.date).getTime() < currentTime ||
               normalizeDate(secondShift.date).getTime() < currentTime;
->>>>>>> master
           }
         }
 

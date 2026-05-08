@@ -54,11 +54,7 @@ export const RequestCard = ({
               {req.fromShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-<<<<<<< HEAD
-              {req.fromShift?.date.toLocaleDateString('he-IL')}
-=======
               {formatDate(req.fromShift?.date)}
->>>>>>> master
             </span>
           </div>
           <div className="request-card__shift">
@@ -66,11 +62,7 @@ export const RequestCard = ({
               {req.toShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-<<<<<<< HEAD
-              {req.toShift?.date.toLocaleDateString('he-IL')}
-=======
               {formatDate(req.toShift?.date)}
->>>>>>> master
             </span>
           </div>
         </div>
@@ -81,11 +73,7 @@ export const RequestCard = ({
               {req.fromShift?.post?.title || 'לא ידוע'}
             </span>
             <span className="request-card__text">
-<<<<<<< HEAD
-              {req.fromShift?.date.toLocaleDateString('he-IL')}
-=======
               {formatDate(req.fromShift?.date)}
->>>>>>> master
             </span>
           </div>
         </div>
