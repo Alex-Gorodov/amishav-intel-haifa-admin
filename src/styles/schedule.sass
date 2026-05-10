@@ -163,7 +163,7 @@
 
   // Pattern background decoration context (decorative visual layer depth localized list surface)
   background-image: linear-gradient(rgba($ai-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.03) 1px, transparent 1px)
-  background-size: 20px 20px
+  background-size: $cell-size $cell-size
   background-position: center
 
   .schedule__header-scroll
@@ -190,6 +190,9 @@
 
   .schedule__right-header
     border: none
+
+  .form__overlay
+    align-items: flex-start
 
 .schedule
   &__cell
