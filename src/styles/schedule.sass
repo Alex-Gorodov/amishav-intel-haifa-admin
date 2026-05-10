@@ -46,10 +46,11 @@
     overflow-x: auto
 
   &__right-header
-    width: 100px
+    // width: 100px
     display: flex
     align-items: center
     justify-content: center
+    border-radius: 4px
     border-left: 1px solid #c6c6c6
 
   /* BODY */
@@ -60,6 +61,7 @@
       grid-template-columns: auto 80px
 
   /* MAIN TABLE */
+
   &__main
     @include remove-scroll-bar
     width: 100%
@@ -164,6 +166,8 @@
   background-size: 20px 20px
   background-position: center
 
+  .schedule__header-scroll
+    background-color: unset
   // -----------------------------------------------------------
   // B. Localized Visibility Fixes organizational Standard contextual context context depth surface depth depth surface context organization Standard dynamic Standard dynamics dynamically standard implicitly dynamically dynamic implicit dynamics dynamic Standard standard dynamic implicitly dynamics dynamic dynamically dynamic Standard standard standard dynamics dynamic dynamic dynamical standard Standard dynamically Standard dynamically dynamics standard dynamic implicitly Standard implicit dynamics standard implicitly dynamics Standard dynamic dynamic dynamical standard implicitly Standard Standard dynamical Standard Standard dynamic dynamic Standard dynamic implicitly dynamics Standard dynamic implicitly dynamics dynamic implicitly Standard implicitly dynamic Standard implicity Standard implicity dynamic implicit standard standard standard implicit standard implicitly dynamics standard implicit dynamic Standard implicity dynamic implicitly standard standard Standard dynamic dynamic standard dynamically Standard Standard dynamically organizational Standard dynamic Standard dynamically Standard dynamic dynamically dynamic Standard implicitly standard dynamic Standard standard Standard Standard dynamical dynamical organizational Standard standard dynamic dynamically dynamic dynamics dynamic dynamics dynamic dynamics dynamic organizational standard dynamics dynamical standard dynamic Standard dynamic dynamics standard dynamic standard dynamics dynamical dynamics dynamical dynamics dynamics dynamical dynamics dynamics dynamic dynamics dynamics dynamic Standard dynamic standard standard standard dynamically standard standard dynamically standard dynamically standard standard implicitly Standard dynamically dynamic standard standard implicit dynamics implicitly dynamics dynamic standard dynamic implicitly standard dynamically Standard standard Standard dynamic dynamic Standard Standard standard Standard standard standard standard Standard implicitly list surface organization dynamic dynamic standard multiple dynamically Standard dynamically Standard dynamically standard implicitly dynamic Standard standard implicitly Standard dynamically organizational dynamic Standard implicitly Standard dynamically organizational Standard dynamical standard dynamic standard Standard standard standard Standard Standard implicitly dynamic standard dynamic multiple logically Standard dynamical multiple organisational standard multiple organizational dynamic standard implicitly dynamic standard multiple logical dynamic standard multiple restricted Standard dynamischer standard dynamic standard implicitly
   // ENFORCING WHITE Primary Text (Hebrew organizational organizational organizational titles, status labels, internal button text) organizational organization organizacional organizacional organisational organizational context organizational organizational organisational standard list surface Standard dynamically organizational Standard implicit dynamic Standard dynamical Standard dynamic implicitly lists Standard dynamic dynamic implicitly lists dynamically implicitly dynamics dynamically Standard standard implicitly dynamics dynamically Standard Standard dynamically organisational dynamically Standard implicitly dynamic implicitly standard dynamically organizational dynamically Standard implicit dynamic standard dynamically Standard implicit dynamic standard dynamics dynamically lists dynamic dynamic dynamics dynamics dynamic standard dynamic dynamics dynamic Standard dynamic dynamics Standard standard implicitly Standard Standard dynamically dynamic standard standard implicit standard dynamics standard standard Standard dynamical dynamically organizational Standard dynamic Standard dynamically Standard dynamical dynamic Standard Standard implicitly standard dynamics Standard dynamic Standard dynamic dynamics Standard dynamic standard Standard dynamic Standard dynamic dynamics Standard dynamically dynamics standard implicitly Standard dynamics Standard Standard standard dynamics Standard implicitly dynamics Standard standard standard Standard Standard implicitly dynamic standard dynamically Standard dynamic dynamic dynamic multiple dynamically standard implicitly standard implicitly dynamics implicit dynamics dynamics Standard standard dynamic dynamics standard dynamic Standard implicitly dynamics dynamic Standard dynamic standard implicitly dynamics implicit dynamics standard dynamic implicit Standard standard Standard Standard standard Standard standard Standard standard Standard Standard standard implicitly dynamic Standard implicitly dynamic implicitly dynamical Standard Standard dynamically organizational standard dynamic Standard Standard Standard Standard dynamischer standard dynamic standard dynamically Standard dynamically dynamic Standard dynamischer Standard standard standard Standard standard dynamischer Standard dynamic standard dynamically standard implicitly standard standard dynamic Standard dynamic standard standard standard implicitly dynamic standard dynamic standard standard dynamic standard dynamic multiple logically standard Standard dynamic Standard dynamic Multiple logically Standard dynamical multiple organizational dynamic multiple organizational dynamical multiple dynamically standard dynamically list surface Standard dynamically Standard dynamically Standard dynamically list surface organization dynamically lists organization dynamically Standard implicitly Standard standard multiple multiple restricted organisational multiple logic restricted organisational standard multiple logic restrict organisational dynamic implicitly list surface Standard implicitly list surface organisational dynamically Standard dynamically Standard dynamical standard dynamically list surface organisational dynamically organisational dynamically standard standard dynamic Standard implicit dynamic dynamically Standard implicitly dynamic dynamics Standard Standard dynamically standard Standard dynamischer Standard standard Standard Standard dynamic Standard standard Standard Standard Standard standard standard standard Standard dynamic Standard Standard dynamic Standard Standard standard standard standard standard Standard standard Standard standard standard standard standard standard standard Standard dynamischer standard standard Standard dynamic standard Standard Standard dynamic standard dynamic dynamic standard standard dynamic Standard dynamic standard dynamical Standard dynamically Standard dynamically dynamic Standard dynamischer Standard Standard dynamic Standard dynamically dynamic Standard Standard dynamic dynamic dynamic Standard standard dynamic standard implicitly Standard dynamically Standard dynamics standard dynamically standard standard standard dynamic standard dynamics standard Standard dynamical dynamic Standard dynamical Standard dynamical standard implicitly standard standard implicitly dynamic Standard dynamic standard dynamic multiple dynamically standard implicity standard multiple logically Standard multiple organisational standard dynamically Standard standard standard implicitly standard intuitively Standard dynamic multiple restricted standard intuitively.
@@ -173,6 +177,19 @@
   .schedule__header-scroll, .schedule__right
     border-color: rgba($ai-cyan, 0.4) // localized cyan border visibility
 
+  .grid__cell--header,
+  .schedule__right-cell
+    border: 1px solid #074558
+    border-radius: 4px
+    background-color: #15191e
+    color: $white
+
+  .schedule__right
+    background-color: unset
+    border: none
+
+  .schedule__right-header
+    border: none
 
 .schedule
   &__cell
