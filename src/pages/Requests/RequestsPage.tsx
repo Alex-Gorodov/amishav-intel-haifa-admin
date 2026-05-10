@@ -119,6 +119,24 @@ export default function RequestsPage() {
     });
 }, [active, swapRequests, giveRequests, users]);
 
+  function combineDateAndTime(
+    date: Date | any,
+    time: string
+  ): Date {
+    const normalizedDate = normalizeDate(date);
+
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const combined = new Date(normalizedDate);
+
+    combined.setHours(hours);
+    combined.setMinutes(minutes);
+    combined.setSeconds(0);
+    combined.setMilliseconds(0);
+
+    return combined;
+  }
+
   useEffect(() => {
     const shiftsMap = new Map(
       users
@@ -129,8 +147,6 @@ export default function RequestsPage() {
     const checkAndDeleteExpiredRequests = async () => {
       const allRequests = [...swapRequests, ...giveRequests];
       const currentTime = new Date().getTime();
-
-
 
       for (const req of allRequests) {
         let shouldDelete = false;
@@ -152,19 +168,25 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
-          console.log(firstShift?.date);
-          console.log(secondShift?.date);
-
-          console.log(currentTime);
-
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
+            const firstShiftStart = combineDateAndTime(
+              firstShift.date,
+              firstShift.startTime
+            ).getTime();
+
+            const secondShiftStart = combineDateAndTime(
+              secondShift.date,
+              secondShift.startTime
+            ).getTime();
+
             shouldDelete =
-              normalizeDate(firstShift.date).getTime() < currentTime ||
-              normalizeDate(secondShift.date).getTime() < currentTime;
+              firstShiftStart < currentTime ||
+              secondShiftStart < currentTime;
           }
         }
+
 
         if (shouldDelete) {
           try {

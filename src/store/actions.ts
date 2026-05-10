@@ -42,7 +42,7 @@ export const setSuccess = createAction<{message: string | null}>('app/setSuccess
 
 export const setUserShifts = createAction<{userId: string, shifts: Shift[]}>('data/setUserShifts');
 
-export const setTrainingupdatingDate = createAction<{userId: string, training: Training, date: Date}>('data/setTrainingupdatingDate')
+export const setTrainingUpdatingDate = createAction<{userId: string, training: Training, date: Date}>('data/setTrainingUpdatingDate')
 
 export const addUserRole = createAction<{userId: string, role: Role}>('data/addUserRole');
 export const removeUserRole = createAction<{userId: string, role: Role}>('data/removeUserRole');
