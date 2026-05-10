@@ -19,22 +19,29 @@
 
     tr
       display: grid
-      grid-template-columns: 1fr 3fr 2fr 2fr 1fr
+      padding-right: calc($cell-size * 2)
+
+      // grid-template-columns: 1fr 3fr 2fr 2fr 1fr
+      grid-template-columns: 200px 500px 200px 200px 100px
+      gap: $cell-size
 
     th
-      padding: 15px
+      padding: calc($cell-size / 2) 0
       text-align: right
       font-weight: 600
 
   tbody
     tr
       border-bottom: 1px solid #ddd
+      background-image: linear-gradient(rgba(10, 188, 199, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(10, 188, 199, 0.07) 1px, transparent 1px)
+      background-size: $cell-size $cell-size
+      background-position: top right
 
       &:hover
         background-color: #ecfaff
 
       td
-        padding: 12px 15px
+        padding: $cell-size calc($cell-size * 2)
         text-align: right
         vertical-align: middle
 

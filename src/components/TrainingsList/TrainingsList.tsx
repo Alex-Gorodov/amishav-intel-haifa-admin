@@ -8,6 +8,7 @@ import { Timestamp } from "firebase/firestore";
 import { TRAINING_SCHEMA, TrainingKey } from "../../const";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { useDispatch } from "react-redux";
+import { getFormattedTimestamp, normalizeDate } from "../../utils/dateUtils";
 
 interface TrainingsListProps {
   user: User;
@@ -19,10 +20,10 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
   const dispatch = useDispatch();
 
   const getExpirationDate = (training: Training) => {
-    if (!training.executionDate) return null;
+    if (!training.updatingDate) return null;
 
-    const executionDate = training.executionDate.toDate();
-    const expirationDate = new Date(executionDate);
+    const updatingDate = normalizeDate(training.updatingDate);
+    const expirationDate = new Date(updatingDate);
 
     expirationDate.setDate(
       expirationDate.getDate() + training.validityPeriod
@@ -57,6 +58,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
     setDatePickerKey(key)
   }
 
+
   const handleEditData = (e: React.MouseEvent, key: TrainingKey) => {
     e.stopPropagation();
 
@@ -66,17 +68,19 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
     setDatePickerKey(key);
 
     setChosenDate(
-      training?.executionDate
-        ? training.executionDate.toDate().toISOString().split("T")[0]
-        : null
-    );
+      training?.updatingDate
+      ? normalizeDate(training.updatingDate)
+          .toISOString()
+          .split("T")[0]
+      : null
+        );
   };
 
   const handleDeleteData = async () => {
     if (!deleteKey) return;
 
     await setEmployeeData(user.id, {
-      [`trainings.${deleteKey}.executionDate`]: null,
+      [`trainings.${deleteKey}.updatingDate`]: null,
       [`trainings.${deleteKey}.title`]: TRAINING_SCHEMA[deleteKey].title,
       [`trainings.${deleteKey}.validityPeriod`]: TRAINING_SCHEMA[deleteKey].validityPeriod,
       [`trainings.${deleteKey}.id`]: `${user.id}-${deleteKey}`,
@@ -133,7 +137,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                 if (!chosenDate || !datePickerKey) return;
 
                 await setEmployeeData(user.id, {
-                  [`trainings.${datePickerKey}.executionDate`]:
+                  [`trainings.${datePickerKey}.updatingDate`]:
                     Timestamp.fromDate(new Date(chosenDate)),
 
                   [`trainings.${datePickerKey}.title`]:
@@ -174,14 +178,12 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
         {Object.keys(trainingLabels).map((key) => {
           const training = user.trainings[key as keyof typeof user.trainings];
 
-          if (training?.executionDate) {
+          if (training?.updatingDate) {
             return isCollapsed ? (
               <span
                 style={{display: 'flex'}}
                 key={key}
-                title={`${training.title} - ${new Date(
-                  training.executionDate.toDate()
-                ).toLocaleDateString('he-IL')}`}
+                title={`${training.title} - ${getFormattedTimestamp(training.updatingDate)}`}
               >
                 {getIcon(training.title)}
               </span>

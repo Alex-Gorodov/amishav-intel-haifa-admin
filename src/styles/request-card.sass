@@ -63,3 +63,97 @@
     text-align: center
     font-weight: 600
     color: white
+
+  &--ai
+  background: $cyber-panel-bg
+  border: 1px solid rgba($ai-cyan, 0.4)
+  box-shadow: 0 0 20px rgba($ai-cyan, 0.2), inset 0 0 10px rgba($ai-cyan, 0.1)
+  backdrop-filter: blur(8px)
+
+  // Subtle background pattern for cards (AI decoration)
+  background-image: linear-gradient(rgba($ai-cyan, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.05) 1px, transparent 1px)
+  background-size: 25px 25px
+
+  // Specific Element Cyber Overrides
+  .request-card__text
+    color: #fff
+    text-shadow: 0 0 2px #fff
+
+  .request-card__date
+    font-family: $font-stack-mono
+    color: rgba($ai-cyan, 0.9)
+    font-size: 13px
+    letter-spacing: -0.3px
+    font-weight: bold
+
+  .request-card__divider
+    background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+    box-shadow: 0 0 5px rgba($ai-cyan, 0.4)
+
+  .request-card__label
+    font-family: $font-stack-mono
+    color: rgba($ai-cyan, 0.7)
+    text-shadow: 0 0 4px rgba($ai-cyan, 0.8)
+
+  .request-card__shift-block
+    background: rgba($ai-cyan, 0.03)
+    border: 1px solid rgba($ai-cyan, 0.15)
+    border-radius: 4px
+
+  .request-card__icon-wrap
+    color: $ai-cyan
+    text-shadow: 0 0 10px $ai-cyan
+    font-weight: bold
+
+  // Footer / Status overrides
+  .request-card__status-tag
+    color: rgba(255,255,255,0.8)
+    &--rejected
+      color: #ff4d4d // replace red with neon red glow
+      text-shadow: 0 0 5px #ff4d4d
+
+  // AI Buttons - Digital Neon Borders
+  .request-card__button
+    text-transform: uppercase
+    font-size: 12px
+    letter-spacing: 1px
+    border-radius: 4px
+    background-color: transparent // transparent center
+    border-width: 1px
+    border-style: solid
+    box-shadow: none
+    transition: all 0.2s ease
+    padding: 8px 12px
+
+    .request-card__button-text
+      font-weight: bold
+      text-shadow: none
+
+    &--confirm
+      border-color: #3fff3f // neon green
+      .request-card__button-text
+        color: #3fff3f
+      &:hover
+        background-color: rgba(#3fff3f, 0.15)
+        box-shadow: 0 0 15px rgba(#3fff3f, 0.5)
+
+    &--reject
+      border-color: #ff3f3f // neon red
+      .request-card__button-text
+        color: #ff3f3f
+      &:hover
+        background-color: rgba(#ff3f3f, 0.15)
+        box-shadow: 0 0 15px rgba(#ff3f3f, 0.5)
+
+    &--delete
+      background-color: transparent
+      border-radius: 50%
+      width: 40px
+      height: 40px
+      display: flex
+      align-items: center
+      justify-content: center
+      border: 1px solid #ff3f3f
+      &:hover
+        background-color: rgba(#ff3f3f, 0.15)
+        box-shadow: 0 0 10px rgba(#ff3f3f, 0.5)

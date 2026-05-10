@@ -64,6 +64,8 @@
     @include remove-scroll-bar
     width: 100%
     overflow: visible
+    @media (max-width: 560px)
+      overflow: scroll
 
   &__row
     display: grid

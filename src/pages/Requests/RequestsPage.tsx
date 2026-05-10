@@ -17,8 +17,6 @@ export default function RequestsPage() {
 
   const users = useSelector((state: RootState) => state.data.users);
 
-  const currentDate = new Date().getTime()
-
   const swapRequests = useSelector((state: RootState) => state.data.swapRequests);
   const giveRequests = useSelector((state: RootState) => state.data.giveRequests);
 
@@ -53,57 +51,6 @@ export default function RequestsPage() {
       console.error('Error request rejecting: ', err);
     }
   };
-
-  // const requestsWithShifts = useMemo(() => {
-  //   const source = active === 'swap' ? swapRequests : giveRequests;
-
-  //   // Build shifts map once
-  //   const shiftsMap = new Map(
-  //     users
-  //       .flatMap(user => user.shifts || [])
-  //       .map(shift => [shift.id, shift])
-  //   );
-
-  //   return source
-  //     .map(req => {
-  //       if (req.type === 'swap') {
-  //         const firstShift = shiftsMap.get(req.firstShiftId) || null;
-  //         const secondShift = shiftsMap.get(req.secondShiftId) || null;
-
-  //         return {
-  //           ...req,
-  //           fromShift: firstShift,
-  //           toShift: secondShift,
-  //         };
-  //       } else {
-  //         const firstShift = shiftsMap.get(req.shiftId) || null;
-
-  //         return {
-  //           ...req,
-  //           fromShift: firstShift,
-  //         };
-  //       }
-  //     })
-  //     .filter(req => {
-  //       // GIVE REQUEST
-  //       if (req.type === 'give') {
-  //         if (!req.fromShift) return false;
-
-  //         const shiftDate = req.fromShift.date;
-
-  //         return Number(shiftDate) >= currentDate;
-  //       }
-
-  //       // SWAP REQUEST
-  //       if (!req.fromShift || !req.toShift) return false;
-
-  //       const firstDate = req.fromShift.date;
-  //       const secondDate = req.toShift.date;
-
-  //       // Keep request only if BOTH shifts are still upcoming
-  //       return Number(firstDate) >= currentDate && Number(secondDate) >= currentDate;
-  //     });
-  // }, [active, swapRequests, giveRequests, users]);
 
   const requestsWithShifts = useMemo(() => {
   const source = active === 'swap' ? swapRequests : giveRequests;
@@ -226,7 +173,6 @@ export default function RequestsPage() {
             // optional redux cleanup
             dispatch(rejectShiftRequest({ request: req }));
 
-            console.log(`Deleted expired request ${req.id}`);
           } catch (err) {
             console.error('Failed deleting expired request:', err);
           }
@@ -239,7 +185,7 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div className={`page-content-wrapper ${isAI ? 'page--ai' : ''}`}>
+      <div className={`${isAI ? 'page--ai' : ''}`}>
 
         <div className="page__header page__header--requests">
           <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>

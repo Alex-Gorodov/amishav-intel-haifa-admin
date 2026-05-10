@@ -18,7 +18,7 @@ export default function EmployeesPage() {
 
   return (
     <Layout>
-      <div className={`page-content-wrapper ${isAI ? 'page--ai' : ''}`}>
+      <div className={`${isAI ? 'page--ai' : ''}`}>
 
         <div className="page__header page__header--employees">
           <input

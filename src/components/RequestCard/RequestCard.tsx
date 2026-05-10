@@ -1,4 +1,5 @@
 import { StatusLabels } from "../../const";
+import { useAITheme } from "../../hooks/useAIContext";
 import { GiveRequestWithShift, RequestStatus, SwapRequestWithShifts } from "../../types/Request";
 
 interface RequestCardProps {
@@ -18,6 +19,8 @@ export const RequestCard = ({
   onReject,
   onDelete,
 }: RequestCardProps) => {
+  const { isAI } = useAITheme();
+
   const firstUser = usersMap[0];
   const secondUser = usersMap[1];
 
@@ -30,7 +33,7 @@ export const RequestCard = ({
   };
 
   return (
-    <div className="request-card">
+    <div className={`request-card ${isAI ? 'request-card--ai' : ''}`}>
 
       {/* Users and icon */}
       <div className="request-card__users">

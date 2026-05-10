@@ -3,7 +3,7 @@
     @include list-reset
     flex-direction: row
     align-items: center
-    gap: 0.5rem
+    gap: $cell-size
     transition: 0.3s
     &--uncollapsed
       align-items: flex-start
@@ -14,6 +14,7 @@
     display: flex
     flex-direction: row
     align-items: center
+    min-height: $cell-size
     gap: 0.5rem
     padding: 10px
     border-radius: 8px

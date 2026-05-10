@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { DataState } from "../../types/State";
-import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingExecutionDate, loadProtocolsPreview, addUserRole, removeUserRole, setError, loadPosts } from "../actions";
+import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingupdatingDate, loadProtocolsPreview, addUserRole, removeUserRole, setError, loadPosts } from "../actions";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { regenerateShiftId } from "../../utils/regenerateShiftId";
 import { Timestamp } from "firebase/firestore";
@@ -47,7 +47,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
       userToUpdate.documents.push(action.payload.document);
     })
 
-    .addCase(setTrainingExecutionDate, (state, action) => {
+    .addCase(setTrainingupdatingDate, (state, action) => {
       const { userId, training, date } = action.payload;
 
       const userToUpdate = state.users.find(u => u.id === userId);
@@ -58,7 +58,7 @@ export const DataReducer = createReducer(initialState, (builder) => {
       // проходим по всем ключам trainings
       (Object.keys(trainings) as (keyof typeof trainings)[]).forEach(key => {
         if (trainings[key].id === training.id) {
-          trainings[key].executionDate = Timestamp.fromDate(date);
+          trainings[key].updatingDate = Timestamp.fromDate(date);
         }
       });
     })

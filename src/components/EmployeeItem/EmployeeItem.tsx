@@ -22,6 +22,8 @@ interface EmployeeItemProps {
 export default function EmployeeItem({user}: EmployeeItemProps) {
   const { isAI } = useAITheme();
   const dispatch = useDispatch();
+
+  const isMobile = window.innerWidth < 768;
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -79,7 +81,9 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
   const validated = deletingPas === user.passportId;
 
-  const isUserHasDocuments = user.documents.length > 0
+  const userHasTrainings = Object.values(user.trainings || {}).some(
+    training => training?.updatingDate
+  );
 
   const hasFutureShifts = user.shifts?.some((s) => {
     if (!s?.date || !s?.startTime) return false;
@@ -116,7 +120,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
           }`}
         >
           <div className={`employee__grid ${!isCollapsed ? 'employee__grid--uncollapsed' : ''}`}>
-            <div className="employee__name">
+            <div className="employee__name employee__table-item">
               <span
                 className={`employee__uncollapse-trigger ${
                   !isCollapsed
@@ -129,7 +133,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </span>
             </div>
 
-            <div className="employee__roles">
+            <div className="employee__roles employee__table-item">
               {user.roles?.map((roleValue: any) => {
                 const roleObj = getRoleObject(roleValue);
                 return roleObj ? (
@@ -150,16 +154,17 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </div>
             </div>
 
-            <div className="employee__trainings">
+           {(!isMobile || userHasTrainings) && (
+              <div className="employee__trainings employee__table-item">
                 <TrainingsList user={user} isCollapsed={isCollapsed} />
-            </div>
+              </div>
+            )}
 
-            <div className="employee__documents">
-              {
-                isUserHasDocuments
-              }
-              <DocumentsList user={user} isCollapsed={isCollapsed}/>
-            </div>
+            {(!isMobile || user.documents.length > 0) && (
+              <div className="employee__documents employee__table-item">
+                <DocumentsList user={user} isCollapsed={isCollapsed} />
+              </div>
+            )}
 
             {!isCollapsed && (
               <div className="employee__buttons">
