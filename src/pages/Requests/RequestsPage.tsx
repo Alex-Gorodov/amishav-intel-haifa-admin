@@ -157,10 +157,12 @@ export default function RequestsPage() {
           if (!shift) {
             shouldDelete = true;
           } else {
-            const shiftDate = normalizeDate(shift.date);
+            const shiftStart = combineDateAndTime(
+              shift.date,
+              shift.startTime
+            ).getTime();
 
-            shouldDelete =
-              shiftDate.getTime() < currentTime;
+            shouldDelete = shiftStart < currentTime;
           }
         }
 
@@ -180,6 +182,8 @@ export default function RequestsPage() {
               secondShift.date,
               secondShift.startTime
             ).getTime();
+
+            console.log(firstShiftStart, secondShiftStart)
 
             shouldDelete =
               firstShiftStart < currentTime ||
