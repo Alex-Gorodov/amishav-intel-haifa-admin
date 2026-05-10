@@ -18,9 +18,6 @@ export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
     setIconColor(isAI ? '#0abcc7' : '#000000')
   }, [ isAI ])
 
-  const isImage = (url: string) =>
-  /\.(jpg|jpeg|png|webp|gif)$/i.test(url);
-
   const isPdf = (url: string) =>
     /\.pdf$/i.test(url);
 

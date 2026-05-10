@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout/Layout";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ScheduleGrid from "../../components/ScheduleGrid/ScheduleGrid";
 import { getIsoLocalDateKey, getWeekByOffset, isSameDay } from "../../utils/getWeekDates";
 import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
@@ -62,6 +62,13 @@ export default function SchedulePage() {
       });
   }, [users, dateKeys, posts]);
 
+  const [iconColor, setIconColor] = useState('');
+
+  useEffect(() => {
+    setIconColor(isAI ? '#0abcc7' : '#ffffff')
+  }, [ isAI ])
+
+
   return (
     <Layout>
       <div className="page__header">
@@ -78,18 +85,20 @@ export default function SchedulePage() {
           <button
             className="button button--with-icon schedule__btn--prev-week"
             onClick={() => setWeekOffset(prev => prev - 1)}
+            style={{ color: isAI ? '#0abcc7' : '#ffffff'}}
           >
-            <ArrowRight size={18} color={Colors.White}/>
+            <ArrowRight size={18} color={iconColor}/>
             שבוע הקודם
           </button>
 
           <button
             className="button button--with-icon schedule__btn--next-week"
             onClick={() => setWeekOffset(prev => prev + 1)}
+            style={{ color: isAI && weekOffset < 1 ? '#0abcc7' : '#ffffff'}}
             disabled={weekOffset >= 1}
           >
             שבוע הבא
-            <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : Colors.White}/>
+            <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : iconColor}/>
           </button>
         </div>
       </div>

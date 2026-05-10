@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
 import { Shift } from "../../types/Shift";
 import { getPostTimeRange } from "../../utils/getPostTimeRange";
+import { useAITheme } from "../../hooks/useAIContext";
 
 type ShiftRow = {
   id: string;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
+  const { isAI } = useAITheme();
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
   }>({ type: null });
 
   return (
-    <div className="page__content schedule">
+    <div className={`page__content schedule ${ isAI ? 'schedule--ai' : ''}`}>
 
       {formState.type === 'add' && formState.cellData && (
         <AddShiftModal
