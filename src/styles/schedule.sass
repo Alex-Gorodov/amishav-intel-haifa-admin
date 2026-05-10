@@ -84,7 +84,12 @@
     &--today
       background-color: #e2fde2
     &--active
+      border-color: darken(#c6c6c6, 0.4)
       background-color: #b9f1ff
+    &:hover
+      background-color: rgba(0, 242, 255, 0.1)
+      border: 1px solid rgba(0, 242, 255, 0.4)
+      box-shadow: 0 0 10px rgba(0, 242, 255, 0.2)
 
   &__cell-trigger
     position: absolute
@@ -143,7 +148,6 @@
     &--active
       font-weight: 600
 
-.schedule__navigation-buttons
 
 .schedule--ai
   position: relative
@@ -208,20 +212,16 @@
         .grid-cell--date
           color: #ff0055
 
+      .schedule__cell-menu
+        background-color: rgba(13, 20, 33, 0.95)
+        border: 1px solid rgba(0, 242, 255, 0.3)
+        border-radius: 12px
+        backdrop-filter: blur(4px)
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5)
+
     &.schedule__cell--header-today
       background-color: rgba(#00f2ff, 0.2)
 
-    &-trigger
-      color: #fff
-      &:hover
-        color: #00f2ff
-
-    &-menu
-      background-color: rgba(13, 20, 33, 0.95)
-      border: 1px solid rgba(0, 242, 255, 0.3)
-      border-radius: 4px
-      backdrop-filter: blur(4px)
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5)
 
     &-menu--top
       bottom: 32px

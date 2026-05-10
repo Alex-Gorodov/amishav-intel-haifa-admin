@@ -148,7 +148,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
           className="schedule__cell-trigger"
           onClick={handleToggleMenu}
         >
-          <EllipsisVertical size={18} />
+          <EllipsisVertical size={18} color={isAI ? '#00f2ff' : '#000000'} />
         </button>
       )}
 
