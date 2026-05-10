@@ -20,8 +20,16 @@ interface ProviderProps {
   children: ReactNode;
 }
 
+const AI_THEME_STORAGE_KEY = "is-ai-theme-enabled";
+
 export function AIThemeProvider({ children }: ProviderProps) {
-  const [isAI, setIsAI] = useState(false);
+  const [isAI, setIsAI] = useState<boolean>(() => {
+    const savedValue = localStorage.getItem(
+      AI_THEME_STORAGE_KEY
+    );
+
+    return savedValue === "true";
+  });
 
   const [isDesktop, setIsDesktop] = useState(
     window.innerWidth > 600
@@ -39,8 +47,21 @@ export function AIThemeProvider({ children }: ProviderProps) {
     };
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem(
+      AI_THEME_STORAGE_KEY,
+      String(isAI)
+    );
+  }, [isAI]);
+
   return (
-    <AIThemeContext.Provider value={{ isDesktop, isAI, setIsAI }}>
+    <AIThemeContext.Provider
+      value={{
+        isDesktop,
+        isAI: isDesktop ? isAI : false,
+        setIsAI,
+      }}
+    >
       {children}
     </AIThemeContext.Provider>
   );

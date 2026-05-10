@@ -42,6 +42,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
 
     setWidth(adjusted);
   }, []);
+
   return (
     isButton ? (
       <button

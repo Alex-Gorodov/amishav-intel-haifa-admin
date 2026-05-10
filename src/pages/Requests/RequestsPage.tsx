@@ -5,11 +5,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/root-reducer';
 import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/Request';
-import { RequestCard } from '../../components/RequestCard/RequestCard';
+import { RequestCard } from "../../components/RequestCard/RequestCard";
 import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
-import { normalizeDate } from "../../utils/normalizeDate";
 import { useAITheme } from "../../hooks/useAIContext";
+import { normalizeDate } from "../../utils/dateUtils";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();

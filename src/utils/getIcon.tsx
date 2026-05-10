@@ -18,9 +18,10 @@ const icons: Record<string, LucideIcon> = {
 
 export const getIcon = (
   title: string,
+  color: string,
   size: number = 18
 ) => {
   const Icon = icons[title] || File;
 
-  return <Icon size={size} />;
+  return <Icon size={size} color={color} />;
 };

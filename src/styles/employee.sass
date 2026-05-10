@@ -148,6 +148,7 @@ $breakpoint-mobile: 600px
       justify-content: center
       width: $cell-size
       &:hover
+        @include basic-btn-hover
         padding-right: 0.5rem
 
   &__role-remove-btn
@@ -225,6 +226,9 @@ $breakpoint-mobile: 600px
     .employee__uncollapse-trigger
       border-top-color: #00c6ff
       filter: drop-shadow(0 0 5px rgba(0, 198, 255, 0.5))
+
+  .employee__name
+    color: #8892b0
 
   .employee__phone
     color: #8892b0

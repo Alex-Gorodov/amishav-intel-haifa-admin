@@ -38,3 +38,102 @@
       left: 0
     &-btn
       @include mini-menu-btn
+
+
+
+.trainings--ai
+  // Subtle backgroundpatterndecoration to whole trainings context
+  background-image: linear-gradient(rgba($ai-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.03) 1px, transparent 1px)
+  background-size: 20px 20px
+  background-position: center
+
+  // A. Localized Visibility Fixes (Dark mode context)
+  .trainings__text--bold, .trainings__item-label
+    color: #fff // Force titles/labels visibility (white)
+    text-shadow: none // Clear text readability on darksurfaces
+
+  .trainings__summary-tag, .trainings__item-icon
+    // Targeted contrast boost for summary iconvisibility
+    svg
+      color: #fff // Force white visibility
+      filter: drop-shadow(0 0 10px rgba($ai-cyan, 0.8)) // localized glow visibility
+
+  // Center icon within localized skeuomorphic depth surface
+  .trainings__item-icon
+    justify-content: center
+    padding: 4px
+
+  // 1. APPLY MONOSPACE ONLY (Respect column layout)
+  .trainings__item-date
+    font-family: $font-stack-mono // Numerical data in technical font
+    color: rgba($ai-cyan, 0.8) // localized cyan visibilitytext
+    font-size: 13px
+    font-weight: bold
+    letter-spacing: -0.3px
+
+  // Technical Divider Localization (layered visually)
+  .trainings__divider
+    // Needs component targetting if a divider semantic div exists
+    background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+    height: 1px
+    width: 100%
+    margin: 8px 0
+
+  // -----------------------------------------------------------
+  // 3. APPLY QUANTIZED Responsibility (LOCALIZED logic only)
+  // Target semantic blocks where width Multiple logic is applied.
+  // -----------------------------------------------------------
+
+  // A. Target localized training tags (collapsed summary) to snap to multiple of 25px
+  .trainings__summary-tag
+    // Visually center the icon in localized depth surface
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 6px
+    background: rgba($ai-cyan, 0.04) // subtle cyan tint surfaces depth
+    border: 1px solid rgba($ai-cyan, 0.15)
+    border-radius: 4px // technical corners
+
+    // ✅ OVERRIDE WIDTH to enforce the dynamic multiple of 25px restriction
+    // Flex set inherently within the grid parent, logic applied organizational
+    // The width multiple logic (e.g., 25px, 50px, 75px) must adapt visually.
+    flex: none !important // prevent compression standard flexing logic
+
+    // Width set inline from component measurement React
+
+  // B. Target individual trainings items in uncollapsed state (Organizational Flex-Column)
+  .trainings__item
+    // VISUAL LAYER depth overrides (localized)
+    background: rgba($ai-cyan, 0.04)
+    border: 1px solid rgba($ai-cyan, 0.15)
+    border-radius: 4px
+    backdrop-filter: blur(8px)
+    transition: border-color 0.2s ease, background-color 0.2s ease
+    padding: 8px 12px // technical padding depth
+
+    &:hover
+      border-color: rgba($ai-cyan, 0.4)
+      background: rgba($ai-cyan, 0.08)
+
+    span
+      svg
+        // Target localized visibility fixes for icon
+        filter: drop-shadow(0 0 8px rgba($ai-cyan, 0.7)) !important // glow visibility
+
+
+    // ✅ OVERRIDE WIDTH to enforce the dynamic multiple of 25px
+    // Organizational based on width multiples organizational.
+    // Width is calculated organisational from measurement.
+    flex: none !important // organisational compression
+    // Width multiple is injected organisational from component React as organisational style.
+
+  // localized skeuomorphic depth surfaces for mini menu / actions (decorative localized overrides)
+  .trainings__item-menu
+    background: rgba(13, 20, 33, 0.95) // organizational localized surfaces organizational
+    border: 1px solid rgba($ai-cyan, 0.3)
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba($ai-cyan, 0.05)
+    backdrop-filter: blur(12px) // organizational depth localized overrides organisational
+
+  .trainings__menu-btn
+    font-family: $font-stack-mono

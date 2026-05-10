@@ -9,6 +9,7 @@ import { TRAINING_SCHEMA, TrainingKey } from "../../const";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { useDispatch } from "react-redux";
 import { getFormattedTimestamp, normalizeDate } from "../../utils/dateUtils";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface TrainingsListProps {
   user: User;
@@ -18,6 +19,14 @@ interface TrainingsListProps {
 export default function TrainingsList({user, isCollapsed = true}: TrainingsListProps) {
 
   const dispatch = useDispatch();
+
+  const { isAI } = useAITheme();
+
+  const [iconColor, setIconColor] = useState('');
+
+  useEffect(() => {
+    setIconColor(isAI ? '#0abcc7' : '#000000')
+  }, [ isAI ])
 
   const getExpirationDate = (training: Training) => {
     if (!training.updatingDate) return null;
@@ -76,7 +85,8 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
         );
   };
 
-  const handleDeleteData = async () => {
+  const handleDeleteData = async (e: React.MouseEvent) => {
+    e.stopPropagation()
     if (!deleteKey) return;
 
     await setEmployeeData(user.id, {
@@ -174,7 +184,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
 
   return (
     <div>
-      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''}`}>
+      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''} ${isAI ? 'trainings--ai' : ''}`}>
         {Object.keys(trainingLabels).map((key) => {
           const training = user.trainings[key as keyof typeof user.trainings];
 
@@ -185,7 +195,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                 key={key}
                 title={`${training.title} - ${getFormattedTimestamp(training.updatingDate)}`}
               >
-                {getIcon(training.title)}
+                {getIcon(training.title, iconColor)}
               </span>
             ) : (
               <li
@@ -202,10 +212,10 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                   <span
                     style={{display: 'flex'}}
                   >
-                    {getIcon(training.title)}
+                    {getIcon(training.title, iconColor)}
                   </span>
 
-                  <span>
+                  <span style={{ color: iconColor}}>
                     {training.title} -{" "}
                     {getExpirationDate(training)?.toLocaleDateString('he-IL')}
                   </span>
@@ -249,10 +259,10 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                 <span
                   style={{display: 'flex'}}
                 >
-                  {getIcon(trainingLabels[key])}
+                  {getIcon(trainingLabels[key], "#ffffff")}
                 </span>
               {trainingLabels[key]}
-              <PlusCircle size={18} color="#ffffff" />
+              <PlusCircle size={18} color={"#ffffff"} />
             </button>
           );
         })}

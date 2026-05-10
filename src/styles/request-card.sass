@@ -1,38 +1,261 @@
+// .request-card
+//   margin: 0 auto
+//   width: calc(100% - 16px)
+//   max-width: 720px
+//   padding: 8px
+//   background-color: white
+//   border-radius: 15px
+//   display: flex
+//   flex-direction: column
+//   gap: 12px
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
+//   &__users
+//     display: flex
+//     align-items: center
+//     justify-content: center
+//     gap: 8px
+
+//   &__icon
+//     font-size: 28px
+
+//   &__text
+//     text-align: right
+//     color: #333
+//     &--bold
+//       font-weight: 600
+
+//   &__shifts
+//     display: flex
+//     flex-direction: column
+//     gap: 8px
+
+//   &__shift
+//     display: flex
+//     flex-direction: column
+
+//   &__buttons
+//     display: flex
+//     flex-direction: row
+//     gap: 12px
+//     margin-top: 8px
+
+//   &__button
+//     flex: 1
+//     border-radius: 8px
+//     padding: 8px
+//     border: none
+//     cursor: pointer
+//     transition: opacity 0.2s
+//     &:hover
+//       opacity: 0.8
+//     &--confirm
+//       background-color: #4caf50
+//     &--reject
+//       background-color: #f44336
+//     &--delete
+//       background-color: #f44336
+//       flex: none
+//       width: auto
+//       padding: 8px 12px
+
+//   &__button-text
+//     text-align: center
+//     font-weight: 600
+//     color: white
+
+//   &--ai
+//     background: $cyber-panel-bg
+//     border: 1px solid rgba($ai-cyan, 0.4)
+//     box-shadow: 0 0 20px rgba($ai-cyan, 0.2), inset 0 0 10px rgba($ai-cyan, 0.1)
+//     backdrop-filter: blur(8px)
+
+//     // Subtle background pattern for cards (AI decoration)
+//     background-image: linear-gradient(rgba($ai-cyan, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.05) 1px, transparent 1px)
+//     background-size: 25px 25px
+
+//     // Specific Element Cyber Overrides
+//     .request-card__text
+//       color: #fff
+//       text-shadow: 0 0 2px #fff
+
+//     .request-card__date
+//       font-family: $font-stack-mono
+//       color: rgba($ai-cyan, 0.9)
+//       font-size: 13px
+//       letter-spacing: -0.3px
+//       font-weight: bold
+
+//     .request-card__divider
+//       background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+//       box-shadow: 0 0 5px rgba($ai-cyan, 0.4)
+
+//     .request-card__label
+//       font-family: $font-stack-mono
+//       color: rgba($ai-cyan, 0.7)
+//       text-shadow: 0 0 4px rgba($ai-cyan, 0.8)
+
+//     .request-card__shift-block
+//       background: rgba($ai-cyan, 0.03)
+//       border: 1px solid rgba($ai-cyan, 0.15)
+//       border-radius: 4px
+
+//     .request-card__icon
+//       color: $ai-cyan
+//       text-shadow: 0 0 10px $ai-cyan
+//       font-weight: bold
+
+//     // Footer / Status overrides
+//     .request-card__status-tag
+//       color: rgba(255,255,255,0.8)
+//       &--rejected
+//         color: #ff4d4d // replace red with neon red glow
+//         text-shadow: 0 0 5px #ff4d4d
+
+//     // AI Buttons - Digital Neon Borders
+//     .request-card__button
+//       text-transform: uppercase
+//       font-size: 12px
+//       letter-spacing: 1px
+//       border-radius: 4px
+//       background-color: transparent // transparent center
+//       border-width: 1px
+//       border-style: solid
+//       box-shadow: none
+//       transition: all 0.2s ease
+//       padding: 8px 12px
+
+//       .request-card__button-text
+//         font-weight: bold
+//         text-shadow: none
+
+//       &--confirm
+//         border-color: #3fff3f // neon green
+//         .request-card__button-text
+//           color: #3fff3f
+//         &:hover
+//           background-color: rgba(#3fff3f, 0.15)
+//           box-shadow: 0 0 15px rgba(#3fff3f, 0.5)
+
+//       &--reject
+//         border-color: #ff3f3f // neon red
+//         .request-card__button-text
+//           color: #ff3f3f
+//         &:hover
+//           background-color: rgba(#ff3f3f, 0.15)
+//           box-shadow: 0 0 15px rgba(#ff3f3f, 0.5)
+
+//       &--delete
+//         background-color: transparent
+//         border-radius: 50%
+//         width: 40px
+//         height: 40px
+//         display: flex
+//         align-items: center
+//         justify-content: center
+//         border: 1px solid #ff3f3f
+//         &:hover
+//           background-color: rgba(#ff3f3f, 0.15)
+//           box-shadow: 0 0 10px rgba(#ff3f3f, 0.5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Necessary Variables for AI style (assumed defined in your global context or imported)
+$ai-panel-bg: rgba(13, 20, 33, 0.9) // Match the generation background base
+$ai-cyan: #00f2ff // Electric cyan
+$ai-neon-green: #3fff3f // Glow green
+$ai-neon-red: #ff3f3f // Glow red
+$font-stack-mono: 'JetBrains Mono', monospace // Modern technical mono
+
+// -----------------------------------------------------------
+// 1. SIMPLE VIEW / BASE STYLES (Your Original Structure)
+// -----------------------------------------------------------
 .request-card
   margin: 0 auto
   width: calc(100% - 16px)
   max-width: 720px
   padding: 8px
-  background-color: white
+  background-color: white // Original light bg
   border-radius: 15px
   display: flex
   flex-direction: column
   gap: 12px
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) // Original simple shadow
+  transition: all 0.3s ease // Keep smooth transitions
 
   &__users
-    display: flex
+    display: grid
     align-items: center
-    justify-content: center
-    gap: 8px
+    grid-template-columns: 1fr auto 1fr
+    gap: $cell-size
 
   &__icon
     font-size: 28px
+    color: #555 // Simple gray icon
 
   &__text
     text-align: right
-    color: #333
+    color: #333 // Original dark text
     &--bold
       font-weight: 600
 
+    &--first-user
+      justify-self: flex-end
+
+    &--second-user
+      justify-self: flex-start
+
+  // ✅ PRESERVING COLUMN LAYOUT (Your original structure)
   &__shifts
     display: flex
-    flex-direction: column
-    gap: 8px
+    gap: calc($cell-size * 3) // Space between shift 1 and 2
 
-  &__shift
+  &__shift-block
     display: flex
-    flex-direction: column
+    width: 100%
+    flex-direction: column // Local Title over Date stack
+    gap: 2px
+
+  &__date
+    font-size: 14px
+    color: #666 // Simple mode darker date color
 
   &__buttons
     display: flex
@@ -49,111 +272,166 @@
     transition: opacity 0.2s
     &:hover
       opacity: 0.8
+
+    // Status colors (simple mode)
     &--confirm
       background-color: #4caf50
     &--reject
       background-color: #f44336
     &--delete
       background-color: #f44336
-      flex: none
-      width: auto
-      padding: 8px 12px
 
   &__button-text
     text-align: center
     font-weight: 600
     color: white
 
-  &--ai
-  background: $cyber-panel-bg
-  border: 1px solid rgba($ai-cyan, 0.4)
-  box-shadow: 0 0 20px rgba($ai-cyan, 0.2), inset 0 0 10px rgba($ai-cyan, 0.1)
-  backdrop-filter: blur(8px)
-
-  // Subtle background pattern for cards (AI decoration)
-  background-image: linear-gradient(rgba($ai-cyan, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.05) 1px, transparent 1px)
-  background-size: 25px 25px
-
-  // Specific Element Cyber Overrides
-  .request-card__text
-    color: #fff
-    text-shadow: 0 0 2px #fff
-
-  .request-card__date
-    font-family: $font-stack-mono
-    color: rgba($ai-cyan, 0.9)
-    font-size: 13px
-    letter-spacing: -0.3px
-    font-weight: bold
-
-  .request-card__divider
-    background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
-    box-shadow: 0 0 5px rgba($ai-cyan, 0.4)
-
-  .request-card__label
-    font-family: $font-stack-mono
-    color: rgba($ai-cyan, 0.7)
-    text-shadow: 0 0 4px rgba($ai-cyan, 0.8)
-
-  .request-card__shift-block
-    background: rgba($ai-cyan, 0.03)
-    border: 1px solid rgba($ai-cyan, 0.15)
-    border-radius: 4px
-
-  .request-card__icon-wrap
-    color: $ai-cyan
-    text-shadow: 0 0 10px $ai-cyan
-    font-weight: bold
-
-  // Footer / Status overrides
-  .request-card__status-tag
-    color: rgba(255,255,255,0.8)
+  &__status-tag
+    font-weight: 600
     &--rejected
-      color: #ff4d4d // replace red with neon red glow
-      text-shadow: 0 0 5px #ff4d4d
+      color: #f03433 // simple mode red style
 
-  // AI Buttons - Digital Neon Borders
-  .request-card__button
-    text-transform: uppercase
-    font-size: 12px
-    letter-spacing: 1px
-    border-radius: 4px
-    background-color: transparent // transparent center
-    border-width: 1px
-    border-style: solid
-    box-shadow: none
-    transition: all 0.2s ease
-    padding: 8px 12px
+  // -----------------------------------------------------------
+  // 2. AI VIEW STYLES (Overwrites ONLY)
+  // Localized aesthetics from the generation. Structure is kept.
+  // -----------------------------------------------------------
+  &--ai
+    // 1. VISUAL LAYER (Depth, Gradient, Pattern)
+    position: relative
+    overflow: hidden
+    padding: $cell-size
+    gap: $cell-size
+    background: linear-gradient(135deg, #0d1421 0%, #05080c 100%) // Deep gradient depth
+    border: 1px solid rgba($ai-cyan, 0.2) // Technical border
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba($ai-cyan, 0.05) // Depths/Glow
+    backdrop-filter: blur(8px)
+    border-radius: 8px // Sharper tech edges
 
-    .request-card__button-text
+    // Subtle background pattern (AI decoration)
+    background-image: linear-gradient(rgba($ai-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.03) 1px, transparent 1px)
+    background-size: $cell-size $cell-size
+    background-position: top right
+
+    // 2. Localized Text Visibility/Styling Fixes (AI mode adjustments)
+
+    .request-card__users
+      min-height: calc($cell-size * 2)
+
+    .request-card__text
+      color: #fff // Force white names/titles against dark bg
+      text-shadow: none // Clear text for dark mode readability
+
+    .request-card__icon
+      color: $ai-cyan // Dynamic cyan color
+      filter: drop-shadow(0 0 10px rgba($ai-cyan, 0.8)) // Glow filter
+
+    // 3. APPLY MONOSPACE ONLY (Preserve vertical layout)
+    .request-card__date
+      font-family: $font-stack-mono // Numerical data in technical font
+      color: rgba($ai-cyan, 0.8) // Darker cyan text visibility
+      font-size: 13px
+      letter-spacing: -0.3px
       font-weight: bold
-      text-shadow: none
 
-    &--confirm
-      border-color: #3fff3f // neon green
-      .request-card__button-text
-        color: #3fff3f
-      &:hover
-        background-color: rgba(#3fff3f, 0.15)
-        box-shadow: 0 0 15px rgba(#3fff3f, 0.5)
+    // Shift block decoration (localized to card block style)
+    .request-card__shift-block
+      // Preserve vertical column, just add AI flavor
 
-    &--reject
-      border-color: #ff3f3f // neon red
-      .request-card__button-text
-        color: #ff3f3f
-      &:hover
-        background-color: rgba(#ff3f3f, 0.15)
-        box-shadow: 0 0 15px rgba(#ff3f3f, 0.5)
+      min-height: calc($cell-size * 4)
+      background: rgba($ai-cyan, 0.03)
+      border: 1px solid rgba($ai-cyan, 0.1)
+      border-radius: 4px
+      padding: calc($cell-size / 2)
+      gap: $cell-size
 
-    &--delete
-      background-color: transparent
-      border-radius: 50%
-      width: 40px
-      height: 40px
+    // Technical Divider (Preserve vertical layout)
+    .request-card__divider
+      background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+      height: 1px
+      width: 100%
+      margin: 8px 0
+
+    // Footer/Status overrides (Dark visibility)
+    .request-card__label
+      font-family: $font-stack-mono
+      color: rgba(255,255,255,0.6)
+      text-transform: uppercase
+      font-size: 11px
+      letter-spacing: 1px
+
+    .request-card__label-wrap
       display: flex
       align-items: center
-      justify-content: center
-      border: 1px solid #ff3f3f
-      &:hover
-        background-color: rgba(#ff3f3f, 0.15)
-        box-shadow: 0 0 10px rgba(#ff3f3f, 0.5)
+      gap: $cell-size
+
+    .request-card__status-tag
+      border: 1px solid rgba(0, 242, 255, 0.1)
+      padding: calc($cell-size / 2)
+      background: rgba(0, 242, 255, 0.03)
+      color: $ai-cyan
+      &--rejected
+        color: #ff4d4d // replace red with neon red glow visibility
+        filter: drop-shadow(0 0 5px #ff4d4d)
+
+    // AI Buttons - Cyber Aesthetics (LOCALIZED)
+    .request-card__footer
+      display: flex
+      gap: $cell-size
+      flex-direction: column
+      @media (min-width: $breakpoint-mobile)
+        display: grid
+        grid-template-columns: 1fr 2fr
+        gap: calc($cell-size * 3)
+
+    .request-card__buttons
+      margin: 0
+
+    .request-card__button
+      text-transform: uppercase
+      font-size: 12px
+      font-weight: bold
+      letter-spacing: 1px
+      border-radius: 4px
+      // Semi-transparent base, looks like glass buttons
+      background-color: transparent
+      border-width: 1px
+      border-style: solid
+      box-shadow: none
+      opacity: 1
+      transition: all 0.2s ease
+      padding: 8px 12px
+
+      .request-card__button-text
+        font-family: $font-stack-mono
+        font-weight: bold
+        text-shadow: none // Clear text for better readability
+
+      &--confirm
+        border-color: rgba($ai-neon-green, 0.6) // neon green
+        .request-card__button-text
+          color: $ai-neon-green
+        &:hover
+          background-color: rgba($ai-neon-green, 0.15)
+          box-shadow: 0 0 15px rgba($ai-neon-green, 0.4)
+
+      &--reject
+        border-color: rgba($ai-neon-red, 0.6) // neon red
+        .request-card__button-text
+          color: $ai-neon-red
+        &:hover
+          background-color: rgba($ai-neon-red, 0.15)
+          box-shadow: 0 0 15px rgba($ai-neon-red, 0.4)
+
+      &--delete
+        background-color: transparent
+        border: 1px solid rgba($ai-neon-red, 0.6)
+        color: $ai-neon-red
+        border-radius: 4px // Standard sharp look
+        width: 100% // Back to full width
+        height: auto
+        padding: 8px 12px
+        margin-top: 12px
+
+        &:hover
+          background-color: rgba($ai-neon-red, 0.15)
+          box-shadow: 0 0 10px rgba($ai-neon-red, 0.4)
