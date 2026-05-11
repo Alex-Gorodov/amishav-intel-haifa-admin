@@ -11,14 +11,14 @@
     box-shadow: 10px 0px 40px rgba(0, 0, 0, 0.25)
     z-index: 1
     transition: width 0.3s ease
-    @media (max-width: 600px)
-      top: -44px
+    @media (max-width: $breakpoint-mobile)
+      top: 0
 
     &--collapsed
       width: 64px
 
     &--ai
-      background: rgba(10, 25, 47, 0.6)
+      background: rgba(0, 11, 26, 0.9)
       backdrop-filter: blur(15px)
       -webkit-backdrop-filter: blur(15px)
       border-right: 1px solid rgba(255, 255, 255, 0.1)

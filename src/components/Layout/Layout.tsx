@@ -20,7 +20,7 @@ export default function Layout({children}: LayoutProps) {
     return localStorage.getItem('sidebar-collapsed') === 'true';
   });
 
-  const { isAI, setIsAI } = useAITheme();
+  const { isAI, isMobile } = useAITheme();
 
   useEffect(() => {
     localStorage.setItem('sidebar-collapsed', String(isCollapsed));
@@ -29,6 +29,8 @@ export default function Layout({children}: LayoutProps) {
   useEffect(() => {
     document.title = routeTitle;
   }, [normalizedPath]);
+
+  const headerTitle = isMobile ? routeTitle.replace('עמישב אינטל חיפה\u00A0|\u00A0', '') : routeTitle;
 
   return (
     <div className={`page ${isAI ? 'page--ai' : ''}`}>
@@ -41,7 +43,7 @@ export default function Layout({children}: LayoutProps) {
             {isCollapsed ? <CircleChevronLeft size={32} color={Colors.White}/> : <CircleChevronRight size={32} color={Colors.White}/>}
           </div>
         </button>
-        <Header title={routeTitle} isAI={isAI} setIsAI={() => setIsAI(!isAI)}/>
+        <Header title={headerTitle}/>
       </div>
       <main className='main'>
         <SideBar isCollapsed={isCollapsed}/>

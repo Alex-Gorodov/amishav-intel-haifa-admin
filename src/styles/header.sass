@@ -15,11 +15,13 @@
     padding-right: 188px
     gap: 16px
 
-    @media (max-width: 468px)
-      padding-right: 150px
-
     &--collapsed
       padding-right: 72px
+      @media (max-width: $breakpoint-mobile)
+        padding-right: 16px
+
+    @media (max-width: $breakpoint-mobile)
+      padding-right: 16px
 
   &--ai
     .header__wrapper

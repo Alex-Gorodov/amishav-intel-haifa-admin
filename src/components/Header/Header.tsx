@@ -3,15 +3,14 @@ import browserHistory from '../../browser-history';
 import { AppRoute } from '../../const';
 import { Toggle } from '../ui/Toggle';
 import { useAITheme } from '../../hooks/useAIContext';
+import { BrainCircuit, Circle, Paintbrush, Power } from 'lucide-react';
 
 interface HeaderProps {
   title: string;
-  isAI: boolean;      // Added prop
-  setIsAI: (val: boolean) => void; // Added prop
 }
 
-export default function Header({ title, isAI, setIsAI }: HeaderProps) {
-  const { isDesktop } = useAITheme();
+export default function Header({ title }: HeaderProps) {
+  const { isMobile, isAI, setIsAI } = useAITheme();
 
   return (
     <header className={`header ${isAI ? 'header--ai' : ''}`}>
@@ -20,16 +19,15 @@ export default function Header({ title, isAI, setIsAI }: HeaderProps) {
           <p className="header__title">{title}</p>
         </div>
 
-        {isDesktop && (
-          <div className={`header__toggle-area ${isAI ? 'header__toggle-area--ai' : ''}`}>
-            <Toggle
-              leftLabel="AI Styled"
-              rightLabel="No AI"
-              value={isAI}
-              onChange={() => setIsAI(!isAI)}
-            />
-          </div>
-        )}
+        <div className={`header__toggle-area ${isAI ? 'header__toggle-area--ai' : ''}`}>
+          <Toggle
+            leftLabel={isMobile ?  <BrainCircuit size={18}/> : "AI styled"}
+            rightLabel={isMobile ?  <Paintbrush size={18}/> : "No AI"}
+            value={isAI}
+            onChange={() => setIsAI(!isAI)}
+          />
+        </div>
+
       </div>
     </header>
   );

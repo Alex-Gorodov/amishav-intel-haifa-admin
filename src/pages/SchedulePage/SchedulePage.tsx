@@ -62,13 +62,6 @@ export default function SchedulePage() {
       });
   }, [users, dateKeys, posts]);
 
-  const [iconColor, setIconColor] = useState('');
-
-  useEffect(() => {
-    setIconColor(isAI ? '#0abcc7' : '#ffffff')
-  }, [ isAI ])
-
-
   return (
     <Layout>
       <div className="page__header">
@@ -76,29 +69,29 @@ export default function SchedulePage() {
 
           <button className="button button--with-icon button--add schedule__btn--add-post" onClick={() => setIsPostFormOpen(true)}>
             הוסף עמדה
-            <PlusCircle size={18} color={Colors.White}/>
+            <PlusCircle size={18} color={'currentColor'}/>
           </button>
 
           <label htmlFor="search-in-schedule" className="visually-hidden"/>
           <input className="form__input form__input--self schedule__search-field" id="search-in-schedule" type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
 
           <button
-            className="button button--with-icon schedule__btn--prev-week"
+            className="button button--with-icon button--add schedule__btn--prev-week"
             onClick={() => setWeekOffset(prev => prev - 1)}
-            style={{ color: isAI ? '#0abcc7' : '#ffffff'}}
+            // style={{ color: isAI ? '#0abcc7' : '#ffffff'}}
           >
-            <ArrowRight size={18} color={iconColor}/>
+            <ArrowRight size={18} color={'currentColor'}/>
             שבוע הקודם
           </button>
 
           <button
-            className="button button--with-icon schedule__btn--next-week"
+            className="button button--with-icon button--add schedule__btn--next-week"
             onClick={() => setWeekOffset(prev => prev + 1)}
-            style={{ color: isAI && weekOffset < 1 ? '#0abcc7' : '#ffffff'}}
+            // style={{ color: isAI && weekOffset < 1 ? '#0abcc7' : '#ffffff'}}
             disabled={weekOffset >= 1}
           >
             שבוע הבא
-            <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : iconColor}/>
+            <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : 'currentColor'}/>
           </button>
         </div>
       </div>

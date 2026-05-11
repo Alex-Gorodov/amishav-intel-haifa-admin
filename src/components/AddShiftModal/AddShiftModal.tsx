@@ -10,6 +10,7 @@ import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import { createShift } from "../../store/api/createShift.api";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface Props {
   onClose: () => void;
@@ -27,6 +28,8 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
+
+  const { isAI } = useAITheme();
 
   const users = useSelector((state: State) => state.data.users);
 
@@ -100,7 +103,8 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
     setEndTime(newEnd);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!selectedPost) {
       dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
       return;
@@ -172,109 +176,115 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
   return (
     <div className="form__overlay" onClick={closeModal}>
       <div className="form__modal form__modal--shift" onClick={(e) => e.stopPropagation()}>
-        <div className="form__wrapper">
+        <form
+          onSubmit={handleSave}
+          method="post"
+          className={`form ${isAI ? 'form--ai-theme' : ''}`}
+        >
+          <div className="form__wrapper">
 
-          <h2 className="form__title">הוספת משמרת</h2>
+            <h2 className="form__title">הוספת משמרת</h2>
 
-          <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
-          <input
-            type="date"
-            className="form__input"
-            id='date'
-            value={date.toISOString().split('T')[0]}
-            onChange={(e) => setDate(new Date(e.target.value))}
-          />
+            <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
+            <input
+              type="date"
+              className="form__input"
+              id='date'
+              value={date.toISOString().split('T')[0]}
+              onChange={(e) => setDate(new Date(e.target.value))}
+            />
 
-          <div className="form__columns">
-            <div className="form__column">
-              <label className="form__label" htmlFor='user'>בחר עובד</label>
-              <div className="form__list form__list--users">
-                <input
-                  className="form__list-item form__list-item--search-user"
-                  type="search"
-                  id="user"
-                  onChange={(e) => setInsertedUserName(e.target.value)}
-                  value={insertedUserName}
-                  placeholder="הכנס שם עובד..."
-                  autoFocus={!isTouchDevice()}
-                />
-                {
-                  availableUsers.length === 0
-                  ?
-                  <p className='form__message'>לא נמצאו עובדים</p>
-                  :
-                  availableUsers.map(u => (
+            <div className="form__columns">
+              <div className="form__column">
+                <label className="form__label" htmlFor='user'>בחר עובד</label>
+                <div className="form__list form__list--users">
+                  <input
+                    className="form__list-item form__list-item--search-user"
+                    type="search"
+                    id="user"
+                    onChange={(e) => setInsertedUserName(e.target.value)}
+                    value={insertedUserName}
+                    placeholder="הכנס שם עובד..."
+                    autoFocus={!isTouchDevice()}
+                  />
+                  {
+                    availableUsers.length === 0
+                    ?
+                    <p className='form__message'>לא נמצאו עובדים</p>
+                    :
+                    availableUsers.map(u => (
+                      <div
+                        key={u.id}
+                        className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
+                        onClick={() => u.id === userId ? setUserId(null) : setUserId(u.id)}
+                      >
+                        <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+              <div className="form__column">
+                <span className="form__label">בחר עמדה</span>
+                <div className="form__list">
+                  {availablePosts.map(p => (
                     <div
-                      key={u.id}
-                      className={`form__list-item ${userId === u.id ? 'form__list-item--selected' : ''}`}
-                      onClick={() => u.id === userId ? setUserId(null) : setUserId(u.id)}
+                      key={p.id}
+                      className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
+                      onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
                     >
-                      <span style={{textAlign: 'right'}}>{u.firstName} {u.secondName}</span>
+                      <span style={{textAlign: 'right'}}>{p.title}</span>
                     </div>
-                  ))
-                }
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="form__column">
-              <span className="form__label">בחר עמדה</span>
-              <div className="form__list">
-                {availablePosts.map(p => (
-                  <div
-                    key={p.id}
-                    className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
-                    onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
-                  >
-                    <span style={{textAlign: 'right'}}>{p.title}</span>
-                  </div>
-                ))}
+
+
+            <div className="form__time-row">
+              <div className="form__time-column">
+                <span className="form__label">שעת התחלה</span>
+                <input
+                  type="time"
+                  className="form__input"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </div>
+
+              <div className="form__time-column">
+                <span className="form__label">שעת סיום</span>
+                <input
+                  type="time"
+                  className="form__input"
+                  value={endTime}
+                  onChange={(e) => handleEndTimeChange(e.target.value)}
+                />
               </div>
             </div>
-          </div>
 
+            <label className="form__label">הערות (אופציונלי)</label>
+            <input
+              type="text"
+              placeholder="הערות..."
+              className="form__input"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+            />
 
-          <div className="form__time-row">
-            <div className="form__time-column">
-              <span className="form__label">שעת התחלה</span>
-              <input
-                type="time"
-                className="form__input"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </div>
+            <div className="form__actions">
+              <button
+                onClick={handleSave}
+                className='button'
+                >
+                {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
 
-            <div className="form__time-column">
-              <span className="form__label">שעת סיום</span>
-              <input
-                type="time"
-                className="form__input"
-                value={endTime}
-                onChange={(e) => handleEndTimeChange(e.target.value)}
-              />
+              </button>
+
+              <button className='button button--cancel' onClick={closeModal}>ביטול</button>
             </div>
           </div>
-
-          <label className="form__label">הערות (אופציונלי)</label>
-          <input
-            type="text"
-            placeholder="הערות..."
-            className="form__input"
-            value={remark}
-            onChange={(e) => setRemark(e.target.value)}
-          />
-
-          <div className="form__actions">
-            <button
-              onClick={handleSave}
-              className='button'
-              >
-              {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
-
-            </button>
-
-            <button className='button button--cancel' onClick={closeModal}>ביטול</button>
-          </div>
-        </div>
+        </form>
 
         </div>
       </div>

@@ -46,7 +46,7 @@ interface ToggleProps {
 }
 
 export const Toggle = ({ value, onChange, leftLabel = "On", rightLabel = "Off", style }: ToggleProps) => {
-  const { isAI } = useAITheme(); // Hook into global AI state
+  const { isAI } = useAITheme();
 
   const toggle = () => onChange(!value);
 

@@ -8,7 +8,7 @@ import {
 
 interface AIThemeContextType {
   isAI: boolean;
-  isDesktop: boolean;
+  isMobile: boolean;
   setIsAI: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -31,13 +31,13 @@ export function AIThemeProvider({ children }: ProviderProps) {
     return savedValue === "true";
   });
 
-  const [isDesktop, setIsDesktop] = useState(
-    window.innerWidth > 600
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth < 620
   );
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth > 600);
+      setIsMobile(window.innerWidth < 620);
     };
 
     window.addEventListener("resize", handleResize);
@@ -45,7 +45,7 @@ export function AIThemeProvider({ children }: ProviderProps) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -57,8 +57,8 @@ export function AIThemeProvider({ children }: ProviderProps) {
   return (
     <AIThemeContext.Provider
       value={{
-        isDesktop,
-        isAI: isDesktop ? isAI : false,
+        isMobile,
+        isAI: isAI,
         setIsAI,
       }}
     >

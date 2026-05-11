@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout/Layout";
 import { Toggle } from "../../components/ui/Toggle";
 
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/root-reducer';
 import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/Request';
@@ -10,10 +10,11 @@ import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
 import { useAITheme } from "../../hooks/useAIContext";
 import { normalizeDate } from "../../utils/dateUtils";
+import { ArrowLeftRight, MoveLeft } from "lucide-react";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
-  const { isAI } = useAITheme();
+  const { isAI, isMobile } = useAITheme();
 
   const users = useSelector((state: RootState) => state.data.users);
 
@@ -214,7 +215,12 @@ export default function RequestsPage() {
       <div className={`${isAI ? 'page--ai' : ''}`}>
 
         <div className="page__header page__header--requests">
-          <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
+          <Toggle
+            value={active === 'swap'}
+            leftLabel={isMobile ? <ArrowLeftRight size={18}/> : "בקשות החלפה"}
+            rightLabel={isMobile ? <MoveLeft size={18}/> : "בקשות מסירה"}
+            onChange={handleToggleChange}
+          />
         </div>
 
         <div className="page__content requests__grid">
