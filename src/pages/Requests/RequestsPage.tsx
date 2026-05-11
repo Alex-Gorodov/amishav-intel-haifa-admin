@@ -11,6 +11,7 @@ import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } 
 import { useAITheme } from "../../hooks/useAIContext";
 import { normalizeDate } from "../../utils/dateUtils";
 import { ArrowLeftRight, MoveLeft } from "lucide-react";
+import { STATUS_PRIORITY } from "../../const";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
@@ -52,71 +53,80 @@ export default function RequestsPage() {
   };
 
   const requestsWithShifts = useMemo(() => {
-  const source = active === 'swap' ? swapRequests : giveRequests;
+    const source = active === 'swap' ? swapRequests : giveRequests;
 
-  // 1. Build shifts map once
-  const shiftsMap = new Map(
-    users
-      .flatMap(user => user.shifts || [])
-      .map(shift => [shift.id, shift])
-  );
+    // 1. Build shifts map once
+    const shiftsMap = new Map(
+      users
+        .flatMap(user => user.shifts || [])
+        .map(shift => [shift.id, shift])
+    );
 
-  // Helper to ensure we have a valid timestamp for comparison
-  const getTimestamp = (dateValue: any) => {
-    if (!dateValue) return 0;
-    // Handle Firebase Timestamps (.toDate()) or standard Date/Strings
-    const date = dateValue.seconds ? new Date(dateValue.seconds * 1000) : new Date(dateValue);
-    return date.getTime();
-  };
+    // Helper to ensure we have a valid timestamp for comparison
+    const getTimestamp = (dateValue: any) => {
+      if (!dateValue) return 0;
+      // Handle Firebase Timestamps (.toDate()) or standard Date/Strings
+      const date = dateValue.seconds ? new Date(dateValue.seconds * 1000) : new Date(dateValue);
+      return date.getTime();
+    };
 
-  // Get start of today (00:00:00) to avoid filtering out today's shifts
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-  const comparisonTime = startOfToday.getTime();
+    // Get start of today (00:00:00) to avoid filtering out today's shifts
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const comparisonTime = startOfToday.getTime();
 
-  return source
-    .map(req => {
-      if (req.type === 'swap') {
-        const firstShift = shiftsMap.get((req as SwapShiftRequest).firstShiftId) || null;
-        const secondShift = shiftsMap.get((req as SwapShiftRequest).secondShiftId) || null;
+    return source
+      .map(req => {
+        if (req.type === 'swap') {
+          const firstShift = shiftsMap.get((req as SwapShiftRequest).firstShiftId) || null;
+          const secondShift = shiftsMap.get((req as SwapShiftRequest).secondShiftId) || null;
 
-        return {
-          ...req,
-          fromShift: firstShift,
-          toShift: secondShift,
-        };
-      } else {
-        const firstShift = shiftsMap.get((req as GiveShiftRequest).shiftId) || null;
+          return {
+            ...req,
+            fromShift: firstShift,
+            toShift: secondShift,
+          };
+        } else {
+          const firstShift = shiftsMap.get((req as GiveShiftRequest).shiftId) || null;
 
-        return {
-          ...req,
-          fromShift: firstShift,
-        };
-      }
-    })
-    .filter(req => {
-      // If we couldn't find the associated shift in the users array, don't show the request
-      if (!req.fromShift) return false;
+          return {
+            ...req,
+            fromShift: firstShift,
+          };
+        }
+      })
+      .filter(req => {
+        // If we couldn't find the associated shift in the users array, don't show the request
+        if (!req.fromShift) return false;
 
-      // GIVE REQUEST logic
-      if (req.type === 'give') {
-        return getTimestamp(req.fromShift.date) >= comparisonTime;
-      }
+        // GIVE REQUEST logic
+        if (req.type === 'give') {
+          return getTimestamp(req.fromShift.date) >= comparisonTime;
+        }
 
-      // SWAP REQUEST logic
-      if (req.type === 'swap') {
-        if (!req.toShift) return false;
+        // SWAP REQUEST logic
+        if (req.type === 'swap') {
+          if (!req.toShift) return false;
 
-        const firstDateTs = getTimestamp(req.fromShift.date);
-        const secondDateTs = getTimestamp(req.toShift.date);
+          const firstDateTs = getTimestamp(req.fromShift.date);
+          const secondDateTs = getTimestamp(req.toShift.date);
 
-        // Show only if BOTH shifts are today or in the future
-        return firstDateTs >= comparisonTime && secondDateTs >= comparisonTime;
-      }
+          // Show only if BOTH shifts are today or in the future
+          return firstDateTs >= comparisonTime && secondDateTs >= comparisonTime;
+        }
 
-      return false;
-    });
-}, [active, swapRequests, giveRequests, users]);
+        return false;
+      })
+
+      .sort((a, b) => {
+        const priorityA = STATUS_PRIORITY[a.status as RequestStatus] || 99;
+        const priorityB = STATUS_PRIORITY[b.status as RequestStatus] || 99;
+
+        return priorityA - priorityB;
+      });
+
+
+  }, [active, swapRequests, giveRequests, users]);
 
   function combineDateAndTime(
     date: Date | any,

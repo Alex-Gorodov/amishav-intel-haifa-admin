@@ -59,6 +59,13 @@ export const StatusLabels: Record<RequestStatus, string> = {
   [RequestStatus.Rejected]: 'נדחה',
 };
 
+export const STATUS_PRIORITY: Record<RequestStatus, number> = {
+  [RequestStatus.PendingAdmin]: 1, // First
+  [RequestStatus.PendingUser]: 2,  // Second
+  [RequestStatus.Approved]: 3,     // Third
+  [RequestStatus.Rejected]: 4,     // Last
+};
+
 
 export const icons: Record<string, string> = {
   "הדרכת בטיחות": "🛡️",
