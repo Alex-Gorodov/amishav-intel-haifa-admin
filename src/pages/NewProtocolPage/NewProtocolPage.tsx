@@ -163,7 +163,7 @@ export default function NewProtocolPage() {
             </label>
 
             {/* CONTENT IMAGES */}
-            <div className="form__upload-wrapper form__upload-wrapper--content">
+            <label className="form__upload-wrapper form__upload-wrapper--content">
 
               <span
                 className="form__upload-title"
@@ -219,7 +219,7 @@ export default function NewProtocolPage() {
                   ))}
                 </div>
               )}
-            </div>
+            </label>
           </div>
 
           <select
