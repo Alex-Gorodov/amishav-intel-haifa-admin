@@ -27,8 +27,7 @@
   // --- Grid System ---
   &__grid
     display: grid
-    // grid-template-columns: 1fr 3fr 2fr 2fr 1fr
-    grid-template-columns: 200px 500px 200px 200px 100px
+    grid-template-columns: 2fr 5fr 2fr 2fr 1fr
     gap: 25px
 
     @media (max-width: $breakpoint-tablet)
@@ -87,7 +86,7 @@
 
   &__name
     display: flex
-    align-items: center
+    align-items: flex-start
     gap: 8px
 
   &__uncollapse-trigger
@@ -112,18 +111,19 @@
       flex-direction: column
 
   &__phone
-    align-self: center
+    align-self: flex-start
 
   // --- Labels & Buttons ---
   &__role-label
     position: relative
     display: flex
     height: $cell-size
-    align-items: flex-start
-    background-color: #f0f0f0
-    border-radius: 0.5rem
     padding: 0.25rem 0.5rem 0.25rem 24px
+    align-items: flex-start
+    border-radius: 0.5rem
+    background-color: #f0f0f0
     font-size: 0.875rem
+    white-space: nowrap
     color: #333
 
     &--add
@@ -207,7 +207,6 @@
 // --- AI Theme Row States ---
 .employee--ai
   background: transparent
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05)
   transition: 0.3s
 
   &:hover

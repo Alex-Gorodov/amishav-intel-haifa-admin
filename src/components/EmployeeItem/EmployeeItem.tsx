@@ -22,10 +22,9 @@ interface EmployeeItemProps {
 }
 
 export default function EmployeeItem({user}: EmployeeItemProps) {
-  const { isAI } = useAITheme();
+  const { isAI, isMobile } = useAITheme();
   const dispatch = useDispatch();
 
-  const isMobile = window.innerWidth < 768;
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(true);

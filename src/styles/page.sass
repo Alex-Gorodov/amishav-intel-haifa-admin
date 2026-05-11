@@ -10,7 +10,8 @@
     display: flex
     padding: 8px
     justify-content: space-between
-    align-items: center
+    @media (min-width: $breakpoint-tablet)
+      align-items: center
     &--requests
       justify-content: center
     &--employees
@@ -113,6 +114,7 @@
 
       td
         border: none
+        border-bottom: 1px solid rgba($ai-cyan, 50%)
         padding: 20px
         &:first-child
           border-radius: 12px 0 0 12px
