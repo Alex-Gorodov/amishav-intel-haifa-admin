@@ -18,22 +18,22 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
   // const getNavClass = ({ isActive }: { isActive: boolean }) =>
   //   ` ${isActive ? "button--side-bar-active" : "button button--side-bar"} ${isAI ? "bar__btn" : "button button--side-bar"}`;
 
-const getNavClass = ({ isActive }: { isActive: boolean }) => {
-  // 1. Start with the base class that is ALWAYS there
-  let classes = "button button--side-bar";
+  const getNavClass = ({ isActive }: { isActive: boolean }) => {
+    // 1. Start with the base class that is ALWAYS there
+    let classes = "button button--side-bar";
 
-  // 2. Add the active state modifier
-  if (isActive) {
-    classes += " button--side-bar-active";
-  }
+    // 2. Add the active state modifier
+    if (isActive) {
+      classes += " button--side-bar-active";
+    }
 
-  // 3. Add the AI styling modifier
-  if (isAI) {
-    classes += " bar__btn--ai"; // Using a modifier pattern is cleaner
-  }
+    // 3. Add the AI styling modifier
+    if (isAI) {
+      classes += " bar__btn--ai"; // Using a modifier pattern is cleaner
+    }
 
-  return classes;
-};
+    return classes;
+  };
 
   return (
       <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''} ${isAI ? 'bar__wrapper--ai' : ''}`}>

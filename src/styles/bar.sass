@@ -13,9 +13,22 @@
     transition: width 0.3s ease
     @media (max-width: $breakpoint-mobile)
       top: 0
+      padding: 0
 
     &--collapsed
       width: 64px
+      & .button--side-bar
+        @media (max-width: $breakpoint-mobile)
+          justify-content: center
+      &:hover
+        @media (max-width: $breakpoint-mobile)
+          box-shadow: none
+
+
+    & .buttons-wrapper
+      @media (max-width: $breakpoint-mobile)
+        background-color: $intel-dark-blue
+        gap: 0
 
     &--ai
       background: rgba(0, 11, 26, 0.9)
@@ -44,6 +57,17 @@
             filter: drop-shadow(0 0 5px #0071c5)
             color: #00c6ff
 
+      & .buttons-wrapper
+        @media (max-width: $breakpoint-mobile)
+          background-color: rgb(2, 13, 27)
+          gap: 0
+
+    & .button--side-bar
+      @media (max-width: $breakpoint-mobile)
+        border-radius: 0
+
+
+
   &__toggle
     display: flex
     align-items: center
@@ -59,6 +83,14 @@
     height: 32px
     transition: transform 0.3s ease
     cursor: pointer
+
+.button--side-bar-active
+  background: rgb(255, 255, 255)
+  border: 2px solid $intel-dark-blue
+  color: $intel-dark-blue
+  @media (max-width: $breakpoint-mobile)
+    border: none
+
 
 .bar__btn--ai
   background: rgba(255, 255, 255, 0.05)
@@ -76,3 +108,4 @@
     border-color: #00c6ff
     color: #ffffff
     text-shadow: 0 0 8px rgba(0, 198, 255, 0.5)
+

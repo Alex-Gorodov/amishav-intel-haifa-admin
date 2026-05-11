@@ -246,6 +246,10 @@ $font-stack-mono: 'JetBrains Mono', monospace // Modern technical mono
   &__shifts
     display: flex
     gap: calc($cell-size * 3) // Space between shift 1 and 2
+    @media (max-width: $breakpoint-mobile)
+      flex-direction: column
+      gap: $cell-size
+
 
   &__shift-block
     display: flex
