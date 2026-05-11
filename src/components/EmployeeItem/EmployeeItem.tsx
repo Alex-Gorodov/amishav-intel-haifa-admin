@@ -13,13 +13,19 @@ import { Pencil, Save } from "lucide-react";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
 import { Colors } from "../../const";
+import { useAITheme } from "../../hooks/useAIContext";
+import { Link } from "react-router-dom";
+import { normalizeDate } from "../../utils/dateUtils";
 
 interface EmployeeItemProps {
   user: User;
 }
 
 export default function EmployeeItem({user}: EmployeeItemProps) {
+  const { isAI } = useAITheme();
   const dispatch = useDispatch();
+
+  const isMobile = window.innerWidth < 768;
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -71,28 +77,30 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
     setIsRolesPopupOpen(prev => !prev);
   };
+
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const [deletingPas, setDeletingPas] = useState('');
 
   const validated = deletingPas === user.passportId;
 
-  const isUserHasDocuments = user.documents.length > 0
+  const userHasTrainings = Object.values(user.trainings || {}).some(
+    training => training?.updatingDate
+  );
 
   const hasFutureShifts = user.shifts?.some((s) => {
-    if (!s?.date || !s?.startTime) return false;
+    // If the shift has no date, we can't reliably call it a future shift.
+    if (!s?.date) return false;
 
-    const baseDate =
-      typeof s.date === "object" && "toDate" in s.date
-        ? s.date
-        : new Date(s.date);
+    // 1. Normalize the shift's date to 00:00:00
+    const shiftDateNormalized = normalizeDate(s.date);
 
-    const [hours, minutes] = s.startTime.split(":").map(Number);
+    // 2. Get Start of Today (00:00:00) for comparison
+    const startOfTodayNormalized = normalizeDate(new Date());
 
-    const shiftDateTime = new Date(baseDate);
-    shiftDateTime.setHours(hours, minutes, 0, 0);
-
-    return shiftDateTime > new Date();
+    // 3. Compare Normalized Times.
+    // If shift is Today (starts > 00:00 today) or in the future.
+    return shiftDateNormalized.getTime() >= startOfTodayNormalized.getTime();
   });
 
   const deleteBtnTitle =
@@ -104,7 +112,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
   return (
     <tr
-      className="employee"
+      className={`employee ${isAI ? 'employee--ai' : ''} ${!isCollapsed ? 'employee--uncollapsed-row' : ''}`}
       onClick={() => setIsCollapsed(!isCollapsed)}
     >
       <td colSpan={4}>
@@ -114,7 +122,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
           }`}
         >
           <div className={`employee__grid ${!isCollapsed ? 'employee__grid--uncollapsed' : ''}`}>
-            <div className="employee__name">
+            <div className="employee__name employee__table-item">
               <span
                 className={`employee__uncollapse-trigger ${
                   !isCollapsed
@@ -127,7 +135,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </span>
             </div>
 
-            <div className="employee__roles">
+            <div className="employee__roles employee__table-item">
               {user.roles?.map((roleValue: any) => {
                 const roleObj = getRoleObject(roleValue);
                 return roleObj ? (
@@ -138,7 +146,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               <div className="roles-popup__wrapper" ref={wrapperRef}>
                 <button
                   ref={triggerRef}
-                  className="employee__role-label employee__role-label--add"
+                  className="button employee__role-label employee__role-label--add employee__role-label--plus"
                   onClick={handleOpenRoles}
                 >
                   +
@@ -148,16 +156,17 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </div>
             </div>
 
-            <div className="employee__trainings">
+           {(!isMobile || userHasTrainings) && (
+              <div className="employee__trainings employee__table-item">
                 <TrainingsList user={user} isCollapsed={isCollapsed} />
-            </div>
+              </div>
+            )}
 
-            <div className="employee__documents">
-              {
-                isUserHasDocuments
-              }
-              <DocumentsList user={user} isCollapsed={isCollapsed}/>
-            </div>
+            {(!isMobile || user.documents.length > 0) && (
+              <div className="employee__documents employee__table-item">
+                <DocumentsList user={user} isCollapsed={isCollapsed} />
+              </div>
+            )}
 
             {!isCollapsed && (
               <div className="employee__buttons">
@@ -323,7 +332,13 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
               </div>
             )}
 
-            <div className="employee__phone">{user.phoneNumber || '-'}</div>
+            <div className="employee__phone">
+              <Link className="link-reset" to={`tel:${user.phoneNumber}`} onClick={(e) => {
+                e.stopPropagation();
+              }}>
+                {user.phoneNumber || '-'}
+              </Link>
+            </div>
           </div>
         </div>
       </td>

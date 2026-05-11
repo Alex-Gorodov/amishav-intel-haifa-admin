@@ -6,11 +6,14 @@ import { isTouchDevice } from '../../utils/isTouchDevice';
 import { useDispatch } from 'react-redux';
 import { setSuccess } from '../../store/actions';
 import { SuccessMessages } from '../../const';
+import { useAITheme } from '../../hooks/useAIContext';
 
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function NewProtocolPage() {
   const dispatch = useDispatch();
+
+  const { isAI } = useAITheme();
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -98,8 +101,12 @@ export default function NewProtocolPage() {
 
   return (
     <Layout>
-      <form onSubmit={handleSubmit} method="post">
-
+      <form
+        method="post"
+        onSubmit={handleSubmit}
+        className={`form ${isAI ? 'form--ai-theme' : ''}`}
+        // style={{ margin: isAI ? '-20px' : '0', padding: isAI ? '20px' : '0' }} // Optional: bleeds out to Layout edges
+      >
         <div className="form__wrapper form__wrapper--fullscreen page__content">
 
           <input

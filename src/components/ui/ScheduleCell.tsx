@@ -10,6 +10,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { getPostTimeRange } from "../../utils/getPostTimeRange";
 import { setSuccess } from "../../store/actions";
 import { SuccessMessages } from "../../const";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface ScheduleCellProps {
   shift: Shift | null;
@@ -20,7 +21,7 @@ interface ScheduleCellProps {
 
 export default function ScheduleCell({ onAction, shift, searchFor, date }: ScheduleCellProps) {
   const dispatch = useDispatch();
-
+  const { isAI } = useAITheme();
   const [isTriggerVisible, setTriggerVisible] = useState(false);
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [openUp, setOpenUp] = useState(false);
@@ -135,6 +136,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
         schedule__cell
         ${isMatch ? 'schedule__cell--active' : ''}
         ${todayMatch ? 'schedule__cell--today' : ''}
+        ${isAI ? 'schedule__cell--ai' : ''}
       `}
       style={{ flexDirection: range ? 'column' : 'row' }}
       onMouseEnter={() => setTriggerVisible(true)}
@@ -146,7 +148,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
           className="schedule__cell-trigger"
           onClick={handleToggleMenu}
         >
-          <EllipsisVertical size={18} />
+          <EllipsisVertical size={18} color={isAI ? '#00f2ff' : '#000000'} />
         </button>
       )}
 

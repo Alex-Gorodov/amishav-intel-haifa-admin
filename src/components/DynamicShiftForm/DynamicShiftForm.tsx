@@ -7,7 +7,7 @@ import { Post } from "../../types/Post";
 import { User } from "../../types/User";
 import { Shift } from "../../types/Shift";
 import { getFullUserName } from "../../utils/getFullUserName";
-import { getFormattedDate } from "../../utils/getFormattedDate";
+import { getFormattedDate } from "../../utils/dateUtils";
 import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";

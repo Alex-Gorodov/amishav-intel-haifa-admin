@@ -1,24 +1,29 @@
 import Layout from "../../components/Layout/Layout";
 import { Toggle } from "../../components/ui/Toggle";
 
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/root-reducer';
 import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/Request';
-import { RequestCard } from '../../components/RequestCard/RequestCard';
+import { RequestCard } from "../../components/RequestCard/RequestCard";
 import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
-import { normalizeDate } from "../../utils/normalizeDate";
+import { useAITheme } from "../../hooks/useAIContext";
+import { normalizeDate } from "../../utils/dateUtils";
+import { ArrowLeftRight, MoveLeft } from "lucide-react";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
+  const { isAI, isMobile } = useAITheme();
 
   const users = useSelector((state: RootState) => state.data.users);
 
-  const currentDate = new Date().getTime()
-
   const swapRequests = useSelector((state: RootState) => state.data.swapRequests);
   const giveRequests = useSelector((state: RootState) => state.data.giveRequests);
+
+  console.log('swap', swapRequests);
+  console.log('give', giveRequests);
+
 
   const [active, setActive] = useState<'give' | 'swap'>('swap')
 
@@ -47,57 +52,6 @@ export default function RequestsPage() {
       console.error('Error request rejecting: ', err);
     }
   };
-
-  // const requestsWithShifts = useMemo(() => {
-  //   const source = active === 'swap' ? swapRequests : giveRequests;
-
-  //   // Build shifts map once
-  //   const shiftsMap = new Map(
-  //     users
-  //       .flatMap(user => user.shifts || [])
-  //       .map(shift => [shift.id, shift])
-  //   );
-
-  //   return source
-  //     .map(req => {
-  //       if (req.type === 'swap') {
-  //         const firstShift = shiftsMap.get(req.firstShiftId) || null;
-  //         const secondShift = shiftsMap.get(req.secondShiftId) || null;
-
-  //         return {
-  //           ...req,
-  //           fromShift: firstShift,
-  //           toShift: secondShift,
-  //         };
-  //       } else {
-  //         const firstShift = shiftsMap.get(req.shiftId) || null;
-
-  //         return {
-  //           ...req,
-  //           fromShift: firstShift,
-  //         };
-  //       }
-  //     })
-  //     .filter(req => {
-  //       // GIVE REQUEST
-  //       if (req.type === 'give') {
-  //         if (!req.fromShift) return false;
-
-  //         const shiftDate = req.fromShift.date;
-
-  //         return Number(shiftDate) >= currentDate;
-  //       }
-
-  //       // SWAP REQUEST
-  //       if (!req.fromShift || !req.toShift) return false;
-
-  //       const firstDate = req.fromShift.date;
-  //       const secondDate = req.toShift.date;
-
-  //       // Keep request only if BOTH shifts are still upcoming
-  //       return Number(firstDate) >= currentDate && Number(secondDate) >= currentDate;
-  //     });
-  // }, [active, swapRequests, giveRequests, users]);
 
   const requestsWithShifts = useMemo(() => {
   const source = active === 'swap' ? swapRequests : giveRequests;
@@ -166,6 +120,24 @@ export default function RequestsPage() {
     });
 }, [active, swapRequests, giveRequests, users]);
 
+  function combineDateAndTime(
+    date: Date | any,
+    time: string
+  ): Date {
+    const normalizedDate = normalizeDate(date);
+
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const combined = new Date(normalizedDate);
+
+    combined.setHours(hours);
+    combined.setMinutes(minutes);
+    combined.setSeconds(0);
+    combined.setMilliseconds(0);
+
+    return combined;
+  }
+
   useEffect(() => {
     const shiftsMap = new Map(
       users
@@ -177,8 +149,6 @@ export default function RequestsPage() {
       const allRequests = [...swapRequests, ...giveRequests];
       const currentTime = new Date().getTime();
 
-
-
       for (const req of allRequests) {
         let shouldDelete = false;
 
@@ -188,10 +158,12 @@ export default function RequestsPage() {
           if (!shift) {
             shouldDelete = true;
           } else {
-            const shiftDate = normalizeDate(shift.date);
+            const shiftStart = combineDateAndTime(
+              shift.date,
+              shift.startTime
+            ).getTime();
 
-            shouldDelete =
-              shiftDate.getTime() < currentTime;
+            shouldDelete = shiftStart < currentTime;
           }
         }
 
@@ -199,19 +171,27 @@ export default function RequestsPage() {
           const firstShift = shiftsMap.get(req.firstShiftId);
           const secondShift = shiftsMap.get(req.secondShiftId);
 
-          console.log(firstShift?.date);
-          console.log(secondShift?.date);
-
-          console.log(currentTime);
-
           if (!firstShift || !secondShift) {
             shouldDelete = true;
           } else {
+            const firstShiftStart = combineDateAndTime(
+              firstShift.date,
+              firstShift.startTime
+            ).getTime();
+
+            const secondShiftStart = combineDateAndTime(
+              secondShift.date,
+              secondShift.startTime
+            ).getTime();
+
+            console.log(firstShiftStart, secondShiftStart)
+
             shouldDelete =
-              normalizeDate(firstShift.date).getTime() < currentTime ||
-              normalizeDate(secondShift.date).getTime() < currentTime;
+              firstShiftStart < currentTime ||
+              secondShiftStart < currentTime;
           }
         }
+
 
         if (shouldDelete) {
           try {
@@ -220,7 +200,6 @@ export default function RequestsPage() {
             // optional redux cleanup
             dispatch(rejectShiftRequest({ request: req }));
 
-            console.log(`Deleted expired request ${req.id}`);
           } catch (err) {
             console.error('Failed deleting expired request:', err);
           }
@@ -233,9 +212,15 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div>
+      <div className={`${isAI ? 'page--ai' : ''}`}>
+
         <div className="page__header page__header--requests">
-          <Toggle value={active === 'swap'} leftLabel="בקשות החלפה" rightLabel="בקשות מסירה" onChange={handleToggleChange}/>
+          <Toggle
+            value={active === 'swap'}
+            leftLabel={isMobile ? <ArrowLeftRight size={18}/> : "בקשות החלפה"}
+            rightLabel={isMobile ? <MoveLeft size={18}/> : "בקשות מסירה"}
+            onChange={handleToggleChange}
+          />
         </div>
 
         <div className="page__content requests__grid">

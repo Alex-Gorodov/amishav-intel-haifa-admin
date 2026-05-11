@@ -5,19 +5,38 @@ import CreateProtocolForm from '../CreateProtocolForm/CreateProtocolForm';
 import { NavLink } from 'react-router-dom';
 import { CalendarClock, Users, FilePlus2, UserPlus, CalendarPlus, CheckCircle2, Home, ChevronRight, ChevronLeft } from 'lucide-react';
 import AddShiftModal from '../AddShiftModal/AddShiftModal';
+import { useAITheme } from '../../hooks/useAIContext';
 
 interface SideBarProps {
   isCollapsed: boolean;
 }
 
 export default function SideBar({ isCollapsed }: SideBarProps) {
+  const { isAI } = useAITheme();
   const [openedForm, setOpenedForm] = useState<Forms | null>(null);
 
-  const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    `button button--side-bar ${isActive ? "button--active" : ""}`;
+  // const getNavClass = ({ isActive }: { isActive: boolean }) =>
+  //   ` ${isActive ? "button--side-bar-active" : "button button--side-bar"} ${isAI ? "bar__btn" : "button button--side-bar"}`;
+
+const getNavClass = ({ isActive }: { isActive: boolean }) => {
+  // 1. Start with the base class that is ALWAYS there
+  let classes = "button button--side-bar";
+
+  // 2. Add the active state modifier
+  if (isActive) {
+    classes += " button--side-bar-active";
+  }
+
+  // 3. Add the AI styling modifier
+  if (isAI) {
+    classes += " bar__btn--ai"; // Using a modifier pattern is cleaner
+  }
+
+  return classes;
+};
 
   return (
-      <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''}`}>
+      <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''} ${isAI ? 'bar__wrapper--ai' : ''}`}>
         <div className='buttons-wrapper'>
 
           <NavLink

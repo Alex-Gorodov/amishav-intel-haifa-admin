@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "../../types/User";
-import { X, File } from "lucide-react";
+import { X, File, Image } from "lucide-react";
+import { useAITheme } from "../../hooks/useAIContext";
+import { Link } from "react-router-dom";
 
 interface DocumentsListProps {
   user: User;
@@ -8,10 +10,13 @@ interface DocumentsListProps {
 }
 
 export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
-  const [preview, setPreview] = useState<string | null>(null);
+  const { isAI } = useAITheme();
 
-    const isImage = (url: string) =>
-    /\.(jpg|jpeg|png|webp|gif)$/i.test(url);
+  const [iconColor, setIconColor] = useState('');
+
+  useEffect(() => {
+    setIconColor(isAI ? '#0abcc7' : '#000000')
+  }, [ isAI ])
 
   const isPdf = (url: string) =>
     /\.pdf$/i.test(url);
@@ -30,11 +35,11 @@ export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
           alignItems: 'center',
           gap: '8px'
         }}>
-          <span>
+          <span style={{ color: iconColor }}>
             {user.documents.length}
           </span>
           <span>
-            <File size={18}/>
+            <File size={18} color={iconColor}/>
           </span>
         </li>
         :
@@ -46,44 +51,42 @@ export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
               key={d.url}
               className="document"
               title={d.name}
+              role="link"
               onClick={(e) => {
                 e.stopPropagation();
-                if (isImage(d.url)) {
-                  e.stopPropagation();
-                  setPreview(d.url);
-                } else {
-                  e.stopPropagation();
-                  window.open(d.url, "_blank");
-                }
+
+                const optimizedUrl = isPdf(d.url) ? d.url : d.url.replace(
+                  "/upload/",
+                  "/upload/f_auto,q_auto/"
+                );
+
+                window.open(optimizedUrl, "_blank");
               }}
             >
-              {isPdf(d.url) ? (
-                <File size={18} className="document__icon document__icon--pdf" />
-              ) : (
-                <File size={18} className="document__icon" />
-              )}
+                {isPdf(d.url) ? (
+                  <File
+                    size={18}
+                    className="document__icon document__icon--pdf"
+                  />
+                ) : (
+                  <Image
+                    size={18}
+                    className="document__icon"
+                  />
+                )}
 
-              {!isCollapsed && (
-                <span className="document__name">
-                  {d.name}
-                </span>
-              )}
+                {!isCollapsed && (
+                  <span
+                    className="document__name"
+                    style={{ color: iconColor }}
+                  >
+                    {d.name}
+                  </span>
+                )}
             </li>
           );
         })}
 
-        {preview && (
-          <div className="doc-preview" onClick={(e) => {
-            e.stopPropagation();
-            setPreview(null)}}
-          >
-            {isPdf(preview) ? (
-              <iframe src={preview} title="doc" />
-            ) : (
-              <img src={preview} alt="" />
-            )}
-          </div>
-        )}
 
     </ul>
   )

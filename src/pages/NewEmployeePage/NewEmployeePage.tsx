@@ -7,9 +7,11 @@ import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { fetchUsers } from '../../store/api/fetchUsers.api';
 import { useDispatch } from 'react-redux';
+import { useAITheme } from '../../hooks/useAIContext';
 
 export default function NewEmployeePage() {
   const dispatch = useDispatch();
+  const { isAI } = useAITheme();
 
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
@@ -86,7 +88,11 @@ export default function NewEmployeePage() {
 
   return (
     <Layout>
-      <form onSubmit={handleCreateUser} method="post">
+      <form
+        onSubmit={handleCreateUser}
+        method="post"
+        className={`form ${isAI ? 'form--ai-theme' : ''}`}
+      >
         {/* <div className="page__header">
           <h2 className='form__title'>עובד חדש</h2>
         </div> */}

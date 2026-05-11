@@ -8,29 +8,44 @@
     padding: 2px
     position: relative
     cursor: pointer
-    background-color: $gray-light
+    background-color: #f0f0f0
     overflow: hidden
-    transition: background-color 0.3s ease
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) // Bouncy AI feel
+
     @media (max-width: 460px)
-      width: 100%
+      width: 88px
+
+    // --- AI SKIN ---
+    &--ai
+      background-color: rgba(10, 25, 47, 0.4)
+      border-color: rgba(0, 113, 197, 0.3)
+      backdrop-filter: blur(8px)
+      box-shadow: inset 0 0 10px rgba(0, 113, 197, 0.2)
 
   &__slider
     position: absolute
     top: 2px
     left: 2px
-    width: calc(320px / 2 - 4px)
+    width: calc(160px - 4px) // Simplified math
     height: 36px
     border-radius: 20px
-    background-color: $intel-dark-blue
-    transition: transform 0.3s ease
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+    background-color: #0068B5 // Intel Blue
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+
     @media (max-width: 460px)
       width: calc(50% - 4px)
 
     &--active
-      transform: translateX(calc(320px / 2 - 4px))
+      transform: translateX(calc(160px - 4px))
       @media (max-width: 460px)
         transform: translateX(calc(100% + 4px))
+
+    // --- AI SLIDER GLOW ---
+    &--ai
+      background: linear-gradient(135deg, #0071c5 0%, #00c6ff 100%)
+      box-shadow: 0 0 15px rgba(0, 198, 255, 0.4), 0 0 5px rgba(0, 113, 197, 0.2)
+      border: 1px solid rgba(255, 255, 255, 0.2)
 
   &__item
     flex: 1
@@ -39,14 +54,12 @@
     align-items: center
 
   &__text
-    font-weight: 600
-    font-size: 16px
-    color: #666666
+    font-weight: 700
+    font-size: 15px
+    color: #888
     z-index: 1
-    user-select: none
     transition: color 0.3s ease
-    @media (max-width: 460px)
-      font-size: 12px
 
     &--active
       color: #ffffff
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3)

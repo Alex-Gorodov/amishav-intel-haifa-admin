@@ -8,6 +8,8 @@ import { Timestamp } from "firebase/firestore";
 import { TRAINING_SCHEMA, TrainingKey } from "../../const";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { useDispatch } from "react-redux";
+import { getFormattedTimestamp, normalizeDate } from "../../utils/dateUtils";
+import { useAITheme } from "../../hooks/useAIContext";
 
 interface TrainingsListProps {
   user: User;
@@ -18,11 +20,19 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
 
   const dispatch = useDispatch();
 
-  const getExpirationDate = (training: Training) => {
-    if (!training.executionDate) return null;
+  const { isAI } = useAITheme();
 
-    const executionDate = training.executionDate.toDate();
-    const expirationDate = new Date(executionDate);
+  const [iconColor, setIconColor] = useState('');
+
+  useEffect(() => {
+    setIconColor(isAI ? '#0abcc7' : '#000000')
+  }, [ isAI ])
+
+  const getExpirationDate = (training: Training) => {
+    if (!training.updatingDate) return null;
+
+    const updatingDate = normalizeDate(training.updatingDate);
+    const expirationDate = new Date(updatingDate);
 
     expirationDate.setDate(
       expirationDate.getDate() + training.validityPeriod
@@ -57,6 +67,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
     setDatePickerKey(key)
   }
 
+
   const handleEditData = (e: React.MouseEvent, key: TrainingKey) => {
     e.stopPropagation();
 
@@ -66,17 +77,20 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
     setDatePickerKey(key);
 
     setChosenDate(
-      training?.executionDate
-        ? training.executionDate.toDate().toISOString().split("T")[0]
-        : null
-    );
+      training?.updatingDate
+      ? normalizeDate(training.updatingDate)
+          .toISOString()
+          .split("T")[0]
+      : null
+        );
   };
 
-  const handleDeleteData = async () => {
+  const handleDeleteData = async (e: React.MouseEvent) => {
+    e.stopPropagation()
     if (!deleteKey) return;
 
     await setEmployeeData(user.id, {
-      [`trainings.${deleteKey}.executionDate`]: null,
+      [`trainings.${deleteKey}.updatingDate`]: null,
       [`trainings.${deleteKey}.title`]: TRAINING_SCHEMA[deleteKey].title,
       [`trainings.${deleteKey}.validityPeriod`]: TRAINING_SCHEMA[deleteKey].validityPeriod,
       [`trainings.${deleteKey}.id`]: `${user.id}-${deleteKey}`,
@@ -133,7 +147,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                 if (!chosenDate || !datePickerKey) return;
 
                 await setEmployeeData(user.id, {
-                  [`trainings.${datePickerKey}.executionDate`]:
+                  [`trainings.${datePickerKey}.updatingDate`]:
                     Timestamp.fromDate(new Date(chosenDate)),
 
                   [`trainings.${datePickerKey}.title`]:
@@ -170,20 +184,18 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
 
   return (
     <div>
-      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''}`}>
+      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''} ${isAI ? 'trainings--ai' : ''}`}>
         {Object.keys(trainingLabels).map((key) => {
           const training = user.trainings[key as keyof typeof user.trainings];
 
-          if (training?.executionDate) {
+          if (training?.updatingDate) {
             return isCollapsed ? (
               <span
                 style={{display: 'flex'}}
                 key={key}
-                title={`${training.title} - ${new Date(
-                  training.executionDate.toDate()
-                ).toLocaleDateString('he-IL')}`}
+                title={`${training.title} - ${getFormattedTimestamp(training.updatingDate)}`}
               >
-                {getIcon(training.title)}
+                {getIcon(training.title, iconColor)}
               </span>
             ) : (
               <li
@@ -200,10 +212,10 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                   <span
                     style={{display: 'flex'}}
                   >
-                    {getIcon(training.title)}
+                    {getIcon(training.title, iconColor)}
                   </span>
 
-                  <span>
+                  <span style={{ color: iconColor}}>
                     {training.title} -{" "}
                     {getExpirationDate(training)?.toLocaleDateString('he-IL')}
                   </span>
@@ -247,10 +259,10 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
                 <span
                   style={{display: 'flex'}}
                 >
-                  {getIcon(trainingLabels[key])}
+                  {getIcon(trainingLabels[key], "#ffffff")}
                 </span>
               {trainingLabels[key]}
-              <PlusCircle size={18} color="#ffffff" />
+              <PlusCircle size={18} color={"#ffffff"} />
             </button>
           );
         })}

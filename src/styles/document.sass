@@ -127,3 +127,89 @@
     height: 32px
     cursor: pointer
 
+.page--ai
+  .trainings-list
+    // Local override for the list container itself in uncollapsed state
+    &--uncollapsed
+      padding: 8px // Breathing room for depth effect
+
+      // Subtle background decoration (AI pattern)
+      background-image: linear-gradient(rgba($ai-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.03) 1px, transparent 1px)
+      background-size: $cell-size $cell-size
+      background-position: center
+
+      // Divider localization (layered visually)
+      &:has(li)::before
+        content: ''
+        display: block
+        background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+        height: 1px
+        width: calc(100% - 16px) // respect localized padding
+        margin: 4px 0 12px 0 // Tighten spacing
+
+  .document
+    // Target individual document items to apply skeuomorphic depth/glass look
+    background: rgba($ai-cyan, 0.04) // subtle cyan tint
+    border: 1px solid rgba($ai-cyan, 0.15)
+    border-radius: 4px
+    margin: 4px 0 // tighten vertical spacing
+    transition: all 0.2s ease
+
+    // Enforce localized text visibility fix (White text)
+    .document__name
+      color: #fff // Force white names against dark surfaces
+      font-weight: 500
+      text-shadow: none // Clear visibility on dark surfaces
+
+    // Center icon within localized skeuomorphic surface
+    .document__icon
+      color: rgba($ai-cyan, 0.8) // localized cyan visibility
+      filter: drop-shadow(0 0 10px rgba($ai-cyan, 0.8)) // glow visibility
+
+    // Localized hover depth effect (instead of underline)
+    &:hover
+      background: rgba($ai-cyan, 0.15)
+      border-color: rgba($ai-cyan, 0.5)
+      box-shadow: 0 0 15px rgba($ai-cyan, 0.3), inset 0 0 10px rgba($ai-cyan, 0.1)
+
+      .document__name
+        color: #fff // Prevent simple mode blue on hover dark surface
+
+    // Visually center the icon in skeuomorphic depth
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 6px
+
+    // Preserve vertical column (Post Title over Date) internally if needed,
+    // but default semantic list items stack them vertically anyway.
+
+    // Remove simple mode underline visual
+    &::after
+      display: none
+
+    // Collapse summary specific AI styling (Respect visibility)
+    // Needs component targetting if isCollapsed is true
+    &[style*="display: flex"]
+      // Target localized flex structure for collapse summary
+      background: transparent // avoid full item skeuomorphism in summary
+      border: none
+
+      span
+        // Target localized visibility fixes for count/tag
+        color: rgba(255, 255, 255, 0.9) !important // force white visibility count
+
+        svg
+          // Target localized visibility fixes for icon
+          filter: drop-shadow(0 0 8px rgba($ai-cyan, 0.7)) !important // glow visibility
+
+  // -----------------------------------------------------------
+  // RESPONSIVE 25PX GRID Logic (LOCALIZED)
+  // Target semantic document elements where width multiple is applied.
+  // -----------------------------------------------------------
+  .document,
+  // Target localized collapsed summary tag (the li with the count/icon)
+  li[style*="display: flex"]
+    // width inline set from React. We ensure it's prioritized over default flex.
+    flex: none !important // prevent compression
+    margin-right: 0

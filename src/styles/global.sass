@@ -1,3 +1,32 @@
+$employee-header-height: 65px
+$breakpoint-schedule-header: 924px
+$breakpoint-tablet: 768px
+$breakpoint-mobile: 620px
+
+$intel-dark-blue: #0068B5
+$intel-light-blue: #00C7FD
+$white: #ffffff
+$gray-light: #f5f5f5
+$disabled-gray: #c7c7c7
+$gray-medium: #999999
+$gray-dark: #333333
+
+$bg-morning: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)
+$bg-afternoon: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)
+$bg-night: linear-gradient(135deg, #243949 0%, #517fa4 100%)
+
+$ai-cyan: #0abcc7
+$ai-bg-glass: rgba(0, 242, 255, 0.05)
+$ai-border: rgba(0, 242, 255, 0.2)
+$ai-blue-glow: rgba(0, 242, 255, 0.15)
+$ai-glass: rgba(10, 25, 47, 0.7)
+
+$cyber-panel-bg: rgba(20, 26, 38, 0.95)
+$cyber-border: 1px solid rgba($ai-cyan, 0.3)
+$font-stack-mono: 'JetBrains Mono', 'Courier New', monospace
+
+$cell-size: 25px
+
 *,
 *::after,
 *::before
@@ -7,13 +36,7 @@
   font-family: Arial, sans-serif
   user-select: none
 
-$intel-dark-blue: #0068B5
-$intel-light-blue: #00C7FD
-$white: #ffffff
-$gray-light: #f5f5f5
-$disabled-gray: #c7c7c7
-$gray-medium: #999999
-$gray-dark: #333333
+
 
 html, body
   height: 100%
@@ -50,6 +73,25 @@ body
 .highlight
   font-weight: 600
   color: $intel-dark-blue
+
+.link-reset
+  color: inherit
+  text-decoration: none
+  cursor: pointer
+
+  &:visited
+    color: inherit
+
+  &:hover
+    color: inherit
+    text-decoration: none
+
+  &:active
+    color: inherit
+
+  &:focus
+    color: inherit
+    outline: none
 
 
 @mixin remove-scroll-bar
@@ -90,3 +132,9 @@ body
     opacity: 0.6
   &:focus-within
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset
+
+@mixin basic-btn-hover
+  background-color: #fff
+  box-shadow: 0 0 0 2px $intel-dark-blue inset
+  color: $intel-dark-blue
+  opacity: 1

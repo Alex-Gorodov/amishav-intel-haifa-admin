@@ -7,7 +7,7 @@ import { store } from './store';
 import { fetchUsers } from './store/api/fetchUsers.api';
 import { fetchSwapRequests, fetchGiveRequests } from './store/api/fetchRequests.api';
 import { fetchPosts } from './store/api/fetchPosts.api';
-import ToastMessage from './components/ui/ToastMessage';
+import { AIThemeProvider } from './context/AIThemeContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,7 +20,9 @@ fetchGiveRequests(store.dispatch);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <AIThemeProvider>
+      <App />
+    </AIThemeProvider>
   </React.StrictMode>
 );
 
