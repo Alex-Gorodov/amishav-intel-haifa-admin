@@ -21,9 +21,7 @@ export default function RequestsPage() {
   const swapRequests = useSelector((state: RootState) => state.data.swapRequests);
   const giveRequests = useSelector((state: RootState) => state.data.giveRequests);
 
-  console.log('swap', swapRequests);
-  console.log('give', giveRequests);
-
+  const [shouldDelete, setShouldDelete] = useState(false);
 
   const [active, setActive] = useState<'give' | 'swap'>('swap')
 
@@ -150,20 +148,19 @@ export default function RequestsPage() {
       const currentTime = new Date().getTime();
 
       for (const req of allRequests) {
-        let shouldDelete = false;
 
         if (req.type === 'give') {
           const shift = shiftsMap.get(req.shiftId);
 
           if (!shift) {
-            shouldDelete = true;
+            setShouldDelete(true)
           } else {
             const shiftStart = combineDateAndTime(
               shift.date,
               shift.startTime
             ).getTime();
 
-            shouldDelete = shiftStart < currentTime;
+            setShouldDelete(shiftStart < currentTime);
           }
         }
 
@@ -172,7 +169,7 @@ export default function RequestsPage() {
           const secondShift = shiftsMap.get(req.secondShiftId);
 
           if (!firstShift || !secondShift) {
-            shouldDelete = true;
+            setShouldDelete(true);
           } else {
             const firstShiftStart = combineDateAndTime(
               firstShift.date,
@@ -184,11 +181,8 @@ export default function RequestsPage() {
               secondShift.startTime
             ).getTime();
 
-            console.log(firstShiftStart, secondShiftStart)
-
-            shouldDelete =
-              firstShiftStart < currentTime ||
-              secondShiftStart < currentTime;
+            setShouldDelete(firstShiftStart < currentTime ||
+              secondShiftStart < currentTime);
           }
         }
 
