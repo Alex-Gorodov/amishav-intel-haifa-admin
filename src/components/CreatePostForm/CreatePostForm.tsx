@@ -74,7 +74,7 @@ export default function PostForm({ onClose }: Props) {
           {/* <Toggle style={{ alignSelf: 'center '}} value={isMultiple} leftLabel="קבוצתי" rightLabel="אישי" onChange={() => setIsMultiple(!isMultiple)}/> */}
 
           <div className="form__wrapper">
-            <p>תפקיד:</p>
+            <p className='form__label'>תפקיד:</p>
 
             <div className="form__roles">
               {roleOptions.map((r) => (

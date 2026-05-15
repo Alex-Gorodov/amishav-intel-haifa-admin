@@ -30,7 +30,7 @@ export default function EmployeesPage() {
             placeholder="הכנס שם עובד..."
             autoFocus={!isTouchDevice()}
           />
-          <button className="button button--header button--wide page__header-btn" onClick={() => setFormOpened(true)}>
+          <button className="button button--add button--wide" onClick={() => setFormOpened(true)}>
             <span>הוסף עובד חדש</span>
           </button>
         </div>

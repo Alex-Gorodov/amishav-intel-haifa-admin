@@ -105,7 +105,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
           </div>
 
           <div className="form__wrapper">
-            <p>תפקיד:</p>
+            <p className='form__label'>תפקיד:</p>
             <div className='form__roles'>
               {Roles.map(role => (
                 <button

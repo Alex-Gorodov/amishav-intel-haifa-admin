@@ -211,10 +211,28 @@
     &--selected, &:hover
       background: #c7f0d8
 
-  &__error
-    color: #ff0000
-    font-size: 14px
-    margin-bottom: 10px
+  &__error-wrapper
+    display: flex
+    height: 0
+    opacity: 0
+    padding: 0
+    justify-content: center
+    align-items: center
+    border-radius: 12px
+    border: 1px solid #ff2c2c
+    background-color: rgba(#ff2c2c, 10%)
+    box-shadow: 0 0 30px rgba(#ff2c2c, 0.2)
+    &--active
+      height: auto
+      opacity: 1
+      padding: 12px
+
+  &__error-message
+    margin: 0
+    padding: 0
+    color: #ff2c2c
+    font-size: 16px
+    font-weight: 600
 
   // --- 5. AI STYLE OVERRIDE (Intel Theme) ---
   &--ai-theme
@@ -270,7 +288,8 @@
       box-shadow: 0 0 10px rgba(255, 77, 77, 0.5)
 
     .button, button[type="submit"]
-      background: $cyan
+      // background: $cyan
+      background: linear-gradient(135deg, #0068B5, #00c6ff)
       color: $bg-dark
       font-weight: 900
       border-radius: 4px
@@ -328,3 +347,31 @@
       letter-spacing: 1px
       margin-bottom: 4px
       display: block
+
+    .form__roles
+      flex-direction: row
+      width: 100%
+
+    .form__role-item
+      background: rgba(255, 255, 255, 0.03)
+      border: 1px solid rgba($cyan, 0.1)
+      border-radius: 2px
+      color: #e0e0e0
+      font-family: 'JetBrains Mono', monospace
+      font-size: 14px
+
+      &:not(.form__input.form__list-item):hover
+        background: rgba($cyan, 0.1)
+        border-color: $cyan
+        color: #fff
+        transform: translateY(-5px)
+
+      &--selected
+        // background: rgba($cyan, 0.6)
+        background: rgba($cyan, 0.6)
+        border-color: $cyan
+        box-shadow: 0 0 15px rgba($cyan, 0.4)
+        color: #fff
+        // &::before
+        //   content: "> "
+        //   color: $cyan

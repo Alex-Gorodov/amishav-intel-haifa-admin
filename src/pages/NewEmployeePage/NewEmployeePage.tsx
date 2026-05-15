@@ -93,13 +93,14 @@ export default function NewEmployeePage() {
         method="post"
         className={`form ${isAI ? 'form--ai-theme' : ''}`}
       >
-        {/* <div className="page__header">
-          <h2 className='form__title'>עובד חדש</h2>
-        </div> */}
         <div className="page__content form__wrapper form__wrapper--fullscreen">
 
 
-          {error && <p className='form__error'>{error}</p>}
+          {
+            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
+              <p className='form__error-message'>{error}</p>
+            </div>
+          }
 
           <div className='form__wrapper'>
             <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus={!isTouchDevice()}/>
@@ -111,11 +112,12 @@ export default function NewEmployeePage() {
           </div>
 
           <div className="form__wrapper">
-            <p>תפקיד:</p>
+            <p className='form__label'>בחר תפקידים:</p>
             <div className='form__roles'>
               {Roles.map(role => (
                 <button
                   key={role.value}
+                  type="button"
                   onClick={() => toggleRole(role.value)}
                   className={`form__role-item ${selectedRoles.includes(role.value) ? 'form__role-item--selected' : ''}`}
                 >
