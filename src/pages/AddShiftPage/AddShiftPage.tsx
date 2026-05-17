@@ -12,6 +12,7 @@ import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import ToastMessage from "../../components/ui/ToastMessage";
 import { useAITheme } from "../../hooks/useAIContext";
+import { error } from "console";
 
 export default function AddShiftPage() {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ export default function AddShiftPage() {
   const [endTime, setEndTime] = useState("");
   const [remark, setRemark] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [error, setScreenError] = useState<string | null>(null)
 
   const [focusRemark, setFocusRemark] = useState(false)
 
@@ -50,8 +53,11 @@ export default function AddShiftPage() {
   function validateShift(start: string, end: string) {
     const errors: string[] = [];
 
-    if (!start) errors.push(ErrorMessages.START_TIME_NOT_SELECTED);
-    if (!end) errors.push(ErrorMessages.END_TIME_NOT_SELECTED);
+    // if (!start) errors.push(ErrorMessages.START_TIME_NOT_SELECTED);
+    // if (!end) errors.push(ErrorMessages.END_TIME_NOT_SELECTED);
+
+    if (!start) setScreenError(ErrorMessages.START_TIME_NOT_SELECTED);
+    if (!end) setScreenError(ErrorMessages.END_TIME_NOT_SELECTED);
 
     if (start && end) {
       const [sh, sm] = start.split(":").map(Number);
@@ -63,7 +69,8 @@ export default function AddShiftPage() {
       const isNightShift = sh >= 18 || sh < 6;
 
       if (endMin < startMin && !isNightShift) {
-        errors.push(ErrorMessages.END_BEFORE_START_DAY);
+        // errors.push(ErrorMessages.END_BEFORE_START_DAY);
+        setScreenError(ErrorMessages.END_BEFORE_START_DAY);
       }
 
       if (endMin < startMin && isNightShift) {
@@ -72,7 +79,8 @@ export default function AddShiftPage() {
 
       const duration = endMin - startMin;
 
-      if (duration > 12 * 60) errors.push(ErrorMessages.SHIFT_TOO_LONG);
+      // if (duration > 12 * 60) errors.push(ErrorMessages.SHIFT_TOO_LONG);
+      if (duration > 12 * 60) setScreenError(ErrorMessages.SHIFT_TOO_LONG);
     }
 
     return errors;
@@ -86,18 +94,21 @@ export default function AddShiftPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPost) {
-      dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
+      // dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
+      setScreenError(ErrorMessages.POST_NOT_SELECTED);
       return;
     }
 
     const errors = validateShift(startTime, endTime);
     if (errors.length > 0) {
-      dispatch(setError({message: (`${errors.join("\n")}שגיעות! `)}));
+      // dispatch(setError({message: (`${errors.join("\n")}שגיעות! `)}));
+      setScreenError(`${errors.join("\n")}שגיעות! `);
       return;
     }
 
     if (!userId) {
-      dispatch(setError({message: (ErrorMessages.USER_NOT_SELECTED)}));
+      // dispatch(setError({message: (ErrorMessages.USER_NOT_SELECTED)}));
+      setScreenError(ErrorMessages.USER_NOT_SELECTED);
       return;
     }
 
@@ -131,7 +142,8 @@ export default function AddShiftPage() {
       dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED}));
 
     } catch (err) {
-      dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
+      // dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
+      setScreenError(ErrorMessages.SHIFT_SAVE_ERROR);
     } finally {
       setLoading(false);
     }
@@ -156,6 +168,7 @@ export default function AddShiftPage() {
       });
     }, [roleFilteredUsers, insertedUserName]);
 
+
   return (
     <Layout>
       <div className="page__content">
@@ -167,6 +180,11 @@ export default function AddShiftPage() {
 
           <div className="form__wrapper form__wrapper--fullscreen">
 
+            {
+              <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
+                <p className='form__error-message'>{error}</p>
+              </div>
+            }
             <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
             <input
               type="date"

@@ -68,6 +68,8 @@ export default function NewProtocolPage() {
     setImages(prev => [...prev, url]);
   });
 
+  const [error, setError] = useState<string | null>(null);
+
    const resetForm = () => {
     setTitle('');
     setContent('');
@@ -77,13 +79,15 @@ export default function NewProtocolPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
+    e.preventDefault();
+    setError(null);
 
-      if ( !title || !content || !group) {
-        alert('Fill required fields');
-        return;
-      }
+    if (!title || !content || !group) {
+      setError("יש למלא את כל שדות החובה!");
+      return;
+    }
 
+    try {
       await createProtocol({
         title,
         content,
@@ -94,9 +98,11 @@ export default function NewProtocolPage() {
 
       resetForm();
 
-      dispatch(setSuccess({message: SuccessMessages.PROTOCOL_ADDED}))
-
-    };
+      dispatch(setSuccess({ message: SuccessMessages.PROTOCOL_ADDED }));
+    } catch (err: any) {
+      setError(err?.message || "שגיאה ביצירת נוהל");
+    }
+  };
 
 
   return (
@@ -109,10 +115,16 @@ export default function NewProtocolPage() {
       >
         <div className="form__wrapper form__wrapper--fullscreen page__content">
 
+          {
+            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
+              <p className='form__error-message'>{error}</p>
+            </div>
+          }
+
           <input
             id="title"
             placeholder="כותרת"
-            required
+            // required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="form__input"
@@ -122,7 +134,7 @@ export default function NewProtocolPage() {
           <textarea
             id="content"
             placeholder="תוכן"
-            required
+            // required
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="form__input form__input--textarea"
@@ -226,7 +238,7 @@ export default function NewProtocolPage() {
             value={group}
             onChange={(e) => setGroup(e.target.value as Group)}
             className="form__input"
-            required
+            // required
           >
             <option value="">בחר מחלקה</option>
             <option value="controller">בקרה</option>

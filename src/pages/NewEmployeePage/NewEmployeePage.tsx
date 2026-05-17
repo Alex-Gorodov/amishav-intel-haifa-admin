@@ -47,7 +47,7 @@ export default function NewEmployeePage() {
     setError(null);
 
     if (!email || !password || !firstName || !secondName) {
-      setError('Fill required fields');
+      setError("יש למלא את כל שדות החובה!");
       return;
     }
 
@@ -79,7 +79,7 @@ export default function NewEmployeePage() {
       resetForm();
 
     } catch (err: any) {
-      setError(err.message || 'Error creating user');
+      setError(err.message || 'שגיאה בתהליך יצור משתמש');
     } finally {
       setLoading(false);
       fetchUsers(dispatch)
