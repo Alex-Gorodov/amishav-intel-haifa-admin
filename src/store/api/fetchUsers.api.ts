@@ -3,6 +3,7 @@ import { AppDispatch } from "../../types/State";
 import { loadUsers, setUsersDataLoading } from "../actions";
 import { User } from "../../types/User";
 import { USERS } from "../../const";
+import { sanitizeFirestoreData } from "../../utils/sanitizeFirestoreData";
 
 export const fetchUsers = async (dispatch: AppDispatch) => {
   dispatch(setUsersDataLoading({ isUsersDataLoading: true }));
@@ -10,64 +11,33 @@ export const fetchUsers = async (dispatch: AppDispatch) => {
   try {
     const data = await getDocs(USERS);
 
-    const users: User[] = await Promise.all(
-      data.docs.map(async (doc) => {
-        const userData = doc.data();
+const users: User[] = await Promise.all(
+  data.docs.map(async (doc) => {
+    // 1. Get raw data
+    const rawUserData = doc.data();
 
-        return {
-          id: doc.id,
-          passportId: userData.passportId || '',
-          firstName: userData.firstName || '',
-          secondName: userData.secondName || '',
-          roles: userData.roles || [],
-          shifts: userData.shifts || [],
-          email: userData.email || '',
-          availability: userData.availability || [],
-          isAdmin: userData.isAdmin || false,
-          documents: userData.documents || [],
-          trainings: userData.trainings || {
-            safety: {
-              id: `${doc.id}-safety`,
-              title: 'הדרכת בטיחות',
-              description: '',
-              updatingDate: null,
-              validityPeriod: 365,
-            },
-            roni: {
-              id: `${doc.id}-roni`,
-              title: 'רענון רוני',
-              description: '',
-              updatingDate: null,
-              validityPeriod: 365,
-            },
-            weapon: {
-              id: `${doc.id}-weapon`,
-              title: 'רענון נשק',
-              description: '',
-              updatingDate: null,
-              validityPeriod: 182,
-            },
-            mada: {
-              id: `${doc.id}-mada`,
-              title: 'רענון עזרה ראשונה',
-              description: '',
-              updatingDate: null,
-              validityPeriod: 730,
-            },
-            rights: {
-              id: `${doc.id}-rights`,
-              title: 'הדרכת סמכויות',
-              description: '',
-              updatingDate: null,
-              validityPeriod: 365,
-            }
-          },
-          phoneNumber: userData.phoneNumber || '',
-          avatarUrl: userData.avatarUrl || '',
-          createdAt: userData.createdAt || '',
-        } as User;
-      })
-    );
+    // 2. Pass the entire object to your recursive sanitizer
+    const userData = sanitizeFirestoreData(rawUserData);
+
+    // 3. Fallbacks apply normally because everything is already a plain primitive string now
+    return {
+      id: doc.id,
+      passportId: userData.passportId || '',
+      firstName: userData.firstName || '',
+      secondName: userData.secondName || '',
+      roles: userData.roles || [],
+      shifts: userData.shifts || [],
+      email: userData.email || '',
+      availability: userData.availability || [],
+      isAdmin: userData.isAdmin || false,
+      documents: userData.documents || [],
+      trainings: userData.trainings || { /* your default trainings block */ },
+      phoneNumber: userData.phoneNumber || '',
+      avatarUrl: userData.avatarUrl || '',
+      createdAt: userData.createdAt || '',
+    } as User;
+  })
+);
 
     dispatch(loadUsers({ users }));
   } catch (error) {

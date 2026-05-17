@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
 import { Shift } from "../../types/Shift";
-import { getPostTimeRange } from "../../utils/getPostTimeRange";
 import { useAITheme } from "../../hooks/useAIContext";
+import { useSelector } from "react-redux";
+import { Posts } from "../../const";
+import { Post } from "../../types/Post";
 
 type ShiftRow = {
   id: string;
@@ -14,14 +16,46 @@ type ShiftRow = {
 type Props = {
   dates: string[];
   rows: ShiftRow[];
+  scheduleType: string;
   searchFor: string;
 };
 
-export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
+export default function ScheduleGrid({ dates, rows, searchFor, scheduleType }: Props) {
   const { isAI } = useAITheme();
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
+
+  const securityPosts = useSelector((state: any) => state.data.securityPosts);
+  const occPosts = useSelector((state: any) => state.data.controllCenterPosts);
+  const dertPosts = useSelector((state: any) => state.data.dertPosts);
+
+  const contextPosts: Post[] = useMemo(() => {
+    let selectedSlice: Post[] = [];
+
+    switch (scheduleType?.toLowerCase()) {
+      case 'security':
+        selectedSlice = securityPosts;
+        break;
+      case 'occ':
+      case 'controllcenter':
+        selectedSlice = occPosts;
+        break;
+      case 'dert':
+        selectedSlice = dertPosts;
+        break;
+      default:
+        selectedSlice = [];
+    }
+
+    // 🔥 CRITICAL FIX: If Redux hasn't loaded the slice, or if it's empty,
+    // fall back to the global Posts constant so lookups do not break.
+    if (!selectedSlice || selectedSlice.length === 0) {
+      return Posts;
+    }
+
+    return selectedSlice;
+  }, [scheduleType, securityPosts, occPosts, dertPosts]);
 
   const handleScroll = () => {
     if (headerRef.current && bodyRef.current) {
@@ -59,6 +93,7 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
           onClose={() => setFormState({ type: null })}
           initialDate={formState.cellData.date}
           initialPostId={formState.cellData.postId}
+          scheduleType={scheduleType}
         />
       )}
 
@@ -116,6 +151,7 @@ export default function ScheduleGrid({ dates, rows, searchFor }: Props) {
                     shift={shift}
                     date={new Date(d)}
                     searchFor={searchFor}
+                    allPosts={contextPosts}
                     onAction={(type) =>
                       setFormState({
                         type,

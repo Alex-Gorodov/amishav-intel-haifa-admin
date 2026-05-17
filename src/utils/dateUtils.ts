@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export function normalizeDate(date: any): Date {
   if (!date) return new Date();
 
@@ -32,4 +30,15 @@ export function getFormattedTimestamp(date: any) {
     month: 'long',
     year: 'numeric',
   });
+}
+
+export function isSameDay(a: any, b: any): boolean {
+  const dateA = normalizeDate(a);
+  const dateB = normalizeDate(b);
+
+  return (
+    dateA.getFullYear() === dateB.getFullYear() &&
+    dateA.getMonth() === dateB.getMonth() &&
+    dateA.getDate() === dateB.getDate()
+  );
 }

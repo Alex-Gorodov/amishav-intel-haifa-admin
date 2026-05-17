@@ -7,7 +7,7 @@ import { Post } from "../../types/Post";
 import { User } from "../../types/User";
 import { Shift } from "../../types/Shift";
 import { getFullUserName } from "../../utils/getFullUserName";
-import { getFormattedDate } from "../../utils/dateUtils";
+import { getFormattedDate, normalizeDate } from "../../utils/dateUtils";
 import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";
@@ -20,9 +20,10 @@ interface FormProps {
   onAccept?: () => void;
   onClose: () => void;
   shift: Shift;
+  allPosts: Post[]
 }
 
-export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormProps) {
+export default function DynamicShiftForm({type, shift, onClose, onAccept, allPosts}: FormProps) {
   const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,7 +36,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
 
   const [formData, setFormData] = useState({
-    date: shift.date.toDate().toISOString().split("T")[0],
+    date: normalizeDate(shift.date).toISOString().split("T")[0],
     startTime: shift.startTime || "",
     endTime: shift.endTime || "",
     remark: shift.remark || "",
@@ -54,16 +55,13 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
 
 
   const canSwap = (userA: User, userB: User, shiftA: Shift, shiftB: Shift) => {
-    // same user ❌
     if (userA.id === userB.id) return false;
 
-    // A must be able to work B's shift
     const aCanTakeB =
-      getAvailableUsersByPost([userA], shiftB.post.id).length > 0;
+      getAvailableUsersByPost([userA], shiftB.post.id, allPosts).length > 0;
 
-    // B must be able to work A's shift
     const bCanTakeA =
-      getAvailableUsersByPost([userB], shiftA.post.id).length > 0;
+      getAvailableUsersByPost([userB], shiftA.post.id, allPosts).length > 0;
 
     return aCanTakeB && bCanTakeA;
   };
@@ -77,10 +75,8 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
         .filter(targetShift => {
           if (!targetShift?.date) return false;
 
-          const targetDate =
-            "toDate" in targetShift.date
-              ? targetShift.date.toDate()
-              : new Date(targetShift.date);
+          // ✅ FIX 1: Safely normalize with the utility instead of 'in' operator check
+          const targetDate = normalizeDate(targetShift.date);
 
           const inWeek = targetDate >= start && targetDate < end;
 
@@ -103,11 +99,9 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
         }));
     })
     .sort((a, b) => {
-      const dateA =
-        "toDate" in a.date ? a.date.toDate() : new Date(a.date);
-
-      const dateB =
-        "toDate" in b.date ? b.date.toDate() : new Date(b.date);
+      // ✅ FIX 2: Safely normalize inside sorting map
+      const dateA = normalizeDate(a.date);
+      const dateB = normalizeDate(b.date);
 
       return dateA.getTime() - dateB.getTime();
     });
@@ -115,10 +109,8 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
 
   const groupedShifts = useMemo(() => {
     return availableShifts.reduce((acc, s) => {
-      const date =
-        "toDate" in s.date
-          ? s.date.toDate()
-          : new Date(s.date);
+      // ✅ FIX 3: Safely normalize during group indexing
+      const date = normalizeDate(s.date);
 
       const key = date.toISOString().split("T")[0]; // YYYY-MM-DD
 
@@ -153,7 +145,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
       shiftId: shift.id,
       data: {
         ...formData,
-        date: new Date(formData.date), // important
+        date: new Date(formData.date),
       },
     });
 
@@ -179,7 +171,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
                 <br />
                 עמדה: <span className="highlight">{shift.post?.title}</span>
                 <br />
-                תאריך: <span className="highlight">{getFormattedDate(shift.date.toDate())}</span>
+                תאריך: <span className="highlight">{getFormattedDate(shift.date)}</span>
               </h2>
               <div className="buttons-wrapper">
                 <button className="button button--delete" onClick={onAccept} type="button">למחוק</button>
@@ -198,7 +190,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
               <div className="form__list-item form__list-item--self">
                 <p>{getFullUserName(triggeredUser!)}</p>
                 <p>{shift.post.title}</p>
-                <p>{getFormattedDate(shift.date.toDate())}</p>
+                <p>{getFormattedDate(shift.date)}</p>
                 <p>{shift.startTime} - {shift.endTime}</p>
               </div>
 
@@ -331,5 +323,5 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept}: FormP
         </form>
       </div>
     </div>
-  )
+  );
 }

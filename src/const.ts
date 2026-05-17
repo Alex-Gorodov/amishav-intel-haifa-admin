@@ -12,6 +12,8 @@ export const SWAP_REQUESTS = collection(db, 'swapRequests');
 export const GIVE_REQUESTS = collection(db, 'giveRequests');
 
 export const POSTS = collection(db, 'posts');
+export const CONTROLL_CENTER_POSTS = collection(db, 'controllCenterPosts');
+export const DERT_POSTS = collection(db, 'dertPosts');
 
 export const PROTOCOLS_HEADERS = collection(db, 'protocolsHeaders')
 
@@ -107,6 +109,49 @@ export const Posts: Post[] = [
   { id: "shift-manager-afternoon", title: "מנהל משמרת חמוש צהריים", defaultStartTime: "13:30", defaultEndTime: "22:00", hourlyRate: Tariffs.shiftManager, role: 'shift_manager'},
   { id: "shift-manager-night", title: "מנהל משמרת חמוש לילה", defaultStartTime: "21:30", defaultEndTime: "06:30", hourlyRate: Tariffs.shiftManager, role: 'shift_manager'},
 ];
+
+
+export const SecurityPostsOrder = [
+  { id: "gatehouse-morning"},
+  { id: "gatehouse-afternoon"},
+  { id: "gatehouse-night"},
+
+  { id: "security-sl-morning"},
+  { id: "security-sl-afternoon"},
+
+  { id: "patrol-satellite-morning"},
+  { id: "patrol-satellite-afternoon"},
+  { id: "patrol-satellite-night"},
+
+  { id: "patrol-preliminary-2"},
+
+  { id: "patrol-main-morning"},
+  { id: "gatehouse-reinforcement"},
+  { id: "patrol-9-afternoon"},
+
+  { id: "shift-manager-morning"},
+  { id: "shift-manager-afternoon"},
+  { id: "shift-manager-night"},
+];
+
+export const DertPostsOrder = [
+  { id: 'dert-morning'},
+  { id: 'dert-leader-morning'},
+  { id: 'dert-evening'},
+  { id: 'dert-leader-evening'},
+  { id: 'dert-night'},
+  { id: 'dert-leader-night'},
+];
+
+export const OccPostsOrder = [
+  { id: 'controller-1-morning'},
+  { id: 'controller-2-morning'},
+  { id: 'supervisor-morning'},
+  { id: 'controller-evening'},
+  { id: 'supervisor-evening'},
+  { id: 'controller-night'},
+  { id: 'supervisor-night'},
+]
 
 export const ErrorMessages = {
   // global

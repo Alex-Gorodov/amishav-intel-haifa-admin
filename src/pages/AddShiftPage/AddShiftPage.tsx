@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
-import { setError, setSuccess } from "../../store/actions";
+import { setSuccess } from "../../store/actions";
 import { arrayUnion, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
@@ -10,11 +10,10 @@ import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
-import ToastMessage from "../../components/ui/ToastMessage";
 import { useAITheme } from "../../hooks/useAIContext";
-import { error } from "console";
+import { Post } from "../../types/Post";
 
-export default function AddShiftPage() {
+export default function AddShiftPage(scheduleType: string) {
   const dispatch = useDispatch();
   const { isAI } = useAITheme();
 
@@ -34,6 +33,20 @@ export default function AddShiftPage() {
 
   const users = useSelector((state: State) => state.data.users);
 
+    const securityPosts = useSelector((state: any) => state.data.securityPosts);
+  const occPosts = useSelector((state: any) => state.data.controllCenterPosts);
+  const dertPosts = useSelector((state: any) => state.data.dertPosts);
+
+  // 3. Fallback tracking logic based on active tab group context
+  const contextPosts: Post[] = useMemo(() => {
+    switch (scheduleType) {
+      case 'security': return securityPosts;
+      case 'occ': return occPosts;
+      case 'dert': return dertPosts;
+      default: return Posts; // Absolute fallback if undefined
+    }
+  }, [scheduleType, securityPosts, occPosts, dertPosts]);
+
   const resetForm = () => {
     setUserId(null);
     setSelectedPost(null);
@@ -45,7 +58,7 @@ export default function AddShiftPage() {
 
   const handlePostSelect = (postId: string) => {
     setSelectedPost(postId);
-    const post = Posts.find(p => p.id === postId);
+    const post = contextPosts.find(p => p.id === postId);
     setStartTime(post?.defaultStartTime || "");
     setEndTime(post?.defaultEndTime || "");
   };
@@ -153,12 +166,12 @@ export default function AddShiftPage() {
 
     const roleFilteredUsers = useMemo(() => {
       if (!selectedPost) return users;
-      return getAvailableUsersByPost(users, selectedPost);
+      return getAvailableUsersByPost(users, selectedPost, contextPosts);
     }, [users, selectedPost]);
 
   const availablePosts = useMemo(() => {
     if (!user) return Posts;
-    return getAvailablePostsByRole(user);
+    return getAvailablePostsByRole(user, contextPosts);
   }, [user, userId]);
 
     const availableUsers = useMemo(() => {

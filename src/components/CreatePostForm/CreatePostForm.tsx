@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { createPost } from "../../store/api/createPost.api";
 import { Post } from "../../types/Post";
-import { Toggle } from "../ui/Toggle";
-import { fetchPosts } from "../../store/api/fetchPosts.api";
 import { useDispatch } from "react-redux";
+import { fetchSecurityPosts } from "../../store/api/fetchSecurityPosts.api";
 
 interface Props {
   onClose: () => void;
@@ -43,7 +42,7 @@ export default function PostForm({ onClose }: Props) {
       // isMultiple: isMultiple
     });
 
-    await fetchPosts(dispatch);
+    await fetchSecurityPosts(dispatch);
 
     onClose();
   };

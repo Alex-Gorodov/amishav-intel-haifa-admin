@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
 import { setError, setSuccess } from "../../store/actions";
-import { arrayUnion, doc, setDoc, Timestamp } from "firebase/firestore";
-import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
@@ -11,14 +9,16 @@ import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import { createShift } from "../../store/api/createShift.api";
 import { useAITheme } from "../../hooks/useAIContext";
+import { Post } from "../../types/Post";
 
 interface Props {
   onClose: () => void;
   initialDate?: string;
   initialPostId?: string;
+  scheduleType?: string;
 }
 
-export default function AddShiftModal({ onClose, initialDate, initialPostId }: Props) {
+export default function AddShiftModal({ onClose, initialDate, initialPostId, scheduleType }: Props) {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState("");
@@ -33,6 +33,48 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const users = useSelector((state: State) => state.data.users);
 
+  // Extract specific post slices from Redux store
+  const securityPosts = useSelector((state: any) => state.data.securityPosts);
+  const occPosts = useSelector((state: any) => state.data.controllCenterPosts);
+  const dertPosts = useSelector((state: any) => state.data.dertPosts);
+
+  // const contextPosts: Post[] = useMemo(() => {
+  //   switch (scheduleType) {
+  //     case 'security': return securityPosts;
+  //     case 'occ': return occPosts;
+  //     case 'dert': return dertPosts;
+  //     default: return Posts;
+  //   }
+  // }, [scheduleType, securityPosts, occPosts, dertPosts]);
+
+  const contextPosts: Post[] = useMemo(() => {
+    let selectedSlice: Post[] = [];
+
+    switch (scheduleType?.toLowerCase()) {
+      case 'security':
+        selectedSlice = securityPosts;
+        break;
+      case 'occ':
+      case 'controllcenter':
+        selectedSlice = occPosts;
+        break;
+      case 'dert':
+        selectedSlice = dertPosts;
+        break;
+      default:
+        selectedSlice = [];
+    }
+
+    // 🔥 CRITICAL FIX: If Redux hasn't loaded the slice, or if it's empty,
+    // fall back to the global Posts constant so lookups do not break.
+    if (!selectedSlice || selectedSlice.length === 0) {
+      return Posts;
+    }
+
+    return selectedSlice;
+  }, [scheduleType, securityPosts, occPosts, dertPosts]);
+
+  // Unified Single Source of Truth for the selected post ID
   const activePostId = selectedPost || initialPostId;
 
   const dispatch = useDispatch();
@@ -48,24 +90,25 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const handlePostSelect = (postId: string) => {
     setSelectedPost(postId);
-    const post = Posts.find(p => p.id === postId);
+    const post = contextPosts.find(p => p.id === postId);
     setStartTime(post?.defaultStartTime || "");
     setEndTime(post?.defaultEndTime || "");
   };
 
+  // FIX 1: Watch contextPosts so default times apply immediately when Redux loads
   useEffect(() => {
     if (initialDate) {
       setDate(new Date(initialDate));
     }
 
-    if (initialPostId) {
+    if (initialPostId && contextPosts.length > 0) {
       setSelectedPost(initialPostId);
 
-      const post = Posts.find(p => p.id === initialPostId);
+      const post = contextPosts.find(p => p.id === initialPostId);
       setStartTime(post?.defaultStartTime || "");
       setEndTime(post?.defaultEndTime || "");
     }
-  }, [initialDate, initialPostId]);
+  }, [initialDate, initialPostId, contextPosts]);
 
   function validateShift(start: string, end: string) {
     const errors: string[] = [];
@@ -96,7 +139,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
     }
 
     return errors;
-  };
+  }
 
   const handleEndTimeChange = (newEnd: string | null) => {
     if (!newEnd) return;
@@ -105,7 +148,9 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedPost) {
+
+    // FIX 2: Validate using activePostId instead of selectedPost
+    if (!activePostId) {
       dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
       return;
     }
@@ -123,9 +168,12 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
     setLoading(true);
 
-    const post = Posts.find(p => p.id === selectedPost);
+    // FIX 3: Find the post entry using the activePostId backup chain
+    const post = contextPosts.find(p => p.id === activePostId);
     if (!post) {
+      console.error(`❌ Post ID "${activePostId}" was not found inside current contextPosts slice.`, contextPosts);
       setLoading(false);
+      dispatch(setError({ message: "שגיאה: עמדה לא נמצאה במערכת" }));
       return;
     }
 
@@ -133,7 +181,8 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
       await createShift({
         userId,
         date,
-        postId: selectedPost,
+        posts: contextPosts,
+        postId: activePostId, // Pass activePostId down cleanly
         startTime,
         endTime,
         remark,
@@ -145,7 +194,10 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
       dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
       onClose();
     } catch (err) {
+      console.error("CREATE SHIFT FAILED:", err);
       dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -156,15 +208,16 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
   const roleFilteredUsers = useMemo(() => {
     if (!activePostId) return users;
-    return getAvailableUsersByPost(users, activePostId);
-  }, [users, activePostId]);
+    return getAvailableUsersByPost(users, activePostId, contextPosts);
+  }, [users, activePostId, contextPosts]);
 
-  const user = users.find((u) => u.id === userId)
+  const user = users.find((u) => u.id === userId);
 
-  const availablePosts = useMemo(() => {
-    if (!user) return Posts;
-    return getAvailablePostsByRole(user);
-  }, [user, userId]);
+  const availablePosts: Post[] = useMemo(() => {
+    if (!user) return contextPosts;
+    const allowedByRole = getAvailablePostsByRole(user, contextPosts);
+    return contextPosts.filter((cp: any) => allowedByRole.some((ap: any) => ap.id === cp.id));
+  }, [user, userId, contextPosts]);
 
   const availableUsers = useMemo(() => {
     return roleFilteredUsers.filter(u => {
@@ -230,7 +283,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
                   {availablePosts.map(p => (
                     <div
                       key={p.id}
-                      className={`form__list-item ${selectedPost === p.id ? 'form__list-item--selected' : ''}`}
+                      className={`form__list-item ${activePostId === p.id ? 'form__list-item--selected' : ''}`}
                       onClick={() => p.id === selectedPost ? setSelectedPost(null) : handlePostSelect(p.id)}
                     >
                       <span style={{textAlign: 'right'}}>{p.title}</span>
@@ -239,7 +292,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
                 </div>
               </div>
             </div>
-
 
             <div className="form__time-row">
               <div className="form__time-column">
@@ -274,19 +326,18 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId }: P
 
             <div className="form__actions">
               <button
-                onClick={handleSave}
+                type="submit"
                 className='button'
-                >
+                disabled={loading}
+              >
                 {loading ? <span>טעינה...</span> : <span>הוסף משמרת</span>}
-
               </button>
 
-              <button className='button button--cancel' onClick={closeModal}>ביטול</button>
+              <button type="button" className='button button--cancel' onClick={closeModal}>ביטול</button>
             </div>
           </div>
         </form>
-
-        </div>
       </div>
+    </div>
   );
 }

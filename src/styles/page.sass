@@ -12,6 +12,9 @@
     justify-content: space-between
     @media (min-width: $breakpoint-tablet)
       align-items: center
+    @media (max-width: $breakpoint-mobile)
+      flex-direction: column
+      gap: 8px
     &--requests
       justify-content: center
     &--employees

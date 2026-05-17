@@ -3,17 +3,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
 import { useEffect, useMemo, useState } from "react";
 import ScheduleGrid from "../../components/ScheduleGrid/ScheduleGrid";
-import { getIsoLocalDateKey, getWeekByOffset, isSameDay } from "../../utils/getWeekDates";
+import { getIsoLocalDateKey, getWeekByOffset } from "../../utils/getWeekDates";
 import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
 import { Shift } from "../../types/Shift";
 import CreatePostForm from "../../components/CreatePostForm/CreatePostForm";
-import { Colors, Posts } from "../../const";
-import { useAITheme } from "../../hooks/useAIContext";
+import { Colors, DertPostsOrder, OccPostsOrder, SecurityPostsOrder } from "../../const";
+import { TripleToggle } from "../../components/ui/TrippleToggle";
+import { isSameDay } from "../../utils/dateUtils";
 
 export default function SchedulePage() {
   const users = useSelector((state: RootState) => state.data.users);
 
-  const { isAI } = useAITheme();
   const [weekOffset, setWeekOffset] = useState(0);
 
   const weekDates = useMemo(() => getWeekByOffset(weekOffset), [weekOffset]);
@@ -24,14 +24,51 @@ export default function SchedulePage() {
 
   const [isPostFormOpen, setIsPostFormOpen] = useState(false);
 
-  const postOrder = new Map(
-    Posts.map((p, index) => [p.id, index])
-  );
+  const [scheduleScreen, setScheduleScreen] = useState<'security' | 'occ' | 'dert'>('security')
 
-  const posts = useSelector((state: RootState) => state.data.posts)
+  const securityPosts = useSelector((state: RootState) => state.data.securityPosts);
+  const occPosts = useSelector((state: RootState) => state.data.controllCenterPosts);
+  const dertPosts = useSelector((state: RootState) => state.data.dertPosts);
+
+  const currentPosts = useMemo(() => {
+    switch (scheduleScreen) {
+      case 'security':
+        return securityPosts;
+
+      case 'occ':
+        return occPosts;
+
+      case 'dert':
+        return dertPosts;
+
+      default:
+        return [];
+    }
+  }, [scheduleScreen, securityPosts, occPosts, dertPosts]);
+
+  const postOrder = useMemo(() => {
+    let targetOrder: { id: string }[] = [];
+
+    switch (scheduleScreen) {
+      case 'security':
+        targetOrder = SecurityPostsOrder;
+        break;
+      case 'occ':
+        targetOrder = OccPostsOrder;
+        break;
+      case 'dert':
+        targetOrder = DertPostsOrder;
+        break;
+      default:
+        targetOrder = [];
+    }
+
+    // Create a fast-lookup Map of id -> index array position
+    return new Map(targetOrder.map((p, index) => [p.id, index]));
+  }, [scheduleScreen]);
 
   const rows = useMemo(() => {
-    return [...posts]
+    return [...currentPosts]
       .sort((a, b) => {
         const aIndex = postOrder.get(a.id) ?? 9999;
         const bIndex = postOrder.get(b.id) ?? 9999;
@@ -60,7 +97,7 @@ export default function SchedulePage() {
           shifts: shiftsMap,
         };
       });
-  }, [users, dateKeys, posts]);
+  }, [users, dateKeys, weekDates, currentPosts]);
 
   return (
     <Layout>
@@ -87,18 +124,27 @@ export default function SchedulePage() {
           <button
             className="button button--with-icon button--add schedule__btn--next-week"
             onClick={() => setWeekOffset(prev => prev + 1)}
-            // style={{ color: isAI && weekOffset < 1 ? '#0abcc7' : '#ffffff'}}
             disabled={weekOffset >= 1}
           >
             שבוע הבא
             <ArrowLeft size={18} color={weekOffset >= 1 ? Colors.GrayDark : 'currentColor'}/>
           </button>
         </div>
+        <TripleToggle
+          value={scheduleScreen}
+          onChange={(v) => setScheduleScreen(v)}
+          options={[
+            { label: "בקרה", value: "occ" },
+            { label: "חירום", value: "dert" },
+            { label: "ביטחון", value: "security" },
+          ]}
+        />
+
       </div>
       {isPostFormOpen && (
         <CreatePostForm onClose={() => setIsPostFormOpen(false)} />
       )}
-      <ScheduleGrid dates={dateKeys} rows={rows} searchFor={searchValue}/>
+      <ScheduleGrid dates={dateKeys} scheduleType={scheduleScreen} rows={rows} searchFor={searchValue}/>
     </Layout>
   );
 }

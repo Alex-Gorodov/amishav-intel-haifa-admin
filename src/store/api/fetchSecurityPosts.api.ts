@@ -2,9 +2,9 @@ import { getDocs } from "firebase/firestore"
 import { POSTS } from "../../const"
 import { AppDispatch } from "../../types/State"
 import { Post } from "../../types/Post";
-import { loadPosts } from "../actions";
+import { loadSecurityPosts } from "../actions";
 
-export const fetchPosts = async (dispatch: AppDispatch) => {
+export const fetchSecurityPosts = async (dispatch: AppDispatch) => {
   try {
     const data = await getDocs(POSTS);
 
@@ -22,7 +22,7 @@ export const fetchPosts = async (dispatch: AppDispatch) => {
       } as Post;
     })
 
-    dispatch(loadPosts({ posts }))
+    dispatch(loadSecurityPosts({ posts }))
   } catch (error) {
     console.error("Error fetching posts:", error);
   }

@@ -11,15 +11,17 @@ import { getPostTimeRange } from "../../utils/getPostTimeRange";
 import { setSuccess } from "../../store/actions";
 import { SuccessMessages } from "../../const";
 import { useAITheme } from "../../hooks/useAIContext";
+import { Post } from "../../types/Post";
 
 interface ScheduleCellProps {
   shift: Shift | null;
   searchFor: string;
   date: Date;
+  allPosts: Post[];
   onAction: (type: 'add' | 'swap' | 'remove' | 'edit', shift?: Shift | null) => void;
 }
 
-export default function ScheduleCell({ onAction, shift, searchFor, date }: ScheduleCellProps) {
+export default function ScheduleCell({ onAction, shift, searchFor, date, allPosts }: ScheduleCellProps) {
   const dispatch = useDispatch();
   const { isAI } = useAITheme();
   const [isTriggerVisible, setTriggerVisible] = useState(false);
@@ -203,6 +205,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date }: Sched
           shift={shift}
           onAccept={handleDelete}
           onClose={onReset}
+          allPosts={allPosts}
         />
       )}
 
