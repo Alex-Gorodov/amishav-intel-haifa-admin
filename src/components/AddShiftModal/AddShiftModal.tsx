@@ -38,15 +38,6 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
   const occPosts = useSelector((state: any) => state.data.controllCenterPosts);
   const dertPosts = useSelector((state: any) => state.data.dertPosts);
 
-  // const contextPosts: Post[] = useMemo(() => {
-  //   switch (scheduleType) {
-  //     case 'security': return securityPosts;
-  //     case 'occ': return occPosts;
-  //     case 'dert': return dertPosts;
-  //     default: return Posts;
-  //   }
-  // }, [scheduleType, securityPosts, occPosts, dertPosts]);
-
   const contextPosts: Post[] = useMemo(() => {
     let selectedSlice: Post[] = [];
 
