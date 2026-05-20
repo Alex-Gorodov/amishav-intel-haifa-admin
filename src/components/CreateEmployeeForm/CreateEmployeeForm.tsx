@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, FieldValue } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
 import { Roles } from '../../const';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { fetchUsers } from '../../store/api/fetchUsers.api';
 import { useDispatch } from 'react-redux';
+import { createEmployee } from '../../store/api/createEmployee.api';
+import { addEmployee } from '../../store/actions';
+import { RoleValue } from '../../types/User';
 
 interface Props {
   onClose: () => void;
@@ -19,12 +22,12 @@ export default function CreateEmployeeForm({ onClose }: Props) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<RoleValue[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const toggleRole = (value: string) => {
+  const toggleRole = (value: RoleValue) => {
     setSelectedRoles(prev =>
       prev.includes(value)
         ? prev.filter(r => r !== value)
@@ -41,6 +44,16 @@ export default function CreateEmployeeForm({ onClose }: Props) {
     setPassword('');
     setSelectedRoles([]);
   };
+
+  const userData = {
+    firstName,
+    secondName,
+    passportId: passport,
+    email,
+    phoneNumber: phone,
+    password,
+    roles: selectedRoles,
+  }
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,29 +72,15 @@ export default function CreateEmployeeForm({ onClose }: Props) {
     try {
       setLoading(true);
 
-      const userCred = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCred.user.uid;
+      const createdUser = await createEmployee(userData);
 
-      await setDoc(doc(db, 'users', uid), {
-        id: uid,
-        passportId: passport,
-        firstName,
-        secondName,
-        email,
-        roles: selectedRoles,
-        shifts: [],
-        isAdmin: false,
-        phoneNumber: phone,
-        avatarUrl: null,
-        createdAt: serverTimestamp(),
-      });
+      dispatch(addEmployee({ user: createdUser }));
 
       resetForm();
       onClose();
     } catch (err: any) {
       setError(err.message || 'Error creating user');
     } finally {
-      fetchUsers(dispatch);
       setLoading(false);
     }
   };

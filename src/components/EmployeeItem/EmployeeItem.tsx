@@ -4,7 +4,6 @@ import TrainingsList from "../TrainingsList/TrainingsList";
 import { getRoleObject } from "../../utils/getRoleObject";
 import { useState, useEffect, useRef } from "react";
 import RolesListPopup from "../RolesListPopup/RolesListPopup";
-import DynamicShiftForm from "../DynamicShiftForm/DynamicShiftForm";
 import { deleteUser } from "../../store/api/deleteUser.api";
 import { getFullUserName } from "../../utils/getFullUserName";
 import { useDispatch } from "react-redux";
@@ -16,6 +15,7 @@ import { Colors } from "../../const";
 import { useAITheme } from "../../hooks/useAIContext";
 import { Link } from "react-router-dom";
 import { normalizeDate } from "../../utils/dateUtils";
+import { deleteEmployee } from "../../store/actions";
 
 interface EmployeeItemProps {
   user: User;
@@ -225,7 +225,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                         onClick={async () => {
                           await deleteUser({userId: user.id});
                           setIsDeleteOpen(false);
-                          fetchUsers(dispatch);
+                          dispatch(deleteEmployee({userId: user.id}));
                         }}
                       >
                         מחק

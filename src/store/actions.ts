@@ -2,11 +2,10 @@ import { createAction } from "@reduxjs/toolkit";
 import { Role, User } from "../types/User";
 import { Availability } from "../types/Availability";
 import { Document } from "../types/Document";
-import { Timestamp } from "firebase/firestore";
 import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from "../types/Request";
 import { Shift } from "../types/Shift";
 import { Training } from "../types/Training";
-import { ProtocolPreview } from "../types/Protocol";
+import { Protocol, ProtocolPreview } from "../types/Protocol";
 import { Post } from "../types/Post";
 
 export const setUsersDataLoading = createAction<{isUsersDataLoading: boolean}>('data/setUsersDataLoading');
@@ -25,6 +24,13 @@ export const loadControllCenterPosts = createAction<{posts: Post[]}>('data/loadC
 
 export const setDertPostsDataLoading = createAction<{isPostsDataLoading: boolean}>('data/setDertPostsDataLoading');
 export const loadDertPosts = createAction<{posts: Post[]}>('data/loadDertPosts');
+
+export const addEmployee = createAction<{user: User}>('data/addEmployee');
+export const deleteEmployee = createAction<{userId: string}>('data/deleteEmployee');
+
+export const addShift = createAction<{shift: Shift}>('data/addShift');
+
+export const addProtocol = createAction<{protocol: Protocol}>('data/addProtocol');
 
 export const setAvailability = createAction<{user: User, availability: Availability[]}>('data/setAvailability');
 

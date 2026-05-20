@@ -2,19 +2,29 @@ import EmployeeItem from "../../components/EmployeeItem/EmployeeItem";
 import Layout from "../../components/Layout/Layout";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import CreateEmployeeForm from "../../components/CreateEmployeeForm/CreateEmployeeForm";
-import { getShiftsStreak } from "../../utils/getShiftsStreak";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { useAITheme } from "../../hooks/useAIContext";
+import { normalizeDate } from "../../utils/dateUtils";
 
 export default function EmployeesPage() {
   const users = useSelector((state: RootState) => state.data.users);
+
+  const sortedUsers = useMemo(() => {
+    return [...users].sort(
+      (a, b) =>
+        normalizeDate(a.createdAt).getTime() -
+        normalizeDate(b.createdAt).getTime()
+    );
+  }, [users]);
+
   const { isAI } = useAITheme();
+
   const [isFormOpened, setFormOpened] = useState(false);
   const [search, setSearch] = useState('')
 
-  const filteredUsers = users.filter((u) => u.firstName.includes(search) || u.secondName.includes(search));
+  const filteredUsers = sortedUsers.filter((u) => u.firstName.includes(search) || u.secondName.includes(search));
 
   return (
     <Layout>

@@ -8,8 +8,13 @@ export type Protocol = {
   content: string;
 };
 
+export type ProtocolGroup =
+  | 'controller'
+  | 'emergency'
+  | 'security';
+
 export type ProtocolPreview = {
   id: string;
-  group: 'controller' | 'emergency' | 'security';
+  group: ProtocolGroup;
   title: string;
 };

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../../services/firebase';
 import { Roles } from '../../const';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
-import { fetchUsers } from '../../store/api/fetchUsers.api';
 import { useDispatch } from 'react-redux';
 import { useAITheme } from '../../hooks/useAIContext';
+import { RoleValue } from '../../types/User';
+import { addEmployee } from '../../store/actions';
+import { createEmployee } from '../../store/api/createEmployee.api';
 
 export default function NewEmployeePage() {
   const dispatch = useDispatch();
@@ -19,12 +18,12 @@ export default function NewEmployeePage() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<RoleValue[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const toggleRole = (value: string) => {
+  const toggleRole = (value: RoleValue) => {
     setSelectedRoles(prev =>
       prev.includes(value)
         ? prev.filter(r => r !== value)
@@ -59,30 +58,23 @@ export default function NewEmployeePage() {
     try {
       setLoading(true);
 
-      const userCred = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCred.user.uid;
-
-      await setDoc(doc(db, 'users', uid), {
-        id: uid,
-        passportId: passport,
+      const userData = await createEmployee({
         firstName,
         secondName,
+        passportId: passport,
         email,
-        roles: selectedRoles,
-        shifts: [],
-        isAdmin: false,
         phoneNumber: phone,
-        avatarUrl: null,
-        createdAt: serverTimestamp(),
+        password,
+        roles: selectedRoles,
       });
 
-      resetForm();
+      dispatch(addEmployee({ user: userData }));
 
+      resetForm();
     } catch (err: any) {
       setError(err.message || 'שגיאה בתהליך יצור משתמש');
     } finally {
       setLoading(false);
-      fetchUsers(dispatch)
     }
   };
 

@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { FieldValue, Timestamp } from "firebase/firestore";
 import { Shift } from "./Shift";
 import { Availability } from "./Availability";
 import { Document } from "./Document";
@@ -25,7 +25,7 @@ export type User = {
   phoneNumber: string;
   isAdmin?: boolean;
   avatarUrl?: string;
-  createdAt?: Timestamp;
+  createdAt: Timestamp | FieldValue;
 }
 
 export type RoleValue = typeof Roles[number]["value"];

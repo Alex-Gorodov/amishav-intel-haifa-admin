@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { DataState } from "../../types/State";
-import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingUpdatingDate, loadProtocolsPreview, addUserRole, removeUserRole, loadSecurityPosts, loadControllCenterPosts, loadDertPosts } from "../actions";
+import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingUpdatingDate, loadProtocolsPreview, addUserRole, removeUserRole, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, addEmployee, deleteEmployee } from "../actions";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { regenerateShiftId } from "../../utils/regenerateShiftId";
 import { Timestamp } from "firebase/firestore";
@@ -20,6 +20,12 @@ const initialState: DataState = {
 
 export const DataReducer = createReducer(initialState, (builder) => {
   builder
+    .addCase(addEmployee, (state, action) => {
+      state.users.push(action.payload.user);
+    })
+    .addCase(deleteEmployee, (state, action) => {
+      state.users = state.users.filter(u => u.id !== action.payload.userId);
+    })
     .addCase(loadUsers, (state, action) => {
       state.users = action.payload.users;
     })
