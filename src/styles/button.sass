@@ -36,6 +36,10 @@
     @media (hover)
       &:hover
         @include basic-btn-hover
+        box-shadow: 0px 3px 0 2px $intel-dark-blue, 0px 0px 0 2px $intel-dark-blue
+      &:active
+        transform: translateY(3px)
+        box-shadow: 0px 0 0 0 $intel-dark-blue, 0px 0px 0 2px $intel-dark-blue
   &--cancel
     background-color: #eeeeee
     color: #000000
@@ -116,6 +120,9 @@
     &--add
       background: linear-gradient(135deg, #0068B5, #00c6ff)
       box-shadow: 0 4px 15px rgba(0, 113, 197, 0.3)
+      color: $white
+      &:hover
+        color: #555
 
     &--delete
       background: rgba(255, 47, 47, 0.1)

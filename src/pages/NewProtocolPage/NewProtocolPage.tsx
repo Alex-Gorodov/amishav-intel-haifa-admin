@@ -247,7 +247,7 @@ export default function NewProtocolPage() {
           </select>
 
           <button
-            className="button"
+            className="button button--add button--wide"
             type="submit"
             disabled={uploadingImages}
           >
