@@ -33,8 +33,9 @@
     color: $intel-dark-blue
   &--wide
     width: 100%
-    &:hover
-      @include basic-btn-hover
+    @media (hover)
+      &:hover
+        @include basic-btn-hover
   &--cancel
     background-color: #eeeeee
     color: #000000

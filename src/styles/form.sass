@@ -211,8 +211,11 @@
     border: 1px solid #ccc
     cursor: pointer
     transition: 0.3s
-    &--selected, &:hover
+    &--selected
       background: #c7f0d8
+    @media (hover)
+      &:hover
+        background: #c7f0d8
 
   &__error-wrapper
     display: flex

@@ -3,6 +3,7 @@ $breakpoint-schedule-header: 924px
 $breakpoint-tablet: 768px
 $breakpoint-mobile: 620px
 
+$page-background: #f9f9f9
 $intel-dark-blue: #0068B5
 $intel-light-blue: #00C7FD
 $white: #ffffff
@@ -43,7 +44,7 @@ html, body
 body
   direction: rtl
   margin: 0
-  background-color: #f9f9f9
+  background-color: $page-background
   color: $gray-dark
   min-height: 100%
 
@@ -81,9 +82,10 @@ body
   &:visited
     color: inherit
 
-  &:hover
-    color: inherit
-    text-decoration: none
+  @media (hover)
+    &:hover
+      color: inherit
+      text-decoration: none
 
   &:active
     color: inherit

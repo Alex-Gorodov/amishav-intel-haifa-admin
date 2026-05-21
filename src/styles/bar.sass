@@ -20,9 +20,10 @@
       & .button--side-bar
         @media (max-width: $breakpoint-mobile)
           justify-content: center
-      &:hover
-        @media (max-width: $breakpoint-mobile)
-          box-shadow: none
+      @media (hover)
+        &:hover
+          @media (max-width: $breakpoint-mobile)
+            box-shadow: none
 
 
     & .buttons-wrapper
@@ -43,9 +44,10 @@
         margin-bottom: 8px
         transition: all 0.3s ease
 
-        &:hover
-          background: rgba(0, 113, 197, 0.1)
-          color: #64ffda
+        @media (hover)
+          &:hover
+            background: rgba(0, 113, 197, 0.1)
+            color: #64ffda
 
         &-active
           background: rgba(0, 113, 197, 0.2)
@@ -98,10 +100,11 @@
   color: #8892b0
   backdrop-filter: blur(5px)
 
-  &:hover
-    background: rgba(0, 113, 197, 0.15)
-    color: #00c6ff
-    box-shadow: 0 0 15px rgba(0, 113, 197, 0.2)
+  @media (hover)
+    &:hover
+      background: rgba(0, 113, 197, 0.15)
+      color: #00c6ff
+      box-shadow: 0 0 15px rgba(0, 113, 197, 0.2)
 
   &.button--side-bar-active
     background: rgba(0, 113, 197, 0.25)

@@ -170,6 +170,7 @@ export const ErrorMessages = {
   CHECK_LOGIN_AND_PASSWORD: "תוודא שהנתונים תקינים",
   PASSWORD_MIN_LENGTH_ERROR: "הסיסמה חייבת להכיל 6 ספרות",
   CHECK_EMAIL_FOR_RESET_LINK: "בדוק את האימייל שלך - שלחנו לך קישור לאיפוס הסיסמה! ייתכן שהקישור הגיע לתיקיית הספאם",
+  NO_ADMIN_PERMISSIONS: "אין הרשאות מנהל",
 
   // camera
   CAMERA_OPEN_ERROR: "שגיאה בפתיחת המצלמה",

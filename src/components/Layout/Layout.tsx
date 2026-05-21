@@ -48,7 +48,7 @@ export default function Layout({children}: LayoutProps) {
       <main className='main'>
         <SideBar isCollapsed={isCollapsed}/>
         <div className="page__wrapper">
-            {children}
+          {children}
         </div>
       </main>
       <ToastMessage/>

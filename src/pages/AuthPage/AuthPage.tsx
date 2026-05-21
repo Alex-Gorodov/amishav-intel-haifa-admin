@@ -115,15 +115,16 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useAITheme } from "../../hooks/useAIContext";
-import { AppRoute } from "../../const";
+import { AppRoute, ErrorMessages } from "../../const";
 import { signInUser } from "../../store/api/signIn.api";
 import Layout from "../../components/Layout/Layout";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../services/firebase";
+import { getUserProfile } from "../../store/api/getUserProfile.api";
+import { signOut } from "firebase/auth";
 
 export default function AuthPage() {
+
   const navigate = useNavigate();
   const { isAI } = useAITheme();
 
@@ -155,11 +156,23 @@ export default function AuthPage() {
         password
       );
 
+      const uid = auth.currentUser?.uid;
+
+      if (!uid) throw new Error("No user found");
+
+      const profile = await getUserProfile(uid);
+
+      if (!profile?.isAdmin) {
+        await signOut(auth);
+        setError(ErrorMessages.NO_ADMIN_PERMISSIONS);
+        return;
+      }
+
       navigate(AppRoute.Root);
 
     } catch (err: any) {
       console.log("LOGIN ERROR:", err);
-      setError(err?.message || "Login failed");
+      setError(ErrorMessages.CHECK_LOGIN_AND_PASSWORD);
     } finally {
       setLoading(false);
     }

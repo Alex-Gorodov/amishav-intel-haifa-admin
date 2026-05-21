@@ -37,8 +37,9 @@
       background-size: $cell-size $cell-size
       background-position: top right
 
-      &:hover
-        background-color: #ecfaff
+      @media (hover)
+        &:hover
+          background-color: #ecfaff
 
       td
         padding: $cell-size calc($cell-size * 2)

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Layout from '../../components/Layout/Layout';
 import { useAITheme } from '../../hooks/useAIContext';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../../services/firebase';
+import { getUserProfile } from '../../store/api/getUserProfile.api';
 
 export default function App() {
 
@@ -13,6 +14,18 @@ export default function App() {
   });
 
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const loadProfile = async () => {
+      const data = await getUserProfile(user.uid);
+      setProfile(data);
+    };
+
+    loadProfile();
+  }, [user?.uid]);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -49,6 +62,11 @@ export default function App() {
   };
 
   const { greeting, icon, theme } = getTimeTheme();
+  const getUserName = () => {
+    if (!profile) return 'אורח';
+    if (profile.firstName) return `${profile.firstName}`;
+    return 'אורח';
+  };
 
   const { isAI } = useAITheme();
   const className = isAI ? 'home-ai' : 'home';
@@ -66,7 +84,7 @@ export default function App() {
           </span>
 
           <h1 className={`${className}__greeting`}>
-            {greeting}
+            {greeting}, {getUserName()}
           </h1>
 
           <p className={`${className}__time`}>
