@@ -210,11 +210,14 @@
     border-radius: 8px
     border: 1px solid #ccc
     cursor: pointer
+    color: #7c7c7c
     transition: 0.3s
     &--selected
       background: #c7f0d8
+      color: #555555
     @media (hover)
       &:hover
+        color: #555555
         background: #c7f0d8
 
   &__error-wrapper
@@ -366,18 +369,25 @@
       font-family: 'JetBrains Mono', monospace
       font-size: 14px
 
-      &:not(.form__input.form__list-item):hover
-        background: rgba($cyan, 0.1)
-        border-color: $cyan
-        color: #fff
-        transform: translateY(-5px)
-
+      &:not(.form__input.form__list-item)
+        @media (hover)
+          &:hover
+            background: rgba($cyan, 0.1)
+            border-color: $cyan
+            color: #fff
+            transform: translateY(-5px)
       &--selected
-        // background: rgba($cyan, 0.6)
         background: rgba($cyan, 0.6)
         border-color: $cyan
         box-shadow: 0 0 15px rgba($cyan, 0.4)
         color: #fff
-        // &::before
-        //   content: "> "
-        //   color: $cyan
+        @media (hover)
+
+        &:not(.form__input.form__list-item)
+          &:hover
+            background: rgba($cyan, 0.1)
+            border-color: rgba($cyan, 0.6)
+            transform: translateY(0)
+            box-shadow: 0 0 15px rgba($cyan, 0.2)
+            color: #fff
+
