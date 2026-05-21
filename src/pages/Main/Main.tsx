@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout/Layout';
 import { useAITheme } from '../../hooks/useAIContext';
+import { onAuthStateChanged, signOut, User } from 'firebase/auth';
+import { auth } from '../../services/firebase';
 
 export default function App() {
 
@@ -10,6 +12,15 @@ export default function App() {
     minute: '2-digit',
   });
 
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,6 +29,10 @@ export default function App() {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
 
   const formattedDate = date.toLocaleDateString('he-IL', {
     weekday: 'long',
@@ -87,7 +102,17 @@ export default function App() {
             </div>
           </div>
 
+
         </main>
+          {
+            user &&
+              <button
+                className="button button--wide button--add home__logout-button"
+                onClick={handleLogout}
+              >
+                התנתקות
+              </button>
+          }
       </div>
     </Layout>
   );

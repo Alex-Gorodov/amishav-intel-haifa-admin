@@ -13,7 +13,7 @@ interface LayoutProps {
 
 export default function Layout({children}: LayoutProps) {
   const location = useLocation();
-  const normalizedPath = location.pathname.replace(/\/$/, '');
+  const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
   const routeTitle = Titles[normalizedPath] ?? "עמישב אינטל חיפה | 404";
 
   const [isCollapsed, setIsCollapsed] = useState(() => {

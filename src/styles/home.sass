@@ -5,6 +5,8 @@
   gap: 24px
   padding: 32px
   transition: 0.3s
+  min-height: 100%
+
 
   &__header
     z-index: 1
@@ -51,11 +53,13 @@
     color: #555
 
 
+  &__logout-button
+    max-width: 440px
+    margin-top: auto
 
 
 
 .home-ai
-
   display: flex
   flex-direction: column
   align-items: center
@@ -63,7 +67,7 @@
   padding: 32px
   transition: 0.3s
 
-  min-height: 100vh
+  min-height: 100%
   padding: 40px 20px
   position: relative
   overflow: hidden
@@ -149,3 +153,6 @@
     font-size: 1.1rem
     line-height: 1.5
     font-weight: 400
+
+  &__logout-button
+    margin-top: auto

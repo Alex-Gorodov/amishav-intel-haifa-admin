@@ -35,17 +35,19 @@ export const Roles = [
 ] as const;
 
 export enum AppRoute {
-  Root = "/amishav-intel-haifa-admin",
-  Employees = "/amishav-intel-haifa-admin/employees",
-  Requests = "/amishav-intel-haifa-admin/requests",
-  NewEmployee = "/amishav-intel-haifa-admin/new-employee",
-  NewProtocol = "/amishav-intel-haifa-admin/new-protocol",
-  AddShift = "/amishav-intel-haifa-admin/add-shift",
-  Schedule = "/amishav-intel-haifa-admin/schedule",
+  Root = "/",
+  Auth = '/auth',
+  Employees = "/employees",
+  Requests = "/requests",
+  NewEmployee = "/new-employee",
+  NewProtocol = "/new-protocol",
+  AddShift = "/add-shift",
+  Schedule = "/schedule",
 }
 
 export const Titles: Record<string, string> = {
   [AppRoute.Root]: "עמישב אינטל חיפה\u00A0|\u00A0מערכת ניהול",
+  [AppRoute.Auth]: "עמישב אינטל חיפה\u00A0|\u00A0התחברות למערכת",
   [AppRoute.Employees]: "עמישב אינטל חיפה\u00A0|\u00A0רשימת עובדים",
   [AppRoute.Requests]: "עמישב אינטל חיפה\u00A0|\u00A0בקשות לשינויים",
   [AppRoute.NewEmployee]: "עמישב אינטל חיפה\u00A0|\u00A0עובד חדש",

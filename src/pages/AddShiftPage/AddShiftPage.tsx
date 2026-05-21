@@ -12,8 +12,9 @@ import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import { useAITheme } from "../../hooks/useAIContext";
 import { Post } from "../../types/Post";
+import { RootState } from "../../store/root-reducer";
 
-export default function AddShiftPage(scheduleType: string) {
+export default function AddShiftPage() {
   const dispatch = useDispatch();
   const { isAI } = useAITheme();
 
@@ -33,19 +34,25 @@ export default function AddShiftPage(scheduleType: string) {
 
   const users = useSelector((state: State) => state.data.users);
 
-    const securityPosts = useSelector((state: any) => state.data.securityPosts);
+  const securityPosts = useSelector((state: any) => state.data.securityPosts);
   const occPosts = useSelector((state: any) => state.data.controllCenterPosts);
   const dertPosts = useSelector((state: any) => state.data.dertPosts);
 
-  // 3. Fallback tracking logic based on active tab group context
-  const contextPosts: Post[] = useMemo(() => {
-    switch (scheduleType) {
-      case 'security': return securityPosts;
-      case 'occ': return occPosts;
-      case 'dert': return dertPosts;
-      default: return Posts; // Absolute fallback if undefined
-    }
-  }, [scheduleType, securityPosts, occPosts, dertPosts]);
+  const allPosts = useMemo(() => {
+    return [...securityPosts, ...occPosts, ...dertPosts];
+  }, [securityPosts, occPosts, dertPosts]);
+
+  // const [scheduleType, setScheduleType] = useState<"security" | "occ" | "dert">("security");
+
+  // // 3. Fallback tracking logic based on active tab group context
+  // const contextPosts: Post[] = useMemo(() => {
+  //   switch (scheduleType) {
+  //     case 'security': return securityPosts;
+  //     case 'occ': return occPosts;
+  //     case 'dert': return dertPosts;
+  //     default: return allPosts; // Absolute fallback if undefined
+  //   }
+  // }, [scheduleType, securityPosts, occPosts, dertPosts]);
 
   const resetForm = () => {
     setUserId(null);
@@ -58,16 +65,13 @@ export default function AddShiftPage(scheduleType: string) {
 
   const handlePostSelect = (postId: string) => {
     setSelectedPost(postId);
-    const post = contextPosts.find(p => p.id === postId);
+    const post = allPosts.find(p => p.id === postId);
     setStartTime(post?.defaultStartTime || "");
     setEndTime(post?.defaultEndTime || "");
   };
 
   function validateShift(start: string, end: string) {
     const errors: string[] = [];
-
-    // if (!start) errors.push(ErrorMessages.START_TIME_NOT_SELECTED);
-    // if (!end) errors.push(ErrorMessages.END_TIME_NOT_SELECTED);
 
     if (!start) setScreenError(ErrorMessages.START_TIME_NOT_SELECTED);
     if (!end) setScreenError(ErrorMessages.END_TIME_NOT_SELECTED);
@@ -127,7 +131,7 @@ export default function AddShiftPage(scheduleType: string) {
 
     setLoading(true);
 
-    const post = Posts.find(p => p.id === selectedPost);
+    const post = allPosts.find(p => p.id === selectedPost);
     if (!post) {
       setLoading(false);
       return;
@@ -164,23 +168,22 @@ export default function AddShiftPage(scheduleType: string) {
 
   const user = users.find((u) => u.id === userId)
 
-    const roleFilteredUsers = useMemo(() => {
-      if (!selectedPost) return users;
-      return getAvailableUsersByPost(users, selectedPost, contextPosts);
-    }, [users, selectedPost]);
+  const roleFilteredUsers = useMemo(() => {
+    if (!selectedPost) return users;
+    return getAvailableUsersByPost(users, selectedPost, allPosts);
+  }, [users, selectedPost]);
 
   const availablePosts = useMemo(() => {
-    if (!user) return Posts;
-    return getAvailablePostsByRole(user, contextPosts);
+    if (!user) return [];
+    return getAvailablePostsByRole(user, allPosts);
   }, [user, userId]);
 
-    const availableUsers = useMemo(() => {
-      return roleFilteredUsers.filter(u => {
-        const fullName = `${u.firstName} ${u.secondName}`;
-        return fullName.includes(insertedUserName);
-      });
-    }, [roleFilteredUsers, insertedUserName]);
-
+  const availableUsers = useMemo(() => {
+    return roleFilteredUsers.filter(u => {
+      const fullName = `${u.firstName} ${u.secondName}`;
+      return fullName.includes(insertedUserName);
+    });
+  }, [roleFilteredUsers, insertedUserName]);
 
   return (
     <Layout>
@@ -288,7 +291,6 @@ export default function AddShiftPage(scheduleType: string) {
             />
 
             <button
-              onClick={handleSave}
               className='button button--wide'
               type='submit'
             >
