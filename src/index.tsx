@@ -11,8 +11,6 @@ import { fetchSecurityPosts } from './store/api/fetchSecurityPosts.api';
 import { fetchControllCenterPosts } from './store/api/fetchControllCenterPosts.api';
 import { loadGuestData } from './mocks/guestData';
 import { GUEST_MODE_KEY } from './const';
-import { ThunkDispatch, UnknownAction, Dispatch } from '@reduxjs/toolkit';
-import { DataState, AppState } from './types/State';
 import { fetchDertPosts } from './store/api/fetchDertPosts.api';
 
 const root = ReactDOM.createRoot(

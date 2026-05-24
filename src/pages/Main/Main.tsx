@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
 import { useAITheme } from '../../hooks/useAIContext';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../../services/firebase';
+import { AppRoute, GUEST_MODE_KEY } from '../../const';
 import { getUserProfile } from '../../store/api/getUserProfile.api';
 import { RootState } from '../../store/root-reducer';
 import { setGuestMode, loadUsers, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, loadRequests } from '../../store/actions';
-import { GUEST_MODE_KEY } from '../../const';
 
 export default function App() {
 
@@ -18,6 +19,7 @@ export default function App() {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isGuestMode = useSelector((state: RootState) => state.app.isGuestMode);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<any | null>(null);
@@ -59,6 +61,7 @@ export default function App() {
     dispatch(loadRequests({ type: 'give', requests: [] }));
     localStorage.removeItem(GUEST_MODE_KEY);
     await signOut(auth);
+    navigate(AppRoute.Auth);
   };
 
   const formattedDate = date.toLocaleDateString('he-IL', {
