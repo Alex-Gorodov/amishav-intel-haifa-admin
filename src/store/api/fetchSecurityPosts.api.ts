@@ -1,12 +1,15 @@
 import { getDocs } from "firebase/firestore"
-import { POSTS } from "../../const"
+import { SECURITY_POSTS, GUEST_MODE_KEY } from "../../const"
 import { AppDispatch } from "../../types/State"
 import { Post } from "../../types/Post";
 import { loadSecurityPosts } from "../actions";
 
 export const fetchSecurityPosts = async (dispatch: AppDispatch) => {
+  if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
   try {
-    const data = await getDocs(POSTS);
+    const data = await getDocs(SECURITY_POSTS);
+
+    if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
 
     const posts: Post[] = data.docs.map(doc => {
       const postData = doc.data() as Post;

@@ -24,4 +24,5 @@ export type DataState = {
 export type AppState = {
   error: string | null;
   success: string | null;
+  isGuestMode: boolean;
 }

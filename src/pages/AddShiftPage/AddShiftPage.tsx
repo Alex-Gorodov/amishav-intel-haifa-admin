@@ -1,17 +1,17 @@
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ErrorMessages, Posts, SuccessMessages } from "../../const";
-import { setSuccess } from "../../store/actions";
+import { ErrorMessages, SuccessMessages } from "../../const";
+import { setSuccess, setUserShifts } from "../../store/actions";
 import { arrayUnion, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
+import { Shift } from "../../types/Shift";
 import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import { useAITheme } from "../../hooks/useAIContext";
-import { Post } from "../../types/Post";
 import { RootState } from "../../store/root-reducer";
 
 export default function AddShiftPage() {
@@ -27,11 +27,10 @@ export default function AddShiftPage() {
 
   const [error, setScreenError] = useState<string | null>(null)
 
-  const [focusRemark, setFocusRemark] = useState(false)
-
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
 
+  const isGuestMode = useSelector((state: RootState) => state.app.isGuestMode);
   const users = useSelector((state: State) => state.data.users);
 
   const securityPosts = useSelector((state: any) => state.data.securityPosts);
@@ -41,18 +40,6 @@ export default function AddShiftPage() {
   const allPosts = useMemo(() => {
     return [...securityPosts, ...occPosts, ...dertPosts];
   }, [securityPosts, occPosts, dertPosts]);
-
-  // const [scheduleType, setScheduleType] = useState<"security" | "occ" | "dert">("security");
-
-  // // 3. Fallback tracking logic based on active tab group context
-  // const contextPosts: Post[] = useMemo(() => {
-  //   switch (scheduleType) {
-  //     case 'security': return securityPosts;
-  //     case 'occ': return occPosts;
-  //     case 'dert': return dertPosts;
-  //     default: return allPosts; // Absolute fallback if undefined
-  //   }
-  // }, [scheduleType, securityPosts, occPosts, dertPosts]);
 
   const resetForm = () => {
     setUserId(null);
@@ -139,25 +126,43 @@ export default function AddShiftPage() {
 
     const dateToSet = new Date(date);
 
-    const newShift = {
+    const newShift: Shift = {
       id: `${dateToSet.getTime()}_${post.id}`,
-      date: Timestamp.fromDate(dateToSet),
+      date: dateToSet,
       post,
       startTime,
       endTime,
       remark,
-      userId
+      userId,
     };
 
     try {
-      const userRef = doc(db, "users", userId);
-      await setDoc(userRef, { shifts: arrayUnion(newShift) }, { merge: true });
+      if (isGuestMode) {
+        const user = users.find((u) => u.id === userId);
+        if (user) {
+          dispatch(setUserShifts({
+            userId,
+            shifts: [
+              ...(user.shifts || []),
+              newShift,
+            ],
+          }));
+        }
 
-      resetForm();
+        resetForm();
+        dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
+      } else {
+        const userRef = doc(db, "users", userId);
+        await setDoc(
+          userRef,
+          { shifts: arrayUnion({ ...newShift, date: Timestamp.fromDate(dateToSet) }) },
+          { merge: true }
+        );
 
-      await fetchUsers(dispatch);
-      dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED}));
-
+        resetForm();
+        await fetchUsers(dispatch);
+        dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
+      }
     } catch (err) {
       // dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
       setScreenError(ErrorMessages.SHIFT_SAVE_ERROR);
@@ -171,12 +176,12 @@ export default function AddShiftPage() {
   const roleFilteredUsers = useMemo(() => {
     if (!selectedPost) return users;
     return getAvailableUsersByPost(users, selectedPost, allPosts);
-  }, [users, selectedPost]);
+  }, [users, selectedPost, allPosts]);
 
   const availablePosts = useMemo(() => {
     if (!user) return [];
     return getAvailablePostsByRole(user, allPosts);
-  }, [user, userId]);
+  }, [user, allPosts]);
 
   const availableUsers = useMemo(() => {
     return roleFilteredUsers.filter(u => {
@@ -286,8 +291,6 @@ export default function AddShiftPage() {
               className="form__input"
               value={remark}
               onChange={(e) => setRemark(e.target.value)}
-              onFocus={() => setFocusRemark(true)}
-              onBlur={() => setFocusRemark(false)}
             />
 
             <button

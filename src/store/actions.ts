@@ -56,5 +56,7 @@ export const setUserShifts = createAction<{userId: string, shifts: Shift[]}>('da
 
 export const setTrainingUpdatingDate = createAction<{userId: string, training: Training, date: Date}>('data/setTrainingUpdatingDate')
 
+export const setGuestMode = createAction<{isGuestMode: boolean}>('app/setGuestMode');
+
 export const addUserRole = createAction<{userId: string, role: Role}>('data/addUserRole');
 export const removeUserRole = createAction<{userId: string, role: Role}>('data/removeUserRole');

@@ -11,7 +11,7 @@ export const USERS = collection(db, 'users');
 export const SWAP_REQUESTS = collection(db, 'swapRequests');
 export const GIVE_REQUESTS = collection(db, 'giveRequests');
 
-export const POSTS = collection(db, 'posts');
+export const SECURITY_POSTS = collection(db, 'posts');
 export const CONTROLL_CENTER_POSTS = collection(db, 'controllCenterPosts');
 export const DERT_POSTS = collection(db, 'dertPosts');
 
@@ -44,6 +44,8 @@ export enum AppRoute {
   AddShift = "/add-shift",
   Schedule = "/schedule",
 }
+
+export const GUEST_MODE_KEY = "amishav-guest-mode";
 
 export const Titles: Record<string, string> = {
   [AppRoute.Root]: "עמישב אינטל חיפה\u00A0|\u00A0מערכת ניהול",

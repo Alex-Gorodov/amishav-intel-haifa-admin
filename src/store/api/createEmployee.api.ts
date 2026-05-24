@@ -1,10 +1,11 @@
 // store/api/createUser.api.ts
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc, Timestamp } from 'firebase/firestore';
 
 import { auth, db } from '../../services/firebase';
 import { RoleValue, User } from '../../types/User';
+import { GUEST_MODE_KEY } from '../../const';
 
 type CreateEmployeeParams = {
   firstName: string;
@@ -60,13 +61,11 @@ export const createEmployee = async ({
   roles,
 }: CreateEmployeeParams) => {
   try {
-    const userCred = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const isGuestMode = typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 'true';
 
-    const uid = userCred.user.uid;
+    const uid = isGuestMode
+      ? `guest-${Math.random().toString(36).slice(2, 10)}`
+      : (await createUserWithEmailAndPassword(auth, email, password)).user.uid;
 
     const newUser: User = {
       id: uid,
@@ -84,9 +83,12 @@ export const createEmployee = async ({
 
       isAdmin: false,
       avatarUrl: '',
-      createdAt: serverTimestamp(),
+      createdAt: isGuestMode ? Timestamp.fromDate(new Date()) : serverTimestamp(),
     };
-    await setDoc(doc(db, 'users', uid), newUser);
+
+    if (!isGuestMode) {
+      await setDoc(doc(db, 'users', uid), newUser);
+    }
 
     return newUser;
   } catch (error) {

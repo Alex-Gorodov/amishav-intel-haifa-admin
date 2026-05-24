@@ -1,10 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { AppState } from "../../types/State";
-import { setError, setSuccess } from "../actions";
+import { setError, setSuccess, setGuestMode } from "../actions";
 
 const initialState: AppState = {
   error: null,
   success: null,
+  isGuestMode: typeof window !== "undefined" && localStorage.getItem("amishav-guest-mode") === "true",
 };
 
 export const AppReducer = createReducer(initialState, (builder) => {
@@ -14,5 +15,8 @@ export const AppReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setSuccess, (state, action) => {
       state.success = action.payload.message;
+    })
+    .addCase(setGuestMode, (state, action) => {
+      state.isGuestMode = action.payload.isGuestMode;
     })
 });

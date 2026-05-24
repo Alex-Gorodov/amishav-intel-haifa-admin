@@ -9,6 +9,8 @@ import { fetchSwapRequests, fetchGiveRequests } from './store/api/fetchRequests.
 import { AIThemeProvider } from './context/AIThemeContext';
 import { fetchSecurityPosts } from './store/api/fetchSecurityPosts.api';
 import { fetchControllCenterPosts } from './store/api/fetchControllCenterPosts.api';
+import { loadGuestData } from './mocks/guestData';
+import { GUEST_MODE_KEY } from './const';
 import { ThunkDispatch, UnknownAction, Dispatch } from '@reduxjs/toolkit';
 import { DataState, AppState } from './types/State';
 import { fetchDertPosts } from './store/api/fetchDertPosts.api';
@@ -17,12 +19,16 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-fetchUsers(store.dispatch);
-fetchSecurityPosts(store.dispatch);
-fetchControllCenterPosts(store.dispatch);
-fetchDertPosts(store.dispatch);
-fetchSwapRequests(store.dispatch);
-fetchGiveRequests(store.dispatch);
+if (typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 'true') {
+  loadGuestData(store.dispatch);
+} else {
+  fetchUsers(store.dispatch);
+  fetchSecurityPosts(store.dispatch);
+  fetchControllCenterPosts(store.dispatch);
+  fetchDertPosts(store.dispatch);
+  fetchSwapRequests(store.dispatch);
+  fetchGiveRequests(store.dispatch);
+}
 
 root.render(
   <React.StrictMode>

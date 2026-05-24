@@ -2,6 +2,7 @@
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
+import { GUEST_MODE_KEY } from "../../const";
 
 type UpdateShiftParams = {
   userId: string;
@@ -19,6 +20,12 @@ export const setShiftData = async ({
   shiftId,
   data,
 }: UpdateShiftParams) => {
+  const isGuestMode = typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 'true';
+  if (isGuestMode) {
+    console.warn('Guest mode: skipping shift update to Firestore');
+    return true;
+  }
+
   const userRef = doc(db, "users", userId);
   const snap = await getDoc(userRef);
 

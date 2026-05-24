@@ -1,5 +1,6 @@
 import { doc, runTransaction } from "firebase/firestore";
 import { db } from "../../services/firebase";
+import { GUEST_MODE_KEY } from "../../const";
 
 type SwapParams = {
   firstUserId: string;
@@ -14,6 +15,12 @@ export const swapShifts = async ({
   firstShiftId,
   secondShiftId,
 }: SwapParams) => {
+  const isGuestMode = typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 'true';
+  if (isGuestMode) {
+    console.warn('Guest mode: skipping shift swap to Firestore');
+    return true;
+  }
+
   const firstUserRef = doc(db, "users", firstUserId);
   const secondUserRef = doc(db, "users", secondUserId);
 

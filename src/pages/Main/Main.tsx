@@ -1,9 +1,13 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Layout from '../../components/Layout/Layout';
 import { useAITheme } from '../../hooks/useAIContext';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import { getUserProfile } from '../../store/api/getUserProfile.api';
+import { RootState } from '../../store/root-reducer';
+import { setGuestMode, loadUsers, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, loadRequests } from '../../store/actions';
+import { GUEST_MODE_KEY } from '../../const';
 
 export default function App() {
 
@@ -13,6 +17,8 @@ export default function App() {
     minute: '2-digit',
   });
 
+  const dispatch = useDispatch();
+  const isGuestMode = useSelector((state: RootState) => state.app.isGuestMode);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<any | null>(null);
 
@@ -44,6 +50,14 @@ export default function App() {
   }, []);
 
   const handleLogout = async () => {
+    dispatch(setGuestMode({ isGuestMode: false }));
+    dispatch(loadUsers({ users: [] }));
+    dispatch(loadSecurityPosts({ posts: [] }));
+    dispatch(loadControllCenterPosts({ posts: [] }));
+    dispatch(loadDertPosts({ posts: [] }));
+    dispatch(loadRequests({ type: 'swap', requests: [] }));
+    dispatch(loadRequests({ type: 'give', requests: [] }));
+    localStorage.removeItem(GUEST_MODE_KEY);
     await signOut(auth);
   };
 
@@ -123,7 +137,7 @@ export default function App() {
 
         </main>
           {
-            user &&
+            (user || isGuestMode) &&
               <button
                 className="button button--wide button--add home__logout-button"
                 onClick={handleLogout}

@@ -2,14 +2,20 @@ import { getDocs } from "firebase/firestore";
 import { AppDispatch } from "../../types/State";
 import { loadUsers, setUsersDataLoading } from "../actions";
 import { User } from "../../types/User";
-import { USERS } from "../../const";
+import { USERS, GUEST_MODE_KEY } from "../../const";
 import { sanitizeFirestoreData } from "../../utils/sanitizeFirestoreData";
 
 export const fetchUsers = async (dispatch: AppDispatch) => {
+  if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
   dispatch(setUsersDataLoading({ isUsersDataLoading: true }));
 
   try {
     const data = await getDocs(USERS);
+
+    if (localStorage.getItem(GUEST_MODE_KEY) === "true") {
+      dispatch(setUsersDataLoading({ isUsersDataLoading: false }));
+      return;
+    }
 
     const users: User[] = await Promise.all(
       data.docs.map(async (doc) => {

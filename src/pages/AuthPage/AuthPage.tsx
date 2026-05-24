@@ -1,130 +1,24 @@
-// import { useState } from "react";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
-
-// import { auth } from "../../services/firebase";
-// import { useAITheme } from "../../hooks/useAIContext";
-// import { AppRoute } from "../../const";
-// import Layout from "../../components/Layout/Layout";
-
-// export default function AuthPage() {
-//   const navigate = useNavigate();
-//   const { isAI } = useAITheme();
-
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
-
-//   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-
-//     setError(null);
-
-//     if (!email || !password) {
-//       setError("יש למלא אימייל וסיסמה");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       await signInWithEmailAndPassword(auth, email, password);
-
-//       navigate(AppRoute.Root);
-//     } catch (err: any) {
-//       console.error(err);
-
-//       switch (err.code) {
-//         case "auth/invalid-credential":
-//           setError("אימייל או סיסמה שגויים");
-//           break;
-
-//         case "auth/too-many-requests":
-//           setError("יותר מדי ניסיונות התחברות");
-//           break;
-
-//         default:
-//           setError("שגיאה בהתחברות");
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <Layout>
-//       <div className="page page--auth">
-//         <form
-//           onSubmit={handleLogin}
-//           method="POST"
-//           className={`form ${isAI ? "form--ai-theme" : ""}`}
-//         >
-//           <div className="form__wrapper form__wrapper--fullscreen">
-
-//             <h1 className="form__title">
-//               התחברות
-//             </h1>
-
-//             <div
-//               className={`form__error-wrapper ${
-//                 error ? "form__error-wrapper--active" : ""
-//               }`}
-//             >
-//               <p className="form__error-message">
-//                 {error}
-//               </p>
-//             </div>
-
-//             <div className="form__wrapper">
-//               <input
-//                 type="email"
-//                 className="form__input"
-//                 placeholder="אימייל"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//               />
-
-//               <input
-//                 type="password"
-//                 className="form__input"
-//                 placeholder="סיסמה"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//               />
-//             </div>
-
-//             <button
-//               type="submit"
-//               className="button button--wide"
-//               disabled={loading}
-//             >
-//               {loading ? "מתחבר..." : "התחבר"}
-//             </button>
-
-//           </div>
-//         </form>
-//       </div>
-//     </Layout>
-//   );
-// }
-
-
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useAITheme } from "../../hooks/useAIContext";
-import { AppRoute, ErrorMessages } from "../../const";
+import { AppRoute, ErrorMessages, GUEST_MODE_KEY } from "../../const";
 import { signInUser } from "../../store/api/signIn.api";
 import Layout from "../../components/Layout/Layout";
 import { auth } from "../../services/firebase";
 import { getUserProfile } from "../../store/api/getUserProfile.api";
 import { signOut } from "firebase/auth";
+import { setGuestMode } from "../../store/actions";
+import { loadGuestData } from "../../mocks/guestData";
+import { fetchUsers } from "../../store/api/fetchUsers.api";
+import { fetchSecurityPosts } from "../../store/api/fetchSecurityPosts.api";
+import { fetchControllCenterPosts } from "../../store/api/fetchControllCenterPosts.api";
+import { fetchDertPosts } from "../../store/api/fetchDertPosts.api";
+import { fetchSwapRequests, fetchGiveRequests } from "../../store/api/fetchRequests.api";
 
 export default function AuthPage() {
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAI } = useAITheme();
 
@@ -168,6 +62,18 @@ export default function AuthPage() {
         return;
       }
 
+      localStorage.removeItem(GUEST_MODE_KEY);
+      dispatch(setGuestMode({ isGuestMode: false }));
+
+      await Promise.all([
+        fetchUsers(dispatch),
+        fetchSecurityPosts(dispatch),
+        fetchControllCenterPosts(dispatch),
+        fetchDertPosts(dispatch),
+        fetchSwapRequests(dispatch),
+        fetchGiveRequests(dispatch),
+      ]);
+
       navigate(AppRoute.Root);
 
     } catch (err: any) {
@@ -178,42 +84,57 @@ export default function AuthPage() {
     }
   };
 
+  const handleGuestEntry = () => {
+    localStorage.setItem(GUEST_MODE_KEY, "true");
+    dispatch(setGuestMode({ isGuestMode: true }));
+    loadGuestData(dispatch);
+    navigate(AppRoute.Root);
+  };
+
   return (
     <Layout>
-        <form
-          onSubmit={handleLogin}
-          method="POST"
-          className={`form ${isAI ? "form--ai-theme" : ""}`}
-        >
-          <div className="form__wrapper form__wrapper--fullscreen">
-            <h1 className="form__title">התחברות</h1>
+      <form
+        onSubmit={handleLogin}
+        method="POST"
+        className={`form ${isAI ? "form--ai-theme" : ""}`}
+      >
+        <div className="form__wrapper form__wrapper--fullscreen">
+          <h1 className="form__title">התחברות</h1>
 
-            {
-              <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
-                <p className='form__error-message'>{error}</p>
-              </div>
-            }
+          {
+            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
+              <p className='form__error-message'>{error}</p>
+            </div>
+          }
 
-            <input
-              className="form__input"
-              placeholder="תעודת זהות / אימייל"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-            />
+          <input
+            className="form__input"
+            placeholder="תעודת זהות / אימייל"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+          />
 
-            <input
-              className="form__input"
-              type="password"
-              placeholder="סיסמה"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <input
+            className="form__input"
+            type="password"
+            placeholder="סיסמה"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-            <button className="button button--wide" type="submit" disabled={loading}>
-              {loading ? "מתחבר..." : "התחבר"}
-            </button>
-          </div>
-        </form>
+          <button className="button button--wide" type="submit" disabled={loading}>
+            {loading ? "מתחבר..." : "התחבר"}
+          </button>
+
+          <button
+            type="button"
+            className="button button--wide button--secondary"
+            onClick={handleGuestEntry}
+          >
+            כניסה כאורח
+          </button>
+        </div>
+      </form>
     </Layout>
   );
 }

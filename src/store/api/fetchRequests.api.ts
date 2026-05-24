@@ -2,14 +2,17 @@ import { getDocs } from "firebase/firestore";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { AppDispatch } from "../../types/State";
 import { setRequestsDataLoading, loadRequests } from "../actions";
-import { GIVE_REQUESTS, SWAP_REQUESTS } from "../../const";
+import { GIVE_REQUESTS, SWAP_REQUESTS, GUEST_MODE_KEY } from "../../const";
 
 // fetch swap requests
 export const fetchSwapRequests = async (dispatch: AppDispatch) => {
+  if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
   dispatch(setRequestsDataLoading({ isRequestsDataLoading: true }));
 
   try {
     const data = await getDocs(SWAP_REQUESTS);
+
+    if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
 
     const requests: SwapShiftRequest[] = data.docs.map(doc => {
       const requestData = doc.data() as any;
@@ -41,10 +44,13 @@ export const fetchSwapRequests = async (dispatch: AppDispatch) => {
 
 // fetch give requests
 export const fetchGiveRequests = async (dispatch: AppDispatch) => {
+  if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
   dispatch(setRequestsDataLoading({ isRequestsDataLoading: true }));
 
   try {
     const data = await getDocs(GIVE_REQUESTS);
+
+    if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
 
     const requests: GiveShiftRequest[] = data.docs.map(doc => {
       const requestData = doc.data() as any;

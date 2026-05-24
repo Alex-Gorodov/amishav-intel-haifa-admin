@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
-import { setError, setSuccess } from "../../store/actions";
+import { setError, setSuccess, setUserShifts } from "../../store/actions";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
-import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
-import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
 import { createShift } from "../../store/api/createShift.api";
 import { useAITheme } from "../../hooks/useAIContext";
 import { Post } from "../../types/Post";
+import { RootState } from "../../store/root-reducer";
+import { User } from "../../types/User";
+import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
+import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 
 interface Props {
   onClose: () => void;
@@ -69,6 +71,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
   const activePostId = selectedPost || initialPostId;
 
   const dispatch = useDispatch();
+  const isGuestMode = useSelector((state: RootState) => state.app.isGuestMode);
 
   const resetForm = () => {
     setUserId(null);
@@ -169,7 +172,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
     }
 
     try {
-      await createShift({
+      const newShift = await createShift({
         userId,
         date,
         posts: contextPosts,
@@ -179,9 +182,23 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
         remark,
       });
 
-      resetForm();
-      await fetchUsers(dispatch);
+      if (isGuestMode) {
+        const user = users.find((u) => u.id === userId);
 
+        if (user) {
+          dispatch(setUserShifts({
+            userId,
+            shifts: [
+              ...(user.shifts || []),
+              newShift,
+            ],
+          }));
+        }
+      } else {
+        await fetchUsers(dispatch);
+      }
+
+      resetForm();
       dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
       onClose();
     } catch (err) {
@@ -197,7 +214,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
     onClose();
   };
 
-  const roleFilteredUsers = useMemo(() => {
+  const roleFilteredUsers: User[] = useMemo(() => {
     if (!activePostId) return users;
     return getAvailableUsersByPost(users, activePostId, contextPosts);
   }, [users, activePostId, contextPosts]);
@@ -208,7 +225,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
     if (!user) return contextPosts;
     const allowedByRole = getAvailablePostsByRole(user, contextPosts);
     return contextPosts.filter((cp: any) => allowedByRole.some((ap: any) => ap.id === cp.id));
-  }, [user, userId, contextPosts]);
+  }, [user, contextPosts]);
 
   const availableUsers = useMemo(() => {
     return roleFilteredUsers.filter(u => {

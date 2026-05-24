@@ -1,6 +1,7 @@
 import { arrayUnion, doc, setDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { Post } from "../../types/Post";
+import { GUEST_MODE_KEY } from "../../const";
 
 type CreateShiftParams = {
   userId: string;
@@ -60,15 +61,19 @@ export const createShift = async ({
       }
     });
 
-    const userRef = doc(db, "users", userId);
+    const isGuestMode = typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 'true';
 
-    await setDoc(
-      userRef,
-      {
-        shifts: arrayUnion(newShift),
-      },
-      { merge: true }
-    );
+    if (!isGuestMode) {
+      const userRef = doc(db, "users", userId);
+
+      await setDoc(
+        userRef,
+        {
+          shifts: arrayUnion(newShift),
+        },
+        { merge: true }
+      );
+    }
 
     return newShift;
   } catch (error) {

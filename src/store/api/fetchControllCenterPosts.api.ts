@@ -1,12 +1,15 @@
 import { getDocs } from "firebase/firestore";
-import { CONTROLL_CENTER_POSTS } from "../../const";
+import { CONTROLL_CENTER_POSTS, GUEST_MODE_KEY } from "../../const";
 import { Post } from "../../types/Post";
 import { AppDispatch } from "../../types/State";
 import { loadControllCenterPosts } from "../actions";
 
 export const fetchControllCenterPosts = async (dispatch: AppDispatch) => {
+  if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
   try {
     const data = await getDocs(CONTROLL_CENTER_POSTS);
+
+    if (localStorage.getItem(GUEST_MODE_KEY) === "true") return;
 
     const posts: Post[] = data.docs.map(doc => {
       const postData = doc.data() as Post;
