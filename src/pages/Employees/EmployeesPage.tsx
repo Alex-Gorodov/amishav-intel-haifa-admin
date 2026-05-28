@@ -32,7 +32,7 @@ export default function EmployeesPage() {
 
         <div className="page__header page__header--employees">
           <input
-            className="form__list-item form__list-item--search-user page__search-line"
+            className="form__list-item form__input form__list-item--search-user page__search-line"
             type="search"
             id="user"
             onChange={(e) => setSearch(e.target.value)}

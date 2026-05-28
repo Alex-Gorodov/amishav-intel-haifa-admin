@@ -157,6 +157,12 @@ export const OccPostsOrder = [
   { id: 'supervisor-night'},
 ]
 
+export const FirebaseErrorMessages = {
+  SIGN_UP_EMAIL: "Firebase: Error (auth/invalid-email).",
+  SIGN_UP_PASSWORD: "Firebase: Password should be at least 6 characters (auth/weak-password).",
+  SIGN_UP_EMAIL_EXIST: "Firebase: Error (auth/email-already-in-use).",
+}
+
 export const ErrorMessages = {
   // global
   TRY_AGAIN: "נסה שוב",
@@ -166,17 +172,23 @@ export const ErrorMessages = {
   // user / login
   FIELDS_REQUIRED: "כל השדות חייבים להיות מלאים",
   ROLE_REQUIRED: "בחר לפחות תפקיד אחד",
-  USER_CREATE_ERROR: "אירעה שגיאה ביצירת המשתמש",
   ENTER_VALID_EMAIL: "אנא הכנס אימייל תקין",
   USER_NOT_SELECTED: "שגיאה! לא נבחר משתמש",
   CHECK_LOGIN_AND_PASSWORD: "תוודא שהנתונים תקינים",
   PASSWORD_MIN_LENGTH_ERROR: "הסיסמה חייבת להכיל 6 ספרות",
   CHECK_EMAIL_FOR_RESET_LINK: "בדוק את האימייל שלך - שלחנו לך קישור לאיפוס הסיסמה! ייתכן שהקישור הגיע לתיקיית הספאם",
   NO_ADMIN_PERMISSIONS: "אין הרשאות מנהל",
+  USER_CREATING_ERROR: "שגיאה בתהליך יצור משתמש",
+  USER_CREATING_WRONG_EMAIL: "בדוק אימייל",
+  USER_CREATING_SHORT_PASSWORD: "הסיסמא צריכה להכיל 6 ספרות (מספר עובד עמישב)",
+  USER_CREATING_EMAIL_EXIST: "משמתמש עם אימייל זהה כבר קיים!",
 
   // camera
   CAMERA_OPEN_ERROR: "שגיאה בפתיחת המצלמה",
   CAMERA_ACCESS_NEEDED: "יש לתת הרשאה לגישה למצלמה",
+
+  // Protocols
+  PROTOCOL_CREATING_ERROR: "שגיאה ביצירת נוהל",
 
   // shifts
   POST_NOT_SELECTED: "שגיאה! לא נבחרה עמדה",
@@ -195,8 +207,8 @@ export const SuccessMessages = {
   SHIFT_ADDED: "משמרת נוספה בהצלחה!",
   SHIFT_DELETED: "משמרת נמחקה בהצלחה!",
   PROFILE_IMAGE_UPDATED: "תמונת פרופיל חודשה בהצלחה!",
-  USER_CREATED: "המשתמש נוצר בהצלחה",
-  USER_DELETED: "המשתמש נמחק בהצלחה",
+  USER_CREATED: "העובד נוצר בהצלחה",
+  USER_DELETED: "העובד נמחק בהצלחה",
   POST_CREATED: "העמדה נוצרה בהצלחה",
   DATA_SAVED: "הנתונים נשמרו בהצלחה",
   SHIFT_SWAP_REQUEST_SENT: "בקשת החלפה נשלחה בהצלחה",

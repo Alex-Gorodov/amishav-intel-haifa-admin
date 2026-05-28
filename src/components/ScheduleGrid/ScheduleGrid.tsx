@@ -86,8 +86,97 @@ export default function ScheduleGrid({ dates, rows, searchFor, scheduleType }: P
   }>({ type: null });
 
   return (
-    <div className={`page__content schedule ${ isAI ? 'schedule--ai' : ''}`}>
+    <>
+      <div className={`page__content schedule ${ isAI ? 'schedule--ai' : ''}`}>
 
+        {/* HEADER */}
+        <div className="schedule__header">
+          <div className="schedule__header-scroll" ref={headerRef}>
+            {[...dates].reverse().map((d, i) => {
+              const dateObj = new Date(d);
+
+              const weekday = dateObj.toLocaleDateString('he-IL', {
+                weekday: 'long',
+              });
+
+              const day = dateObj.getDate();
+              const month = dateObj.getMonth() + 1;
+
+              return (
+                <div
+                  key={i}
+                  className={`schedule__cell grid__cell--header ${
+                    isToday(d) ? "schedule__cell--header-today" : ""
+                  }`}
+                >
+                  <p>{weekday} {day}.{month}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="schedule__right-header">
+
+          </div>
+        </div>
+
+        {/* BODY */}
+        <div className="schedule__body">
+
+          {/* MAIN SCROLL */}
+          <div
+            className="schedule__main"
+            ref={bodyRef}
+            onScroll={() => {
+              handleScroll();
+              handleVerticalScroll();
+            }}
+          >
+            {rows.map((row) => (
+              <div key={row.id} className="schedule__row">
+                {[...dates].reverse().map((d, i) => {
+                  const shift = row.shifts[d];
+
+                  return (
+                    <ScheduleCell
+                      key={i}
+                      shift={shift}
+                      date={new Date(d)}
+                      searchFor={searchFor}
+                      allPosts={contextPosts}
+                      onAction={(type) =>
+                        setFormState({
+                          type,
+                          cellData: {
+                            date: d,
+                            postId: row.id,
+                            rowId: row.id,
+                          },
+                        })
+                      }
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="schedule__right" ref={rightRef}>
+            {rows.map((row) => {
+
+              return (
+                <div key={row.id} className="schedule__right-cell">
+                  <p className="schedule__cell-text">
+                    {row.name}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+
+        </div>
+      </div>
       {formState.type === 'add' && formState.cellData && (
         <AddShiftModal
           onClose={() => setFormState({ type: null })}
@@ -96,94 +185,6 @@ export default function ScheduleGrid({ dates, rows, searchFor, scheduleType }: P
           scheduleType={scheduleType}
         />
       )}
-
-      {/* HEADER */}
-      <div className="schedule__header">
-        <div className="schedule__header-scroll" ref={headerRef}>
-          {[...dates].reverse().map((d, i) => {
-            const dateObj = new Date(d);
-
-            const weekday = dateObj.toLocaleDateString('he-IL', {
-              weekday: 'long',
-            });
-
-            const day = dateObj.getDate();
-            const month = dateObj.getMonth() + 1;
-
-            return (
-              <div
-                key={i}
-                className={`schedule__cell grid__cell--header ${
-                  isToday(d) ? "schedule__cell--header-today" : ""
-                }`}
-              >
-                <p>{weekday} {day}.{month}</p>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="schedule__right-header">
-
-        </div>
-      </div>
-
-      {/* BODY */}
-      <div className="schedule__body">
-
-        {/* MAIN SCROLL */}
-        <div
-          className="schedule__main"
-          ref={bodyRef}
-          onScroll={() => {
-            handleScroll();
-            handleVerticalScroll();
-          }}
-        >
-          {rows.map((row) => (
-            <div key={row.id} className="schedule__row">
-              {[...dates].reverse().map((d, i) => {
-                const shift = row.shifts[d];
-
-                return (
-                  <ScheduleCell
-                    key={i}
-                    shift={shift}
-                    date={new Date(d)}
-                    searchFor={searchFor}
-                    allPosts={contextPosts}
-                    onAction={(type) =>
-                      setFormState({
-                        type,
-                        cellData: {
-                          date: d,
-                          postId: row.id,
-                          rowId: row.id,
-                        },
-                      })
-                    }
-                  />
-                );
-              })}
-            </div>
-          ))}
-        </div>
-
-        {/* RIGHT COLUMN */}
-        <div className="schedule__right" ref={rightRef}>
-          {rows.map((row) => {
-
-            return (
-              <div key={row.id} className="schedule__right-cell">
-                <p className="schedule__cell-text">
-                  {row.name}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-
-      </div>
-    </div>
+    </>
   );
 }

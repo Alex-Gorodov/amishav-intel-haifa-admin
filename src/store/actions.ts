@@ -48,9 +48,9 @@ export const setRequestStatus = createAction<{id: string, status: RequestStatus}
 
 export const removeRequest = createAction<string>('requests/remove');
 
-export const setError = createAction<{message: string | null}>('app/setError')
+export const setStateError = createAction<{message: string | null}>('app/setStateError')
 
-export const setSuccess = createAction<{message: string | null}>('app/setSuccess')
+export const setStateSuccess = createAction<{message: string | null}>('app/setStateSuccess')
 
 export const setUserShifts = createAction<{userId: string, shifts: Shift[]}>('data/setUserShifts');
 

@@ -102,8 +102,8 @@ export default function AuthPage() {
           <h1 className="form__title">התחברות</h1>
 
           {
-            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
-              <p className='form__error-message'>{error}</p>
+            <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper form__message-wrapper--error--active' : ''}`}>
+              <p className='form__message form__message--error'>{error}</p>
             </div>
           }
 

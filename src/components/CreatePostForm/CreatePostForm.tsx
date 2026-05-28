@@ -20,7 +20,6 @@ export default function PostForm({ onClose }: Props) {
   const [role, setRole] = useState<Post["role"] | null>(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  // const [isMultiple, setIsMultiple] = useState(false);
 
   const roleOptions: RoleOption[] = [
     { value: "security_guard", label: "מאבטח" },
@@ -39,7 +38,6 @@ export default function PostForm({ onClose }: Props) {
       role,
       defaultStartTime: startTime,
       defaultEndTime: endTime,
-      // isMultiple: isMultiple
     });
 
     await fetchSecurityPosts(dispatch);

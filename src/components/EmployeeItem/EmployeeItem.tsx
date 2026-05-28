@@ -11,11 +11,11 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { Pencil, Save } from "lucide-react";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
-import { Colors } from "../../const";
+import { Colors, SuccessMessages } from "../../const";
 import { useAITheme } from "../../hooks/useAIContext";
 import { Link } from "react-router-dom";
 import { normalizeDate } from "../../utils/dateUtils";
-import { deleteEmployee } from "../../store/actions";
+import { deleteEmployee, setStateSuccess } from "../../store/actions";
 
 interface EmployeeItemProps {
   user: User;
@@ -226,6 +226,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
                           await deleteUser({userId: user.id});
                           setIsDeleteOpen(false);
                           dispatch(deleteEmployee({userId: user.id}));
+                          dispatch(setStateSuccess({message: SuccessMessages.USER_DELETED}))
                         }}
                       >
                         מחק

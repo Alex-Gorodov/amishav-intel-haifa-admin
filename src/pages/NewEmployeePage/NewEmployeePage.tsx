@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Roles } from '../../const';
+import { ErrorMessages, FirebaseErrorMessages, Roles, SuccessMessages } from '../../const';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { useDispatch } from 'react-redux';
@@ -22,6 +22,7 @@ export default function NewEmployeePage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const toggleRole = (value: RoleValue) => {
     setSelectedRoles(prev =>
@@ -46,12 +47,12 @@ export default function NewEmployeePage() {
     setError(null);
 
     if (!email || !password || !firstName || !secondName) {
-      setError("יש למלא את כל שדות החובה!");
+      setError(ErrorMessages.FIELDS_REQUIRED);
       return;
     }
 
     if (selectedRoles.length === 0) {
-      setError('Select at least one role');
+      setError(ErrorMessages.ROLE_REQUIRED);
       return;
     }
 
@@ -70,9 +71,19 @@ export default function NewEmployeePage() {
 
       dispatch(addEmployee({ user: userData }));
 
+      setSuccess(SuccessMessages.USER_CREATED)
+
       resetForm();
     } catch (err: any) {
-      setError(err.message || 'שגיאה בתהליך יצור משתמש');
+      if (err.message === FirebaseErrorMessages.SIGN_UP_EMAIL) {
+        setError(ErrorMessages.USER_CREATING_WRONG_EMAIL);
+      } else if (err.message === FirebaseErrorMessages.SIGN_UP_PASSWORD) {
+        setError(ErrorMessages.USER_CREATING_SHORT_PASSWORD);
+      } else if (err.message === FirebaseErrorMessages.SIGN_UP_EMAIL_EXIST) {
+        setError(ErrorMessages.USER_CREATING_EMAIL_EXIST);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -89,8 +100,14 @@ export default function NewEmployeePage() {
 
 
           {
-            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
-              <p className='form__error-message'>{error}</p>
+            <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--error'>{error}</p>
+            </div>
+          }
+
+          {
+            <div className={`form__message-wrapper form__message-wrapper--success ${success ? 'form__message-wrapper form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--success'>{success}</p>
             </div>
           }
 

@@ -7,7 +7,7 @@
     display: flex
     justify-content: center
     align-items: center
-    z-index: 10
+    z-index: 20
 
   &__modal
     background: #fff
@@ -220,7 +220,18 @@
         color: #555555
         background: #c7f0d8
 
-  &__error-wrapper
+  &__groups-wrapper
+    display: flex
+    flex-direction: column
+    gap: 6px
+
+  &__groups-buttons
+    display: grid
+    width: 100%
+    grid-template-columns: repeat(3, 1fr)
+    gap: 6px
+
+  &__message-wrapper
     display: flex
     height: 0
     opacity: 0
@@ -228,20 +239,29 @@
     justify-content: center
     align-items: center
     border-radius: 12px
-    border: 1px solid #ff2c2c
-    background-color: rgba(#ff2c2c, 10%)
-    box-shadow: 0 0 30px rgba(#ff2c2c, 0.2)
+    &--error
+      border: 1px solid #ff2c2c
+      background-color: rgba(#ff2c2c, 10%)
+      box-shadow: 0 0 30px rgba(#ff2c2c, 0.2)
+    border-radius: 12px
+    &--success
+      border: 1px solid #04c15f
+      background-color: rgba(#04c15f, 10%)
+      box-shadow: 0 0 30px rgba(#04c15f, 0.2)
     &--active
       height: auto
       opacity: 1
       padding: 12px
 
-  &__error-message
+  &__message
     margin: 0
     padding: 0
-    color: #ff2c2c
     font-size: 16px
     font-weight: 600
+    &--error
+      color: #ff2c2c
+    &--success
+      color: #04c15f
 
   // --- 5. AI STYLE OVERRIDE (Intel Theme) ---
   &--ai-theme

@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { isTouchDevice } from "../../utils/isTouchDevice";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
@@ -12,7 +11,7 @@ import { swapShifts } from "../../store/api/swapShifts.api";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { ArrowRightLeft, Save } from "lucide-react";
 import { setShiftData } from "../../store/api/setShiftData.api";
-import { setSuccess } from "../../store/actions";
+import { setStateSuccess } from "../../store/actions";
 import { Colors, SuccessMessages } from "../../const";
 
 interface FormProps {
@@ -131,7 +130,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
       secondShiftId: selectedShift.id,
     });
 
-    dispatch(setSuccess({message: SuccessMessages.SHIFT_SWAP_COMPLETED}))
+    dispatch(setStateSuccess({message: SuccessMessages.SHIFT_SWAP_COMPLETED}))
     await fetchUsers(dispatch);
 
     onClose();
@@ -149,7 +148,7 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
       },
     });
 
-    dispatch(setSuccess({message: SuccessMessages.SHIFT_EDIT_COMPLETED}))
+    dispatch(setStateSuccess({message: SuccessMessages.SHIFT_EDIT_COMPLETED}))
     await fetchUsers(dispatch);
 
     onClose();

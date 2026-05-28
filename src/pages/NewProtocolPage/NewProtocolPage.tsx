@@ -4,15 +4,13 @@ import { useImageUpload } from '../../hooks/useImageUpload';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { useDispatch } from 'react-redux';
-import { setSuccess } from '../../store/actions';
-import { SuccessMessages } from '../../const';
+import { setStateSuccess } from '../../store/actions';
+import { ErrorMessages, SuccessMessages } from '../../const';
 import { useAITheme } from '../../hooks/useAIContext';
 
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function NewProtocolPage() {
-  const dispatch = useDispatch();
-
   const { isAI } = useAITheme();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -20,6 +18,12 @@ export default function NewProtocolPage() {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+
+  const GROUP_OPTIONS: { value: Group; label: string }[] = [
+    { value: 'controller', label: 'בקרה' },
+    { value: 'emergency', label: 'חירום' },
+    { value: 'security', label: 'ביטחון' },
+  ];
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -69,6 +73,7 @@ export default function NewProtocolPage() {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
    const resetForm = () => {
     setTitle('');
@@ -83,7 +88,7 @@ export default function NewProtocolPage() {
     setError(null);
 
     if (!title || !content || !group) {
-      setError("יש למלא את כל שדות החובה!");
+      setError(ErrorMessages.FIELDS_REQUIRED);
       return;
     }
 
@@ -98,9 +103,9 @@ export default function NewProtocolPage() {
 
       resetForm();
 
-      dispatch(setSuccess({ message: SuccessMessages.PROTOCOL_ADDED }));
+      setSuccess(SuccessMessages.PROTOCOL_ADDED)
     } catch (err: any) {
-      setError(err?.message || "שגיאה ביצירת נוהל");
+      setError(err?.message || ErrorMessages.PROTOCOL_CREATING_ERROR);
     }
   };
 
@@ -111,13 +116,18 @@ export default function NewProtocolPage() {
         method="post"
         onSubmit={handleSubmit}
         className={`form ${isAI ? 'form--ai-theme' : ''}`}
-        // style={{ margin: isAI ? '-20px' : '0', padding: isAI ? '20px' : '0' }} // Optional: bleeds out to Layout edges
       >
         <div className="form__wrapper form__wrapper--fullscreen page__content">
 
           {
-            <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
-              <p className='form__error-message'>{error}</p>
+            <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--error'>{error}</p>
+            </div>
+          }
+
+          {
+            <div className={`form__message-wrapper form__message-wrapper--success ${success ? 'form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--success'>{success}</p>
             </div>
           }
 
@@ -237,14 +247,30 @@ export default function NewProtocolPage() {
           <select
             value={group}
             onChange={(e) => setGroup(e.target.value as Group)}
-            className="form__input"
-            // required
+            className="visually-hidden"
           >
             <option value="">בחר מחלקה</option>
             <option value="controller">בקרה</option>
             <option value="emergency">חירום</option>
             <option value="security">ביטחון</option>
           </select>
+
+          {/* GROUP SELECTION BUTTONS */}
+          <div className="form__groups-wrapper" style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <p className="form__label">בחר מחלקה:</p>
+            <div className='form__groups-buttons'>
+              {GROUP_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`form__role-item ${group === option.value ? 'form__role-item--selected' : ''}`}
+                  onClick={() => setGroup(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <button
             className="button button--add button--wide"

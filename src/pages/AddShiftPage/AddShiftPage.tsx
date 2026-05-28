@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, SuccessMessages } from "../../const";
-import { setSuccess, setUserShifts } from "../../store/actions";
+import { setUserShifts } from "../../store/actions";
 import { arrayUnion, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
@@ -25,7 +25,8 @@ export default function AddShiftPage() {
   const [remark, setRemark] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [error, setScreenError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -57,11 +58,50 @@ export default function AddShiftPage() {
     setEndTime(post?.defaultEndTime || "");
   };
 
+  // function validateShift(start: string, end: string) {
+  //   const errors: string[] = [];
+
+  //   if (!start) setError(ErrorMessages.START_TIME_NOT_SELECTED);
+  //   if (!end) setError(ErrorMessages.END_TIME_NOT_SELECTED);
+
+  //   if (start && end) {
+  //     const [sh, sm] = start.split(":").map(Number);
+  //     const [eh, em] = end.split(":").map(Number);
+
+  //     const startMin = sh * 60 + sm;
+  //     let endMin = eh * 60 + em;
+
+  //     const isNightShift = sh >= 18 || sh < 6;
+
+  //     if (endMin < startMin && !isNightShift) {
+  //       // errors.push(ErrorMessages.END_BEFORE_START_DAY);
+  //       setError(ErrorMessages.END_BEFORE_START_DAY);
+  //     }
+
+  //     if (endMin < startMin && isNightShift) {
+  //       endMin += 24 * 60;
+  //     }
+
+  //     const duration = endMin - startMin;
+
+  //     // if (duration > 12 * 60) errors.push(ErrorMessages.SHIFT_TOO_LONG);
+  //     if (duration > 12 * 60) setError(ErrorMessages.SHIFT_TOO_LONG);
+  //   }
+
+  //   return errors;
+  // };
+
   function validateShift(start: string, end: string) {
     const errors: string[] = [];
 
-    if (!start) setScreenError(ErrorMessages.START_TIME_NOT_SELECTED);
-    if (!end) setScreenError(ErrorMessages.END_TIME_NOT_SELECTED);
+    if (!start) {
+      setError(ErrorMessages.START_TIME_NOT_SELECTED);
+      errors.push(ErrorMessages.START_TIME_NOT_SELECTED);
+    }
+    if (!end) {
+      setError(ErrorMessages.END_TIME_NOT_SELECTED);
+      errors.push(ErrorMessages.END_TIME_NOT_SELECTED);
+    }
 
     if (start && end) {
       const [sh, sm] = start.split(":").map(Number);
@@ -73,8 +113,8 @@ export default function AddShiftPage() {
       const isNightShift = sh >= 18 || sh < 6;
 
       if (endMin < startMin && !isNightShift) {
-        // errors.push(ErrorMessages.END_BEFORE_START_DAY);
-        setScreenError(ErrorMessages.END_BEFORE_START_DAY);
+        setError(ErrorMessages.END_BEFORE_START_DAY);
+        errors.push(ErrorMessages.END_BEFORE_START_DAY);
       }
 
       if (endMin < startMin && isNightShift) {
@@ -83,36 +123,109 @@ export default function AddShiftPage() {
 
       const duration = endMin - startMin;
 
-      // if (duration > 12 * 60) errors.push(ErrorMessages.SHIFT_TOO_LONG);
-      if (duration > 12 * 60) setScreenError(ErrorMessages.SHIFT_TOO_LONG);
+      if (duration > 12 * 60) {
+        setError(ErrorMessages.SHIFT_TOO_LONG);
+        errors.push(ErrorMessages.SHIFT_TOO_LONG);
+      }
     }
 
     return errors;
-  };
+  }
 
   const handleEndTimeChange = (newEnd: string | null) => {
     if (!newEnd) return;
     setEndTime(newEnd);
   };
 
+  // const handleSave = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!selectedPost) {
+  //     setError(ErrorMessages.POST_NOT_SELECTED);
+  //     return;
+  //   }
+
+  //   const errors = validateShift(startTime, endTime);
+  //   if (errors.length > 0) {
+  //     setError(`${errors.join("\n")}שגיעות! `);
+  //     return;
+  //   }
+
+  //   if (!userId) {
+  //     setError(ErrorMessages.USER_NOT_SELECTED);
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   const post = allPosts.find(p => p.id === selectedPost);
+  //   if (!post) {
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const dateToSet = new Date(date);
+
+  //   const newShift: Shift = {
+  //     id: `${dateToSet.getTime()}_${post.id}`,
+  //     date: dateToSet,
+  //     post,
+  //     startTime,
+  //     endTime,
+  //     remark,
+  //     userId,
+  //   };
+
+  //   try {
+  //     if (isGuestMode) {
+  //       const user = users.find((u) => u.id === userId);
+  //       if (user) {
+  //         dispatch(setUserShifts({
+  //           userId,
+  //           shifts: [
+  //             ...(user.shifts || []),
+  //             newShift,
+  //           ],
+  //         }));
+  //       }
+
+  //       resetForm();
+  //       setSuccess(SuccessMessages.SHIFT_ADDED);
+  //     } else {
+  //       const userRef = doc(db, "users", userId);
+  //       await setDoc(
+  //         userRef,
+  //         { shifts: arrayUnion({ ...newShift, date: Timestamp.fromDate(dateToSet) }) },
+  //         { merge: true }
+  //       );
+
+  //       resetForm();
+  //       await fetchUsers(dispatch);
+  //       setSuccess(SuccessMessages.SHIFT_ADDED)
+  //     }
+  //   } catch (err) {
+  //     console.error(err)
+  //     setError(ErrorMessages.SHIFT_SAVE_ERROR);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPost) {
-      // dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
-      setScreenError(ErrorMessages.POST_NOT_SELECTED);
+      setError(ErrorMessages.POST_NOT_SELECTED);
       return;
     }
 
     const errors = validateShift(startTime, endTime);
     if (errors.length > 0) {
-      // dispatch(setError({message: (`${errors.join("\n")}שגיעות! `)}));
-      setScreenError(`${errors.join("\n")}שגיעות! `);
+      setError(`${errors.join("\n")} שגיאות! `);
       return;
     }
 
     if (!userId) {
-      // dispatch(setError({message: (ErrorMessages.USER_NOT_SELECTED)}));
-      setScreenError(ErrorMessages.USER_NOT_SELECTED);
+      setError(ErrorMessages.USER_NOT_SELECTED);
       return;
     }
 
@@ -126,15 +239,21 @@ export default function AddShiftPage() {
 
     const dateToSet = new Date(date);
 
-    const newShift: Shift = {
+    // Formulate the structural data base
+    const rawShift = {
       id: `${dateToSet.getTime()}_${post.id}`,
       date: dateToSet,
-      post,
+      post: JSON.parse(JSON.stringify(post)), // Quick clean of any hidden prototype/undefined props in post
       startTime,
       endTime,
-      remark,
+      remark: remark || "", // Fallback safely to empty string if undefined
       userId,
     };
+
+    // Strip undefined keys out so Firestore doesn't crash
+    const newShift = Object.fromEntries(
+      Object.entries(rawShift).filter(([_, value]) => value !== undefined)
+    ) as unknown as Shift;
 
     try {
       if (isGuestMode) {
@@ -150,22 +269,29 @@ export default function AddShiftPage() {
         }
 
         resetForm();
-        dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
+        setSuccess(SuccessMessages.SHIFT_ADDED);
       } else {
         const userRef = doc(db, "users", userId);
+
+        // Prepare data for Firestore by swapping the raw JS Date for a Timestamp
+        const firestoreShift = {
+          ...newShift,
+          date: Timestamp.fromDate(dateToSet)
+        };
+
         await setDoc(
           userRef,
-          { shifts: arrayUnion({ ...newShift, date: Timestamp.fromDate(dateToSet) }) },
+          { shifts: arrayUnion(firestoreShift) },
           { merge: true }
         );
 
         resetForm();
         await fetchUsers(dispatch);
-        dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
+        setSuccess(SuccessMessages.SHIFT_ADDED);
       }
     } catch (err) {
-      // dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
-      setScreenError(ErrorMessages.SHIFT_SAVE_ERROR);
+      console.error(err);
+      setError(ErrorMessages.SHIFT_SAVE_ERROR);
     } finally {
       setLoading(false);
     }
@@ -202,10 +328,17 @@ export default function AddShiftPage() {
           <div className="form__wrapper form__wrapper--fullscreen">
 
             {
-              <div className={`form__error-wrapper ${error ? 'form__error-wrapper--active' : ''}`}>
-                <p className='form__error-message'>{error}</p>
+              <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper--active' : ''}`}>
+                <p className='form__message form__message--error'>{error}</p>
               </div>
             }
+
+            {
+              <div className={`form__message-wrapper form__message-wrapper--success ${success ? 'form__message-wrapper--active' : ''}`}>
+                <p className='form__message form__message--success'>{success}</p>
+              </div>
+            }
+
             <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
             <input
               type="date"
@@ -231,7 +364,9 @@ export default function AddShiftPage() {
                   {
                     availableUsers.length === 0
                     ?
-                    <p className='form__message'>לא נמצאו עובדים</p>
+                    <div className='form__message-wrapper form__message-wrapper--error form__message-wrapper--active'>
+                      <p className='form__message form__message--error'>לא נמצאו עובדים</p>
+                    </div>
                     :
                     availableUsers.map(u => (
                       <div

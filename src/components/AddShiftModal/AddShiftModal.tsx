@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessages, Posts, SuccessMessages } from "../../const";
-import { setError, setSuccess, setUserShifts } from "../../store/actions";
+import { setStateError, setStateSuccess, setUserShifts } from "../../store/actions";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
@@ -27,6 +27,9 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
   const [endTime, setEndTime] = useState("");
   const [remark, setRemark] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -145,18 +148,18 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
 
     // FIX 2: Validate using activePostId instead of selectedPost
     if (!activePostId) {
-      dispatch(setError({message: (ErrorMessages.POST_NOT_SELECTED)}));
+      setError(ErrorMessages.POST_NOT_SELECTED);
       return;
     }
 
     const errors = validateShift(startTime, endTime);
     if (errors.length > 0) {
-      dispatch(setError({message: (`${errors.join("\n")}שגיעות! `)}));
+      setError(`${errors.join("\n")}שגיעות! `)
       return;
     }
 
     if (!userId) {
-      dispatch(setError({message: (ErrorMessages.USER_NOT_SELECTED)}));
+      setError(ErrorMessages.USER_NOT_SELECTED)
       return;
     }
 
@@ -167,7 +170,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
     if (!post) {
       console.error(`❌ Post ID "${activePostId}" was not found inside current contextPosts slice.`, contextPosts);
       setLoading(false);
-      dispatch(setError({ message: "שגיאה: עמדה לא נמצאה במערכת" }));
+      setError("שגיאה: עמדה לא נמצאה במערכת")
       return;
     }
 
@@ -199,11 +202,12 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
       }
 
       resetForm();
-      dispatch(setSuccess({ message: SuccessMessages.SHIFT_ADDED }));
+      setSuccess(SuccessMessages.SHIFT_ADDED);
+      dispatch(setStateSuccess({message: SuccessMessages.SHIFT_ADDED}))
       onClose();
     } catch (err) {
       console.error("CREATE SHIFT FAILED:", err);
-      dispatch(setError({ message: ErrorMessages.SHIFT_SAVE_ERROR }));
+      setError(ErrorMessages.SHIFT_SAVE_ERROR);
     } finally {
       setLoading(false);
     }
@@ -246,6 +250,19 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
 
             <h2 className="form__title">הוספת משמרת</h2>
 
+
+            {
+              <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper--active' : ''}`}>
+                <p className='form__message form__message--error'>{error}</p>
+              </div>
+            }
+
+            {
+              <div className={`form__message-wrapper form__message-wrapper--success ${success ? 'form__message-wrapper--active' : ''}`}>
+                <p className='form__message form__message--success'>{success}</p>
+              </div>
+            }
+
             <label className="form__label" htmlFor='date'>תאריך המשמרת</label>
             <input
               type="date"
@@ -271,7 +288,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
                   {
                     availableUsers.length === 0
                     ?
-                    <p className='form__message'>לא נמצאו עובדים</p>
+                    <p className='form__message form__message--error'>לא נמצאו עובדים</p>
                     :
                     availableUsers.map(u => (
                       <div

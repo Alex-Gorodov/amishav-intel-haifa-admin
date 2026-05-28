@@ -8,7 +8,7 @@ import { RootState } from "../../store/root-reducer";
 import { getFullUserName } from "../../utils/getFullUserName";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { getPostTimeRange } from "../../utils/getPostTimeRange";
-import { setSuccess } from "../../store/actions";
+import { setStateSuccess } from "../../store/actions";
 import { SuccessMessages } from "../../const";
 import { useAITheme } from "../../hooks/useAIContext";
 import { Post } from "../../types/Post";
@@ -108,7 +108,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date, allPost
       });
     }
     onReset();
-    dispatch(setSuccess({message: SuccessMessages.SHIFT_DELETED}))
+    dispatch(setStateSuccess({message: SuccessMessages.SHIFT_DELETED}))
     fetchUsers(dispatch);
 
   }

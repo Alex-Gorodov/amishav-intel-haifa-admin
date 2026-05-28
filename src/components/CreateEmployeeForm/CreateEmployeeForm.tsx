@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp, FieldValue } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
-import { Roles } from '../../const';
+import { ErrorMessages, FirebaseErrorMessages, Roles, SuccessMessages } from '../../const';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { fetchUsers } from '../../store/api/fetchUsers.api';
 import { useDispatch } from 'react-redux';
 import { createEmployee } from '../../store/api/createEmployee.api';
-import { addEmployee } from '../../store/actions';
+import { addEmployee, setStateSuccess } from '../../store/actions';
 import { RoleValue } from '../../types/User';
+import { useAITheme } from '../../hooks/useAIContext';
+import { FirebaseError } from 'firebase/app';
 
 interface Props {
   onClose: () => void;
@@ -16,6 +18,8 @@ interface Props {
 
 export default function CreateEmployeeForm({ onClose }: Props) {
   const dispatch = useDispatch();
+  const { isAI } = useAITheme();
+
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [passport, setPassport] = useState('');
@@ -26,6 +30,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const toggleRole = (value: RoleValue) => {
     setSelectedRoles(prev =>
@@ -60,7 +65,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
     setError(null);
 
     if (!email || !password || !firstName || !secondName) {
-      setError('Fill required fields');
+      setError(ErrorMessages.FIELDS_REQUIRED);
       return;
     }
 
@@ -75,11 +80,20 @@ export default function CreateEmployeeForm({ onClose }: Props) {
       const createdUser = await createEmployee(userData);
 
       dispatch(addEmployee({ user: createdUser }));
+      dispatch(setStateSuccess({message: SuccessMessages.USER_CREATED}));
 
       resetForm();
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Error creating user');
+      if (err.message === FirebaseErrorMessages.SIGN_UP_EMAIL) {
+        setError(ErrorMessages.USER_CREATING_WRONG_EMAIL);
+      } else if (err.message === FirebaseErrorMessages.SIGN_UP_PASSWORD) {
+        setError(ErrorMessages.USER_CREATING_SHORT_PASSWORD);
+      } else if (err.message === FirebaseErrorMessages.SIGN_UP_EMAIL_EXIST) {
+        setError(ErrorMessages.USER_CREATING_EMAIL_EXIST);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -92,7 +106,19 @@ export default function CreateEmployeeForm({ onClose }: Props) {
 
           <h2 className='form__title'>עובד חדש</h2>
 
-          {error && <p className='form__error'>{error}</p>}
+          {
+            <div className={`form__message-wrapper form__message-wrapper--error ${error ? 'form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--error'>{error}</p>
+            </div>
+          }
+
+          {
+            <div className={`form__message-wrapper form__message-wrapper--success ${success ? 'form__message-wrapper--active' : ''}`}>
+              <p className='form__message form__message--success'>{success}</p>
+            </div>
+          }
+
+
 
           <div className='form__wrapper'>
             <input className='form__input' placeholder="שם פרטי" value={firstName} onChange={e => setFirstName(e.target.value)} autoFocus={!isTouchDevice()}/>

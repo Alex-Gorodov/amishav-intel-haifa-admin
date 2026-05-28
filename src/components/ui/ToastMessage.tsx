@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
-import { setError, setSuccess } from "../../store/actions";
+import { setStateError, setStateSuccess } from "../../store/actions";
 
 export default function ToastMessage() {
   const dispatch = useDispatch();
@@ -37,8 +37,8 @@ export default function ToastMessage() {
         setIsError(false);
       }, 300);
 
-      if (success) dispatch(setSuccess({ message: null }));
-      if (error) dispatch(setError({ message: null }));
+      if (success) dispatch(setStateSuccess({ message: null }));
+      if (error) dispatch(setStateError({ message: null }));
     }, 3000);
 
     return () => {

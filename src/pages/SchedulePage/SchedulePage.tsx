@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout/Layout";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/root-reducer";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ScheduleGrid from "../../components/ScheduleGrid/ScheduleGrid";
 import { getIsoLocalDateKey, getWeekByOffset } from "../../utils/getWeekDates";
 import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";

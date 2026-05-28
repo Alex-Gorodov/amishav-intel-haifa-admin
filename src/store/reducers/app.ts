@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { AppState } from "../../types/State";
-import { setError, setSuccess, setGuestMode } from "../actions";
+import { setStateError, setStateSuccess, setGuestMode } from "../actions";
 
 const initialState: AppState = {
   error: null,
@@ -10,10 +10,10 @@ const initialState: AppState = {
 
 export const AppReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(setError, (state, action) => {
+    .addCase(setStateError, (state, action) => {
       state.error = action.payload.message;
     })
-    .addCase(setSuccess, (state, action) => {
+    .addCase(setStateSuccess, (state, action) => {
       state.success = action.payload.message;
     })
     .addCase(setGuestMode, (state, action) => {
