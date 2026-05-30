@@ -84,15 +84,14 @@
     border-right: 1px solid #c6c6c6
     border-bottom: 1px solid #c6c6c6
     font-size: 12px
+    transition: border 0s
     &--today
       background-color: #e2fde2
     &--active
       border-color: darken(#c6c6c6, 0.4)
       background-color: #b9f1ff
     &:hover
-      background-color: rgba(0, 242, 255, 0.1)
-      border: 1px solid rgba(0, 242, 255, 0.4)
-      box-shadow: 0 0 10px rgba(0, 242, 255, 0.2)
+      background-color: rgba(127, 127, 127, 0.1)
 
   &__cell-trigger
     position: absolute
@@ -249,10 +248,3 @@
     &-menu--top
       bottom: 32px
       top: auto
-
-    .schedule__menu-btn
-      color: #fff
-      font-family: 'JetBrains Mono', monospace
-      &:hover
-        background-color: rgba(0, 242, 255, 0.1)
-        color: #00f2ff
