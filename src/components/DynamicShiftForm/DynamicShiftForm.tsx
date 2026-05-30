@@ -52,6 +52,21 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 7);
 
+  const weekRange = useMemo(() => {
+    const baseDate = shift?.date
+      ? normalizeDate(shift.date)
+      : new Date();
+
+    const start = new Date(baseDate);
+    start.setDate(baseDate.getDate() - baseDate.getDay());
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(start);
+    end.setDate(start.getDate() + 7);
+
+    return { start, end };
+  }, [shift?.date]);
+
 
   const canSwap = (userA: User, userB: User, shiftA: Shift, shiftB: Shift) => {
     if (userA.id === userB.id) return false;
@@ -66,15 +81,13 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
   };
 
   const availableShifts = useMemo(() => {
-    const start = startOfWeek;
-    const end = endOfWeek;
+    const { start, end } = weekRange;
 
     return users.flatMap(user => {
       return (user.shifts || [])
         .filter(targetShift => {
           if (!targetShift?.date) return false;
 
-          // ✅ FIX 1: Safely normalize with the utility instead of 'in' operator check
           const targetDate = normalizeDate(targetShift.date);
 
           const inWeek = targetDate >= start && targetDate < end;
@@ -98,7 +111,6 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
         }));
     })
     .sort((a, b) => {
-      // ✅ FIX 2: Safely normalize inside sorting map
       const dateA = normalizeDate(a.date);
       const dateB = normalizeDate(b.date);
 
@@ -107,18 +119,25 @@ export default function DynamicShiftForm({type, shift, onClose, onAccept, allPos
   }, [users, shift, startOfWeek, endOfWeek]);
 
   const groupedShifts = useMemo(() => {
-    return availableShifts.reduce((acc, s) => {
-      // ✅ FIX 3: Safely normalize during group indexing
-      const date = normalizeDate(s.date);
+  const grouped: Record<string, typeof availableShifts> = {};
 
-      const key = date.toISOString().split("T")[0]; // YYYY-MM-DD
+  for (const s of availableShifts) {
+    const date = normalizeDate(s.date);
+    const key = date.toISOString().split("T")[0];
 
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(s);
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(s);
+  }
 
-      return acc;
-    }, {} as Record<string, typeof availableShifts>);
-  }, [availableShifts]);
+  // sort each group separately
+  Object.keys(grouped).forEach(key => {
+    grouped[key].sort((a, b) => {
+      return a.startTime.localeCompare(b.startTime);
+    });
+  });
+
+  return grouped;
+}, [availableShifts]);
 
   const handleSwap = async () => {
     if (!selectedShift) return;
