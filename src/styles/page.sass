@@ -133,6 +133,10 @@
             &:active
               transform: translateY(5px)
 
+  .form__list-item:hover:not(.form__list-item--search-user)
+    background: rgba($intel-light-blue, 0.4)
+    border-color: $intel-dark-blue
+
 
 
   // --- Table Rows as "Data Blocks" ---
@@ -165,3 +169,12 @@
   // Requests
   .requests__message
     color: $ai-cyan
+
+
+
+  // Schedule
+  .schedule
+    &__menu-btn
+      &:hover
+        background-color: rgba(0, 242, 255, 0.1)
+        color: #00f2ff
