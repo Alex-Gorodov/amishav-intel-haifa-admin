@@ -1,17 +1,25 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createProtocol } from '../../store/api/createProtocol.api';
 import { useImageUpload } from '../../hooks/useImageUpload';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
-import { useDispatch } from 'react-redux';
-import { setStateSuccess } from '../../store/actions';
 import { ErrorMessages, SuccessMessages } from '../../const';
 import { useAITheme } from '../../hooks/useAIContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/root-reducer';
+import { CircleX, Pencil } from 'lucide-react';
+import { addProtocol, deleteProtocol, setStateSuccess } from '../../store/actions';
+import { deleteApiProtocol } from '../../store/api/deleteProtocol.api';
+import { Protocol } from '../../types/Protocol';
+import { editProtocol } from '../../store/api/editProtocol.api';
+import { fetchProtocols } from '../../store/api/fetchProtocols.api';
 
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function NewProtocolPage() {
   const { isAI } = useAITheme();
+
+  const dispatch = useDispatch();
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -24,6 +32,8 @@ export default function NewProtocolPage() {
     { value: 'emergency', label: 'חירום' },
     { value: 'security', label: 'ביטחון' },
   ];
+
+  const protocols = useSelector((state: RootState) => state.data.protocols)
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -101,14 +111,70 @@ export default function NewProtocolPage() {
         group,
       });
 
+      dispatch(addProtocol({ protocol: {
+        id: group + title,
+        title,
+        content,
+        headerImage,
+        images,
+      }}))
+
       resetForm();
 
       setSuccess(SuccessMessages.PROTOCOL_ADDED)
+      fetchProtocols(dispatch)
     } catch (err: any) {
       setError(err?.message || ErrorMessages.PROTOCOL_CREATING_ERROR);
     }
   };
 
+  const handleDelete = async (id: string) => {
+    console.log(id)
+    await deleteApiProtocol({protocolId: id})
+    dispatch(deleteProtocol({protocolId: id}))
+    dispatch(setStateSuccess({ message: SuccessMessages.PROTOCOL_DELETED}))
+  }
+
+  const [isEditing, setEditing] = useState(false)
+  const [protocolToEdit, setProtocolToEdit] = useState<Protocol | null>(null)
+
+  const [newTitle, setNewTitle] = useState(protocolToEdit?.title || '')
+  const [newContent, setNewContent] = useState('');
+
+  const clearEditing = () => {
+    const original = protocolToEdit;
+
+    setEditing(false);
+    setProtocolToEdit(null);
+
+    setNewTitle(original?.title ?? '');
+  };
+
+  useEffect(() => {
+    if (protocolToEdit) {
+      setNewTitle(protocolToEdit.title);
+      setNewContent(protocolToEdit.content);
+    }
+  }, [protocolToEdit]);
+
+const handleEdit = async () => {
+  if (!protocolToEdit) return;
+
+  try {
+    await editProtocol({
+      protocolId: protocolToEdit.id,
+      title: newTitle,
+      content: newContent,
+    });
+
+    fetchProtocols(dispatch)
+    dispatch(setStateSuccess({message: SuccessMessages.PROTOCOL_EDITED}))
+
+    clearEditing();
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <Layout>
@@ -280,7 +346,67 @@ export default function NewProtocolPage() {
             {uploadingImages ? 'טעינה...' : 'ליצור'}
           </button>
         </div>
+        <div className='protocols'>
+          {
+            protocols.map((p) => {
+              return (
+                <div className='protocol' key={p.id}>
+                  <p className='protocol__title'>{p.title}</p>
+                  <div className='protocol__buttons'>
+                    <button
+                      className="button button--with-icon button--edit"
+                      type="button"
+                      onClick={() => {
+                        setProtocolToEdit(p);
+                        setEditing(true);
+                      }
+                    }
+                    >
+                      <Pencil size={18}/>
+                        ערך
+                    </button>
+                    <button
+                      className="button button--with-icon button--delete"
+                      type="button"
+                      onClick={() => handleDelete(p.id)}
+                    >
+                      <CircleX size={18}/>
+                        מחיקה
+                    </button>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>
       </form>
+      {
+        isEditing
+        &&
+        <div className="form__overlay" onClick={clearEditing} >
+          <div className="form__modal" onClick={(e) => {
+            e.stopPropagation()
+          }}>
+            <form action="" className="form__wrapper">
+              <h2 className='form__title'>ערך נוהל</h2>
+              <label htmlFor="edit-title">
+                <input className='form__input' onChange={(e) => setNewTitle(e.target.value)} type="text" name={`${protocolToEdit?.title}-title`} id="edit-title" value={newTitle}/>
+              </label>
+              <label htmlFor="edit-content">
+                <textarea
+                  className='form__input form__input--textarea'
+                  value={newContent}
+                  name={`${protocolToEdit?.title}-content`}
+                  id="edit-content"
+                  onChange={(e) => setNewContent(e.target.value)}
+                />
+              </label>
+              <button className="button button--wide button--add" type="button" onClick={handleEdit}>שמור</button>
+              <button className="button button--delete" type="button" onClick={clearEditing}>ביטול</button>
+            </form>
+          </div>
+        </div>
+      }
     </Layout>
   );
 }

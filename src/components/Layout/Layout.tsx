@@ -14,7 +14,7 @@ interface LayoutProps {
 export default function Layout({children}: LayoutProps) {
   const location = useLocation();
   const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
-  const routeTitle = Titles[normalizedPath] ?? "עמישב אינטל חיפה | 404";
+  const routeTitle = Titles[normalizedPath] ?? "אינטל חיפה | 404";
 
   const [isCollapsed, setIsCollapsed] = useState(() => {
     return localStorage.getItem('sidebar-collapsed') === 'true';
@@ -30,7 +30,7 @@ export default function Layout({children}: LayoutProps) {
     document.title = routeTitle;
   }, [normalizedPath]);
 
-  const headerTitle = isMobile ? routeTitle.replace('עמישב אינטל חיפה\u00A0|\u00A0', '') : routeTitle;
+  const headerTitle = isMobile ? routeTitle.replace('אינטל חיפה ביטחון\u00A0|\u00A0', '') : routeTitle;
 
   return (
     <div className={`page ${isAI ? 'page--ai' : ''}`}>

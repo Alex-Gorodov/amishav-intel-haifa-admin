@@ -16,6 +16,7 @@ export const CONTROLL_CENTER_POSTS = collection(db, 'controllCenterPosts');
 export const DERT_POSTS = collection(db, 'dertPosts');
 
 export const PROTOCOLS_HEADERS = collection(db, 'protocolsHeaders')
+export const PROTOCOLS = collection(db, 'protocols')
 
 export enum Colors {
   IntelBlue = "#0078d4",
@@ -48,14 +49,14 @@ export enum AppRoute {
 export const GUEST_MODE_KEY = "amishav-guest-mode";
 
 export const Titles: Record<string, string> = {
-  [AppRoute.Root]: "עמישב אינטל חיפה\u00A0|\u00A0מערכת ניהול",
-  [AppRoute.Auth]: "עמישב אינטל חיפה\u00A0|\u00A0התחברות למערכת",
-  [AppRoute.Employees]: "עמישב אינטל חיפה\u00A0|\u00A0רשימת עובדים",
-  [AppRoute.Requests]: "עמישב אינטל חיפה\u00A0|\u00A0בקשות לשינויים",
-  [AppRoute.NewEmployee]: "עמישב אינטל חיפה\u00A0|\u00A0עובד חדש",
-  [AppRoute.NewProtocol]: "עמישב אינטל חיפה\u00A0|\u00A0נוהל חדש",
-  [AppRoute.AddShift]: "עמישב אינטל חיפה\u00A0|\u00A0משמרת חדשה",
-  [AppRoute.Schedule]: "עמישב אינטל חיפה\u00A0|\u00A0סידור עבודה",
+  [AppRoute.Root]: "אינטל חיפה\u00A0|\u00A0מערכת ניהול",
+  [AppRoute.Auth]: "אינטל חיפה\u00A0|\u00A0התחברות למערכת",
+  [AppRoute.Employees]: "אינטל חיפה\u00A0|\u00A0רשימת עובדים",
+  [AppRoute.Requests]: "אינטל חיפה\u00A0|\u00A0בקשות לשינויים",
+  [AppRoute.NewEmployee]: "אינטל חיפה\u00A0|\u00A0עובד חדש",
+  [AppRoute.NewProtocol]: "אינטל חיפה\u00A0|\u00A0נוהל חדש",
+  [AppRoute.AddShift]: "אינטל חיפה\u00A0|\u00A0משמרת חדשה",
+  [AppRoute.Schedule]: "אינטל חיפה\u00A0|\u00A0סידור עבודה",
 };
 
 export const StatusLabels: Record<RequestStatus, string> = {
@@ -217,6 +218,8 @@ export const SuccessMessages = {
   SHIFT_GIVE_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
   SHIFT_EDIT_COMPLETED: "עדכון פרטי המשמרת בוצע בהצלחה!",
   PROTOCOL_ADDED: "נוהל נוצר בהצלחה",
+  PROTOCOL_EDITED: "הנוהל הודכן בהצלחה",
+  PROTOCOL_DELETED: "הנוהל הוסר בהצלחה"
 };
 
 export const DEFAULT_TRAININGS = (userId: string) => ({

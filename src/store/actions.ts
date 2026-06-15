@@ -12,6 +12,8 @@ export const setUsersDataLoading = createAction<{isUsersDataLoading: boolean}>('
 export const loadUsers = createAction<{users: User[]}>('data/loadUsers');
 
 export const loadProtocolsPreview = createAction<{protocolsPreview: ProtocolPreview[]}>('data/loadProtocolsPreview')
+export const loadProtocols = createAction<{protocols: Protocol[]}>('data/loadProtocols')
+export const deleteProtocol = createAction<{protocolId: string}>('data/deleteProtocol')
 
 export const setRequestsDataLoading = createAction<{isRequestsDataLoading: boolean}>('data/setRequestsDataLoading');
 export const loadRequests = createAction<{type: 'swap' | 'give', requests: SwapShiftRequest[] | GiveShiftRequest[]}>('data/loadRequests');

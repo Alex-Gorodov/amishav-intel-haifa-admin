@@ -18,7 +18,6 @@ interface Props {
 
 export default function CreateEmployeeForm({ onClose }: Props) {
   const dispatch = useDispatch();
-  const { isAI } = useAITheme();
 
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
@@ -126,7 +125,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
             <input className='form__input' placeholder="ת.ז." value={passport} onChange={e => setPassport(e.target.value)}/>
             <input className='form__input' placeholder="אימייל" value={email} onChange={e => setEmail(e.target.value)}/>
             <input className='form__input' placeholder="טלפון" value={phone} onChange={e => setPhone(e.target.value)}/>
-            <input className='form__input' placeholder="סיסמה (מספר עובד עמישב)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+            <input className='form__input' placeholder="סיסמה (מספר עובד)" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
           </div>
 
           <div className="form__wrapper">
@@ -149,7 +148,7 @@ export default function CreateEmployeeForm({ onClose }: Props) {
               {loading ? 'שולח...' : 'הוסף עובד'}
             </button>
 
-            <button className='button button--wide button--cancel' onClick={onClose}>
+            <button className='button button--cancel' onClick={onClose}>
               ביטול
             </button>
           </div>

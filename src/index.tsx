@@ -12,6 +12,7 @@ import { fetchControllCenterPosts } from './store/api/fetchControllCenterPosts.a
 import { loadGuestData } from './mocks/guestData';
 import { GUEST_MODE_KEY } from './const';
 import { fetchDertPosts } from './store/api/fetchDertPosts.api';
+import { fetchProtocols } from './store/api/fetchProtocols.api';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,6 +27,7 @@ if (typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 't
   fetchDertPosts(store.dispatch);
   fetchSwapRequests(store.dispatch);
   fetchGiveRequests(store.dispatch);
+  fetchProtocols(store.dispatch);
 }
 
 root.render(

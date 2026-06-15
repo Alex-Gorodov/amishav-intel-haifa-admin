@@ -42,7 +42,15 @@
         box-shadow: 0px 0 0 0 $intel-dark-blue, 0px 0px 0 2px $intel-dark-blue
   &--cancel
     background-color: #eeeeee
-    color: #000000
+    color: $gray-dark
+    @media (hover)
+      &:hover
+        @include basic-btn-hover
+        color: $gray-dark
+        box-shadow: 0px 3px 0 2px $gray-dark, 0px 0px 0 2px $gray-dark
+      &:active
+        transform: translateY(3px)
+        box-shadow: 0px 0 0 0 $gray-dark, 0px 0px 0 2px $gray-dark
   &--with-icon
     display: flex
     justify-content: center
@@ -57,25 +65,36 @@
     &:hover
       @include basic-btn-hover
   &--edit
-    background-color: #7c7c7c
-    &:hover
-      box-shadow: 0 0 0 2px #7c7c7c inset
-      color: #7c7c7c
-      background-color: $white
+    background-color: $gray
+    @media (hover)
+      &:hover
+        @include basic-btn-hover
+        color: $gray
+        box-shadow: 0px 3px 0 2px $gray, 0px 0px 0 2px $gray
+      &:active
+        transform: translateY(3px)
+        box-shadow: 0px 0 0 0 $gray, 0px 0px 0 2px $gray
   &--add
     background-color: $intel-dark-blue
   &--change
     background-color: #f58923
-    &:hover
-      box-shadow: 0 0 0 2px #f58923 inset
-      color: #f58923
-      background-color: $white
+    @media (hover)
+      &:hover
+        @include basic-btn-hover
+        box-shadow: 0px 3px 0 2px #f58923, 0px 0px 0 2px #f58923
+      &:active
+        transform: translateY(3px)
+        box-shadow: 0px 0 0 0 #f58923, 0px 0px 0 2px #f58923
   &--delete
     background-color: #ff2f2f
-    &:hover
-      box-shadow: 0 0 0 2px #ff2f2f inset
-      color: #ff2f2f
-      background-color: $white
+    @media (hover)
+      &:hover
+        @include basic-btn-hover
+        color: #ff2f2f
+        box-shadow: 0px 3px 0 2px #ff2f2f, 0px 0px 0 2px #ff2f2f
+      &:active
+        transform: translateY(3px)
+        box-shadow: 0px 0 0 0 #ff2f2f, 0px 0px 0 2px #ff2f2f
     &.button:disabled
       border-color: #d14f4f
       color: #d14f4f

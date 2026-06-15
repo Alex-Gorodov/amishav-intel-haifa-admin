@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { DataState } from "../../types/State";
-import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingUpdatingDate, loadProtocolsPreview, addUserRole, removeUserRole, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, addEmployee, deleteEmployee } from "../actions";
+import { loadUsers, setUsersDataLoading, setAvailability, uploadDocument, loadRequests, confirmShiftRequest, rejectShiftRequest, setRequestStatus, removeRequest, setUserShifts, setTrainingUpdatingDate, loadProtocolsPreview, addUserRole, removeUserRole, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, addEmployee, deleteEmployee, loadProtocols, deleteProtocol, addProtocol } from "../actions";
 import { SwapShiftRequest, GiveShiftRequest } from "../../types/Request";
 import { regenerateShiftId } from "../../utils/regenerateShiftId";
 import { Timestamp } from "firebase/firestore";
@@ -9,6 +9,7 @@ import { normalizeDate } from "../../utils/dateUtils";
 const initialState: DataState = {
   users: [],
   protocolsPreview: [],
+  protocols: [],
   isUsersLoading: false,
   swapRequests: [],
   giveRequests: [],
@@ -34,6 +35,17 @@ export const DataReducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadProtocolsPreview, (state, action) => {
       state.protocolsPreview = action.payload.protocolsPreview;
+    })
+    .addCase(loadProtocols, (state, action) => {
+      state.protocols = action.payload.protocols;
+    })
+    .addCase(addProtocol, (state, action) => {
+      state.protocols.push(action.payload.protocol);
+    })
+    .addCase(deleteProtocol, (state, action) => {
+      state.protocols = state.protocols.filter(
+        (p) => p.id !== action.payload.protocolId
+      );
     })
     .addCase(loadSecurityPosts, (state, action) => {
       state.securityPosts = action.payload.posts;
