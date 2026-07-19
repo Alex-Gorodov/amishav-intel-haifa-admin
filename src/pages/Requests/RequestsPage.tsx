@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/root-reducer';
 import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/Request';
 import { RequestCard } from "../../components/RequestCard/RequestCard";
-import { confirmShiftRequest, rejectShiftRequest } from '../../store/actions';
+import { confirmShiftRequest, rejectShiftRequest, setStateSuccess } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
 import { useAITheme } from "../../hooks/useAIContext";
 import { normalizeDate } from "../../utils/dateUtils";
 import { ArrowLeftRight, MoveLeft } from "lucide-react";
-import { STATUS_PRIORITY } from "../../const";
+import { STATUS_PRIORITY, SuccessMessages } from "../../const";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
@@ -34,8 +34,10 @@ export default function RequestsPage() {
     try {
       if (req.type === "give") {
         await approveGiveRequest(req);
+        dispatch(setStateSuccess({ message: SuccessMessages.SHIFT_GIVE_ACCEPT_COMPLETED }))
       } else {
         await approveSwapRequest(req);
+        dispatch(setStateSuccess({ message: SuccessMessages.SHIFT_SWAP_ACCEPT_COMPLETED }))
       }
       dispatch(confirmShiftRequest({ request: req }));
     } catch (err: any) {
@@ -47,6 +49,11 @@ export default function RequestsPage() {
     try {
       await rejectRequest(req);
       dispatch(rejectShiftRequest({ request: req }));
+      if (req.type === "give") {
+        dispatch(setStateSuccess({ message: SuccessMessages.SHIFT_GIVE_REJECT_COMPLETED }))
+      } else {
+        dispatch(setStateSuccess({ message: SuccessMessages.SHIFT_SWAP_REJECT_COMPLETED }))
+      }
     } catch (err: any) {
       console.error('Error request rejecting: ', err);
     }
@@ -224,6 +231,7 @@ export default function RequestsPage() {
             leftLabel={isMobile ? <ArrowLeftRight size={18}/> : "בקשות החלפה"}
             rightLabel={isMobile ? <MoveLeft size={18}/> : "בקשות מסירה"}
             onChange={handleToggleChange}
+            className="toggle__wrapper--requests"
           />
         </div>
 

@@ -2,15 +2,28 @@ import { CalendarClock, Users, FilePlus2, UserPlus, CalendarPlus, CheckCircle2, 
 import { useAITheme } from '../../hooks/useAIContext';
 import { AppRoute } from '../../const';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/root-reducer';
+import { useState } from 'react';
 
 interface SideBarProps {
   isCollapsed: boolean;
 }
 
 export default function SideBar({ isCollapsed }: SideBarProps) {
-  const { isAI } = useAITheme();
+  const { isMobile, isAI } = useAITheme();
 
-  const getNavClass = ({ isActive }: { isActive: boolean }) => {
+  const shouldCollapse = isMobile || isCollapsed;
+
+  const swapRequests = useSelector((state: RootState) => state.data.swapRequests)
+  const giveRequests = useSelector((state: RootState) => state.data.giveRequests)
+
+  const isRequestsExist =
+  swapRequests.length > 0 || giveRequests.length > 0;
+
+const getNavClass =
+  (hasNotification = false) =>
+  ({ isActive }: { isActive: boolean }) => {
     let classes = "button button--side-bar";
 
     if (isActive) {
@@ -21,50 +34,56 @@ export default function SideBar({ isCollapsed }: SideBarProps) {
       classes += " bar__btn--ai";
     }
 
+    if (hasNotification) {
+      classes += " button--side-bar-notification";
+    }
+
     return classes;
   };
 
+
+
   return (
-      <div className={`bar__wrapper ${isCollapsed ? 'bar__wrapper--collapsed' : ''} ${isAI ? 'bar__wrapper--ai' : ''}`}>
+      <div className={`bar__wrapper ${shouldCollapse ? 'bar__wrapper--collapsed' : ''} ${isAI ? 'bar__wrapper--ai' : ''}`}>
         <div className='buttons-wrapper'>
 
           <NavLink
             to={AppRoute.Root}
-            className={getNavClass}
+            className={getNavClass()}
             end
           >
             <Home size={18}/>
-            {!isCollapsed && <span>דף הבית</span>}
+            {!shouldCollapse && <span>דף הבית</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.Employees} className={getNavClass} title="רשימת עובדים">
+          <NavLink to={AppRoute.Employees} className={getNavClass()} title="רשימת עובדים">
             <Users size={18}/>
-            {!isCollapsed && <span>רשימת עובדים</span>}
+            {!shouldCollapse && <span>רשימת עובדים</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.NewProtocol} className={getNavClass} title="הוסף נוהל">
+          <NavLink to={AppRoute.NewProtocol} className={getNavClass()} title="הוסף נוהל">
             <FilePlus2 size={18}/>
-            {!isCollapsed && <span>הוסף נוהל</span>}
+            {!shouldCollapse && <span>הוסף נוהל</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.NewEmployee} className={getNavClass} title="הוסף עובד חדש">
+          <NavLink to={AppRoute.NewEmployee} className={getNavClass()} title="הוסף עובד חדש">
             <UserPlus size={18}/>
-            {!isCollapsed && <span>הוסף עובד חדש</span>}
+            {!shouldCollapse && <span>הוסף עובד חדש</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.AddShift} className={getNavClass} title="הוסף משמרת">
+          <NavLink to={AppRoute.AddShift} className={getNavClass()} title="הוסף משמרת">
             <CalendarPlus size={18}/>
-            {!isCollapsed && <span>הוסף משמרת</span>}
+            {!shouldCollapse && <span>הוסף משמרת</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.Requests} className={getNavClass} title="אישור בקשות">
+          <NavLink to={AppRoute.Requests} className={getNavClass(isRequestsExist)} title="אישור בקשות">
             <CheckCircle2 size={18}/>
-            {!isCollapsed && <span>אישור בקשות</span>}
+            {!shouldCollapse && <span>אישור בקשות</span>}
           </NavLink>
 
-          <NavLink to={AppRoute.Schedule} className={getNavClass} title="סידור עבודה">
+          <NavLink to={AppRoute.Schedule} className={getNavClass()} title="סידור עבודה">
             <CalendarClock size={18}/>
-            {!isCollapsed && <span>סידור עבודה</span>}
+            {!shouldCollapse && <span>סידור עבודה</span>}
           </NavLink>
 
         </div>

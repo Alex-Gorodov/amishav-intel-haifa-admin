@@ -7,16 +7,17 @@ interface ToggleProps {
   leftLabel?: string | React.ReactNode;
   rightLabel?: string | React.ReactNode;
   style?: React.CSSProperties;
+  className?: string;
 }
 
-export const Toggle = ({ value, onChange, leftLabel = "On", rightLabel = "Off", style }: ToggleProps) => {
+export const Toggle = ({ value, onChange, leftLabel = "On", rightLabel = "Off", style, className }: ToggleProps) => {
   const { isAI } = useAITheme();
 
   const toggle = () => onChange(!value);
 
   return (
     <div
-      className={`toggle__wrapper ${isAI ? 'toggle__wrapper--ai' : ''}`}
+      className={`toggle__wrapper ${className !== undefined ? className : ''} ${isAI ? 'toggle__wrapper--ai' : ''}`}
       style={style}
       onClick={toggle}
     >

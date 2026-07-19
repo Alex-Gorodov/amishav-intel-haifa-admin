@@ -25,6 +25,7 @@ export default function Header({ title }: HeaderProps) {
             rightLabel={isMobile ?  <Paintbrush size={18}/> : "No AI"}
             value={isAI}
             onChange={() => setIsAI(!isAI)}
+            // className='visually-hidden'
           />
         </div>
 

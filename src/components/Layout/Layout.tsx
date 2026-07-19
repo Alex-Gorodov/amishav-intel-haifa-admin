@@ -35,7 +35,9 @@ export default function Layout({children}: LayoutProps) {
   return (
     <div className={`page ${isAI ? 'page--ai' : ''}`}>
       <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`} style={{ background: isAI ? '#0a192f' : '#0068B5'}}>
-        <button
+        {
+          !isMobile &&
+          <button
           className={`bar__toggle ${isCollapsed ? 'bar__toggle--collapsed' : ''}`}
           onClick={() => setIsCollapsed(prev => !prev)}
         >
@@ -43,6 +45,7 @@ export default function Layout({children}: LayoutProps) {
             {isCollapsed ? <CircleChevronLeft size={32} color={Colors.White}/> : <CircleChevronRight size={32} color={Colors.White}/>}
           </div>
         </button>
+        }
         <Header title={headerTitle}/>
       </div>
       <main className='main'>

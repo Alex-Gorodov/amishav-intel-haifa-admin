@@ -12,14 +12,15 @@
     overflow: hidden
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) // Bouncy AI feel
 
-    @media (max-width: 460px)
-      width: 88px
+    &:not(.toggle__wrapper--requests)
+      @media (max-width: $breakpoint-tablet)
+        width: 88px
 
     // --- TRIPLE OVERRIDE ---
-    &--tripple
-      width: 360px // Given a bit more breathing room for 3 labels
+    &.toggle__wrapper--tripple
+      width: 360px
       @media (max-width: 460px)
-        width: 100% // Fluid width on mobile so 3 buttons don't crush down to 88px
+        width: 100%
 
     // --- AI SKIN ---
     &--ai
@@ -32,14 +33,14 @@
     position: absolute
     top: 2px
     left: 2px
-    width: calc(160px - 4px) // Simplified math
+    width: calc(160px - 4px)
     height: 36px
     border-radius: 20px
     background-color: #0068B5 // Intel Blue
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) // Shared bouncy transition
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
 
-    @media (max-width: 460px)
+    @media (max-width: 760px)
       width: calc(50% - 4px)
 
     // --- TRIPLE OVERRIDE ---
@@ -51,7 +52,7 @@
 
     &--active
       transform: translateX(calc(160px - 4px))
-      @media (max-width: 460px)
+      @media (max-width: 768px)
         transform: translateX(calc(100% + 4px))
 
     // --- AI SLIDER GLOW ---

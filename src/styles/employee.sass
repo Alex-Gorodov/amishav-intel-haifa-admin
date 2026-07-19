@@ -12,14 +12,14 @@
   // --- Content Container ---
   &__content
     overflow: hidden
-    max-height: 100px
+    max-height: 200px
     transition: max-height 0.35s ease
 
     &:has(.roles-popup)
       overflow: unset
 
     &--uncollapsed
-      max-height: 600px
+      max-height: 1000px
 
     @media (max-width: $breakpoint-tablet)
       max-height: unset

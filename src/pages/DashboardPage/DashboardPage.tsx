@@ -9,17 +9,20 @@ import { AppRoute, GUEST_MODE_KEY } from '../../const';
 import { getUserProfile } from '../../store/api/getUserProfile.api';
 import { RootState } from '../../store/root-reducer';
 import { setGuestMode, loadUsers, loadSecurityPosts, loadControllCenterPosts, loadDertPosts, loadRequests } from '../../store/actions';
+import DashboardUsers from '../../components/Dashboard/DashboardUsers/DashboardUsers';
 
 export default function App() {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [date, setDate] = useState(new Date());
+
   const formattedTime = date.toLocaleTimeString('he-IL', {
     hour: '2-digit',
     minute: '2-digit',
   });
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isGuestMode = useSelector((state: RootState) => state.app.isGuestMode);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<any | null>(null);
@@ -86,7 +89,7 @@ export default function App() {
   };
 
   const { isAI } = useAITheme();
-  const className = isAI ? 'home-ai' : 'home';
+  const className = isAI ? 'dashboard-ai' : 'dashboard';
 
   return (
     <Layout>
@@ -111,10 +114,10 @@ export default function App() {
 
         <main className={`${className}__content`}>
 
-          <div className={`${className}__card`}>
+          <div className={`${className}__card ${className}__card--date`}>
             <div className={`${className}__card-content`}>
               <p className={`${className}__label`}>
-                היום שלך
+                היום
               </p>
 
               <p className={`${className}__date`}>
@@ -122,6 +125,8 @@ export default function App() {
               </p>
             </div>
           </div>
+
+          <DashboardUsers/>
 
           <div
             className={`${className}__card ${className}__card--accent`}

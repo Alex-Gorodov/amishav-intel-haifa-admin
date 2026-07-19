@@ -13,12 +13,13 @@
     position: sticky
     top: 0
     z-index: 10
+    gap: 8px
     background-color: $page-background
     @media (min-width: $breakpoint-tablet)
       align-items: center
-    @media (max-width: $breakpoint-mobile)
+    @media (max-width: 792px)
+      align-items: center
       flex-direction: column
-      gap: 8px
     &--requests
       justify-content: center
       flex-direction: unset

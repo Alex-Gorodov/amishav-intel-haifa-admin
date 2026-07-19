@@ -14,11 +14,11 @@ import EmployeesPage from "./pages/Employees/EmployeesPage";
 import RequestsPage from "./pages/Requests/RequestsPage";
 import NewEmployeePage from "./pages/NewEmployeePage/NewEmployeePage";
 import NewProtocolPage from "./pages/NewProtocolPage/NewProtocolPage";
-import Main from "./pages/Main/Main";
 import SchedulePage from "./pages/SchedulePage/SchedulePage";
 import AddShiftPage from "./pages/AddShiftPage/AddShiftPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
 
 export function App() {
   return (
@@ -40,7 +40,7 @@ export function App() {
             path={AppRoute.Root}
             element={
               <ProtectedRoute>
-                <Main />
+                <DashboardPage />
               </ProtectedRoute>
             }
           />

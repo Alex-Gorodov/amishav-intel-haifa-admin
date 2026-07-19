@@ -33,6 +33,7 @@
     color: $intel-dark-blue
   &--wide
     width: 100%
+    max-width: $breakpoint-schedule-header
     @media (hover)
       &:hover
         @include basic-btn-hover
@@ -64,6 +65,22 @@
     gap: 8px
     &:hover
       @include basic-btn-hover
+
+    &-notification
+      position: relative
+      &::after
+        position: absolute
+        top: 50%
+        left: 8px
+        transform: translateY(-50%)
+        display: block
+        width: 14px
+        height: 14px
+        border-radius: 50%
+        background-color: #e00808
+        border: 2px solid white
+        content: ''
+
   &--edit
     background-color: $gray
     @media (hover)

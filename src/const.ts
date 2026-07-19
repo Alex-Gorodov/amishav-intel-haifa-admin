@@ -2,6 +2,7 @@ import { collection } from "firebase/firestore";
 import { db } from "./services/firebase";
 import { Post } from "./types/Post";
 import { RequestStatus } from "./types/Request";
+import { RoleValue } from "./types/User";
 
 export type Forms = "protocol" | "newEmployee" | "newShift";
 
@@ -34,6 +35,22 @@ export const Roles = [
   { value: "dert_member", label: "רספונדר" },
   { value: "security_guard", label: "מאבטח" },
 ] as const;
+
+export const securityRoles: RoleValue[] = [
+  "shift_manager",
+  "security_shift_leader",
+  "security_guard",
+];
+
+export const controlRoomRoles: RoleValue[] = [
+  "controller",
+  "supervisor",
+];
+
+export const emergencyRoles: RoleValue[] = [
+  "dert_member",
+  "dert_leader",
+];
 
 export enum AppRoute {
   Root = "/",
@@ -73,23 +90,14 @@ export const STATUS_PRIORITY: Record<RequestStatus, number> = {
   [RequestStatus.Rejected]: 4,     // Last
 };
 
-
-export const icons: Record<string, string> = {
-  "הדרכת בטיחות": "🛡️",
-  "רענון רוני": "🔄",
-  "רענון נשק": "🔫",
-  "רענון עזרה ראשונה": "🩹",
-  "הדרכת סמכויות": "📜"
-};
-
 export const Tariffs = {
   shiftManager: 65,
-  supervisor: 52,
-  dertLeader: 57,
-  securityShiftLeader: 52,
-  controller: 48,
-  dertMember: 48,
-  securityGuard: 48,
+  supervisor: 60,
+  dertLeader: 60,
+  securityShiftLeader: 56,
+  controller: 56,
+  dertMember: 56,
+  securityGuard: 50,
 }
 
 export const Posts: Post[] = [
@@ -214,8 +222,10 @@ export const SuccessMessages = {
   DATA_SAVED: "הנתונים נשמרו בהצלחה",
   SHIFT_SWAP_REQUEST_SENT: "בקשת החלפה נשלחה בהצלחה",
   SHIFT_GIVE_REQUEST_SENT: "בקשת מסירת משמרת נשלחה בהצלחה",
-  SHIFT_SWAP_COMPLETED: "חילןף בין המשמרות בוצע בהצלחה!",
-  SHIFT_GIVE_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
+  SHIFT_SWAP_ACCEPT_COMPLETED: "חילןף בין המשמרות בוצע בהצלחה!",
+  SHIFT_SWAP_REJECT_COMPLETED: "חילןף בין המשמרות נדחה בהצלחה!",
+  SHIFT_GIVE_ACCEPT_COMPLETED: "מסירת משמרת בוצעה בהצלחה!",
+  SHIFT_GIVE_REJECT_COMPLETED: "מסירת משמרת נדחה בהצלחה!",
   SHIFT_EDIT_COMPLETED: "עדכון פרטי המשמרת בוצע בהצלחה!",
   PROTOCOL_ADDED: "נוהל נוצר בהצלחה",
   PROTOCOL_EDITED: "הנוהל הודכן בהצלחה",
