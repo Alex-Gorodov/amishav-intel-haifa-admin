@@ -2,29 +2,29 @@ import { useLocation } from 'react-router-dom';
 import browserHistory from '../../browser-history';
 import { AppRoute } from '../../const';
 import { Toggle } from '../ui/Toggle';
-import { useAITheme } from '../../hooks/useAIContext';
 import { BrainCircuit, Circle, Paintbrush, Power } from 'lucide-react';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 
 interface HeaderProps {
   title: string;
 }
 
 export default function Header({ title }: HeaderProps) {
-  const { isMobile, isAI, setIsAI } = useAITheme();
+  const { isMobile, isDark, setIsDark } = useDarkTheme();
 
   return (
-    <header className={`header ${isAI ? 'header--ai' : ''}`}>
+    <header className={`header ${isDark ? 'header--dark' : ''}`}>
       <div className="header__inner-content">
         <div className="header__left-section">
           <p className="header__title">{title}</p>
         </div>
 
-        <div className={`header__toggle-area ${isAI ? 'header__toggle-area--ai' : ''}`}>
+        <div className={`header__toggle-area ${isDark ? 'header__toggle-area--dark' : ''}`}>
           <Toggle
-            leftLabel={isMobile ?  <BrainCircuit size={18}/> : "AI styled"}
-            rightLabel={isMobile ?  <Paintbrush size={18}/> : "No AI"}
-            value={isAI}
-            onChange={() => setIsAI(!isAI)}
+            leftLabel={isMobile ?  <BrainCircuit size={18}/> : "Dark"}
+            rightLabel={isMobile ?  <Paintbrush size={18}/> : "Light"}
+            value={isDark}
+            onChange={() => setIsDark(!isDark)}
             // className='visually-hidden'
           />
         </div>

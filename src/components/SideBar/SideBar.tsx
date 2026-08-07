@@ -1,5 +1,5 @@
 import { CalendarClock, Users, FilePlus2, UserPlus, CalendarPlus, CheckCircle2, Home } from 'lucide-react';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 import { AppRoute } from '../../const';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ interface SideBarProps {
 }
 
 export default function SideBar({ isCollapsed }: SideBarProps) {
-  const { isMobile, isAI } = useAITheme();
+  const { isMobile, isDark } = useDarkTheme();
 
   const shouldCollapse = isMobile || isCollapsed;
 
@@ -30,8 +30,8 @@ const getNavClass =
       classes += " button--side-bar-active";
     }
 
-    if (isAI) {
-      classes += " bar__btn--ai";
+    if (isDark) {
+      classes += " bar__btn--dark";
     }
 
     if (hasNotification) {
@@ -44,7 +44,7 @@ const getNavClass =
 
 
   return (
-      <div className={`bar__wrapper ${shouldCollapse ? 'bar__wrapper--collapsed' : ''} ${isAI ? 'bar__wrapper--ai' : ''}`}>
+      <div className={`bar__wrapper ${shouldCollapse ? 'bar__wrapper--collapsed' : ''} ${isDark ? 'bar__wrapper--dark' : ''}`}>
         <div className='buttons-wrapper'>
 
           <NavLink

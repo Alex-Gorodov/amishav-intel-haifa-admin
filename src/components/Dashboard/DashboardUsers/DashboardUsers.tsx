@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useAITheme } from "../../../hooks/useAIContext";
+import { useDarkTheme } from "../../../hooks/useDarkThemeContext";
 import { RootState } from "../../../store/root-reducer";
 import DashboardUser from "../DashboardUser/DashboardUser";
 import { securityRoles, controlRoomRoles, emergencyRoles } from "../../../const";
@@ -8,8 +8,8 @@ import { useDragScroll } from "../../../hooks/useDragScroll";
 export default function DashboardUsers() {
 
   // Theme control
-  const { isAI } = useAITheme();
-  const className = isAI ? 'dashboard-ai' : 'dashboard';
+  const { isDark } = useDarkTheme();
+  const className = isDark ? 'dashboard-dark' : 'dashboard';
 
   // Users
   const users = useSelector((state: RootState) => state.data.users)

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { AppRoute, ErrorMessages, GUEST_MODE_KEY } from "../../const";
 import { signInUser } from "../../store/api/signIn.api";
 import Layout from "../../components/Layout/Layout";
@@ -20,7 +20,7 @@ export default function AuthPage() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -96,7 +96,7 @@ export default function AuthPage() {
       <form
         onSubmit={handleLogin}
         method="POST"
-        className={`form ${isAI ? "form--ai-theme" : ""}`}
+        className={`form ${isDark ? "form--dark-theme" : ""}`}
       >
         <div className="form__wrapper form__wrapper--fullscreen">
           <h1 className="form__title">התחברות</h1>

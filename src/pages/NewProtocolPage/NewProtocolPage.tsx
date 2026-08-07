@@ -4,7 +4,7 @@ import { useImageUpload } from '../../hooks/useImageUpload';
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { ErrorMessages, SuccessMessages } from '../../const';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/root-reducer';
 import { CircleX, Pencil } from 'lucide-react';
@@ -17,7 +17,7 @@ import { fetchProtocols } from '../../store/api/fetchProtocols.api';
 type Group = 'controller' | 'emergency' | 'security';
 
 export default function NewProtocolPage() {
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const dispatch = useDispatch();
 
@@ -181,7 +181,7 @@ const handleEdit = async () => {
       <form
         method="post"
         onSubmit={handleSubmit}
-        className={`form ${isAI ? 'form--ai-theme' : ''}`}
+        className={`form ${isDark ? 'form--dark-theme' : ''}`}
       >
         <div className="form__wrapper form__wrapper--fullscreen page__content">
 

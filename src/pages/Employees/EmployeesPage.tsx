@@ -5,7 +5,7 @@ import { RootState } from "../../store/root-reducer";
 import { useMemo, useState } from "react";
 import CreateEmployeeForm from "../../components/CreateEmployeeForm/CreateEmployeeForm";
 import { isTouchDevice } from "../../utils/isTouchDevice";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { normalizeDate } from "../../utils/dateUtils";
 
 export default function EmployeesPage() {
@@ -19,7 +19,7 @@ export default function EmployeesPage() {
     );
   }, [users]);
 
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [isFormOpened, setFormOpened] = useState(false);
   const [search, setSearch] = useState('')
@@ -28,7 +28,7 @@ export default function EmployeesPage() {
 
   return (
     <Layout>
-      <div className={`${isAI ? 'page--ai' : ''}`}>
+      <div className={`${isDark ? 'page--dark' : ''}`}>
 
         <div className="page__header page__header--employees">
           <input

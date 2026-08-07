@@ -5,7 +5,7 @@ import { Colors, Titles } from '../../const';
 import SideBar from '../SideBar/SideBar';
 import { ChevronLeft, ChevronRight, CircleChevronLeft, CircleChevronRight } from 'lucide-react';
 import ToastMessage from '../ui/ToastMessage';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -20,7 +20,7 @@ export default function Layout({children}: LayoutProps) {
     return localStorage.getItem('sidebar-collapsed') === 'true';
   });
 
-  const { isAI, isMobile } = useAITheme();
+  const { isDark, isMobile } = useDarkTheme();
 
   useEffect(() => {
     localStorage.setItem('sidebar-collapsed', String(isCollapsed));
@@ -33,8 +33,8 @@ export default function Layout({children}: LayoutProps) {
   const headerTitle = isMobile ? routeTitle.replace('אינטל חיפה ביטחון\u00A0|\u00A0', '') : routeTitle;
 
   return (
-    <div className={`page ${isAI ? 'page--ai' : ''}`}>
-      <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`} style={{ background: isAI ? '#0a192f' : '#0068B5'}}>
+    <div className={`page ${isDark ? 'page--dark' : ''}`}>
+      <div className={`header__wrapper ${isCollapsed ? 'header__wrapper--collapsed' : ''}`} style={{ background: isDark ? '#0a192f' : '#0068B5'}}>
         {
           !isMobile &&
           <button

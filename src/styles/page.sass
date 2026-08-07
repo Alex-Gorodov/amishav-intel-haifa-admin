@@ -48,7 +48,7 @@
 
 
 // OVERRIDES FOR EMPLOYEES PAGE & FORMS
-.page--ai
+.page--dark
   // --- Search Bar Intelligence ---
   .page__header
     background-color: rgb(10, 25, 47)
@@ -70,7 +70,6 @@
       box-shadow: 0 0 20px rgba(0, 198, 255, 0.3), inset 0 0 5px rgba(0, 198, 255, 0.1)
       background: rgba(255, 255, 255, 0.08) !important
 
-  // --- The Glass Modal (AI COMMAND CENTER) ---
   .form__overlay
     backdrop-filter: blur(20px)
 
@@ -105,7 +104,7 @@
 
   .form__role-item
       background: rgba(255, 255, 255, 0.03)
-      border: 1px solid rgba($ai-cyan, 0.1)
+      border: 1px solid rgba($dark-cyan, 0.1)
       border-radius: 2px
       color: #e0e0e0
       font-family: 'JetBrains Mono', monospace
@@ -114,22 +113,22 @@
       &:not(.form__input.form__list-item)
         @media (hover)
           &:hover
-            background: rgba($ai-cyan, 0.1)
-            border-color: $ai-cyan
+            background: rgba($dark-cyan, 0.1)
+            border-color: $dark-cyan
             color: #fff
           &:active
             transform: translateY(5px)
       &--selected
-        background: rgba($ai-cyan, 0.6)
-        border-color: $ai-cyan
-        box-shadow: 0 0 15px rgba($ai-cyan, 0.4)
+        background: rgba($dark-cyan, 0.6)
+        border-color: $dark-cyan
+        box-shadow: 0 0 15px rgba($dark-cyan, 0.4)
         color: #fff
         @media (hover)
           &:not(.form__input.form__list-item)
             &:hover
-              background: rgba($ai-cyan, 0.1)
-              border-color: rgba($ai-cyan, 0.6)
-              box-shadow: 0 0 15px rgba($ai-cyan, 0.2)
+              background: rgba($dark-cyan, 0.1)
+              border-color: rgba($dark-cyan, 0.6)
+              box-shadow: 0 0 15px rgba($dark-cyan, 0.2)
               color: #fff
             &:active
               transform: translateY(5px)
@@ -160,7 +159,7 @@
 
       td
         border: none
-        border-bottom: 1px solid rgba($ai-cyan, 50%)
+        border-bottom: 1px solid rgba($dark-cyan, 50%)
         padding: 20px
         &:first-child
           border-radius: 12px 0 0 12px
@@ -169,7 +168,7 @@
 
   // Requests
   .requests__message
-    color: $ai-cyan
+    color: $dark-cyan
 
 
 

@@ -3,14 +3,14 @@ import { ErrorMessages, FirebaseErrorMessages, Roles, SuccessMessages } from '..
 import Layout from '../../components/Layout/Layout';
 import { isTouchDevice } from '../../utils/isTouchDevice';
 import { useDispatch } from 'react-redux';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 import { RoleValue } from '../../types/User';
 import { addEmployee } from '../../store/actions';
 import { createEmployee } from '../../store/api/createEmployee.api';
 
 export default function NewEmployeePage() {
   const dispatch = useDispatch();
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
@@ -94,7 +94,7 @@ export default function NewEmployeePage() {
       <form
         onSubmit={handleCreateUser}
         method="post"
-        className={`form ${isAI ? 'form--ai-theme' : ''}`}
+        className={`form ${isDark ? 'form--dark-theme' : ''}`}
       >
         <div className="page__content form__wrapper form__wrapper--fullscreen">
 

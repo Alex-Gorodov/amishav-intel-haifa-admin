@@ -1,5 +1,5 @@
 import React from "react";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 
 interface ToggleProps {
   value: boolean;
@@ -11,18 +11,18 @@ interface ToggleProps {
 }
 
 export const Toggle = ({ value, onChange, leftLabel = "On", rightLabel = "Off", style, className }: ToggleProps) => {
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const toggle = () => onChange(!value);
 
   return (
     <div
-      className={`toggle__wrapper ${className !== undefined ? className : ''} ${isAI ? 'toggle__wrapper--ai' : ''}`}
+      className={`toggle__wrapper ${className !== undefined ? className : ''} ${isDark ? 'toggle__wrapper--dark' : ''}`}
       style={style}
       onClick={toggle}
     >
       <div
-        className={`toggle__slider ${value ? 'toggle__slider--active' : ''} ${isAI ? 'toggle__slider--ai' : ''}`}
+        className={`toggle__slider ${value ? 'toggle__slider--active' : ''} ${isDark ? 'toggle__slider--dark' : ''}`}
       />
 
       <div className="toggle__item">

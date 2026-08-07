@@ -11,12 +11,12 @@ import Layout from "../../components/Layout/Layout";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { getAvailablePostsByRole } from "../../utils/getAvailablePostsByRole";
 import { getAvailableUsersByPost } from "../../utils/getAvailableUserByPost";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { RootState } from "../../store/root-reducer";
 
 export default function AddShiftPage() {
   const dispatch = useDispatch();
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
   const [date, setDate] = useState(new Date());
@@ -322,7 +322,7 @@ export default function AddShiftPage() {
         <form
           onSubmit={handleSave}
           method="post"
-          className={`form ${isAI ? 'form--ai-theme' : ''}`}
+          className={`form ${isDark ? 'form--dark-theme' : ''}`}
         >
 
           <div className="form__wrapper form__wrapper--fullscreen">

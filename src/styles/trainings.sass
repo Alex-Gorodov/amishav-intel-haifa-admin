@@ -41,9 +41,9 @@
 
 
 
-.trainings--ai
+.trainings--dark
   // Subtle backgroundpatterndecoration to whole trainings context
-  background-image: linear-gradient(rgba($ai-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($ai-cyan, 0.03) 1px, transparent 1px)
+  background-image: linear-gradient(rgba($dark-cyan, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba($dark-cyan, 0.03) 1px, transparent 1px)
   background-size: $cell-size $cell-size
   background-position: center
 
@@ -56,7 +56,7 @@
     // Targeted contrast boost for summary iconvisibility
     svg
       color: #fff // Force white visibility
-      filter: drop-shadow(0 0 10px rgba($ai-cyan, 0.8)) // localized glow visibility
+      filter: drop-shadow(0 0 10px rgba($dark-cyan, 0.8)) // localized glow visibility
 
   // Center icon within localized skeuomorphic depth surface
   .trainings__item-icon
@@ -66,7 +66,7 @@
   // 1. APPLY MONOSPACE ONLY (Respect column layout)
   .trainings__item-date
     font-family: $font-stack-mono // Numerical data in technical font
-    color: rgba($ai-cyan, 0.8) // localized cyan visibilitytext
+    color: rgba($dark-cyan, 0.8) // localized cyan visibilitytext
     font-size: 13px
     font-weight: bold
     letter-spacing: -0.3px
@@ -74,7 +74,7 @@
   // Technical Divider Localization (layered visually)
   .trainings__divider
     // Needs component targetting if a divider semantic div exists
-    background: linear-gradient(to right, transparent, rgba($ai-cyan, 0.6), transparent)
+    background: linear-gradient(to right, transparent, rgba($dark-cyan, 0.6), transparent)
     height: 1px
     width: 100%
     margin: 8px 0
@@ -91,8 +91,8 @@
     align-items: center
     justify-content: center
     padding: 6px
-    background: rgba($ai-cyan, 0.04) // subtle cyan tint surfaces depth
-    border: 1px solid rgba($ai-cyan, 0.15)
+    background: rgba($dark-cyan, 0.04) // subtle cyan tint surfaces depth
+    border: 1px solid rgba($dark-cyan, 0.15)
     border-radius: 4px // technical corners
 
     // ✅ OVERRIDE WIDTH to enforce the dynamic multiple of 25px restriction
@@ -105,21 +105,21 @@
   // B. Target individual trainings items in uncollapsed state (Organizational Flex-Column)
   .trainings__item
     // VISUAL LAYER depth overrides (localized)
-    background: rgba($ai-cyan, 0.04)
-    border: 1px solid rgba($ai-cyan, 0.15)
+    background: rgba($dark-cyan, 0.04)
+    border: 1px solid rgba($dark-cyan, 0.15)
     border-radius: 4px
     backdrop-filter: blur(8px)
     transition: border-color 0.2s ease, background-color 0.2s ease
     padding: 8px 12px // technical padding depth
 
     &:hover
-      border-color: rgba($ai-cyan, 0.4)
-      background: rgba($ai-cyan, 0.08)
+      border-color: rgba($dark-cyan, 0.4)
+      background: rgba($dark-cyan, 0.08)
 
     span
       svg
         // Target localized visibility fixes for icon
-        filter: drop-shadow(0 0 8px rgba($ai-cyan, 0.7)) !important // glow visibility
+        filter: drop-shadow(0 0 8px rgba($dark-cyan, 0.7)) !important // glow visibility
 
 
     // ✅ OVERRIDE WIDTH to enforce the dynamic multiple of 25px
@@ -131,8 +131,8 @@
   // localized skeuomorphic depth surfaces for mini menu / actions (decorative localized overrides)
   .trainings__item-menu
     background: rgba(13, 20, 33, 0.95) // organizational localized surfaces organizational
-    border: 1px solid rgba($ai-cyan, 0.3)
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba($ai-cyan, 0.05)
+    border: 1px solid rgba($dark-cyan, 0.3)
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba($dark-cyan, 0.05)
     backdrop-filter: blur(12px) // organizational depth localized overrides organisational
 
   .trainings__menu-btn

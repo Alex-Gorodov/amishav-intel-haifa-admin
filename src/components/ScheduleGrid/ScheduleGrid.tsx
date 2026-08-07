@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import ScheduleCell from "../ui/ScheduleCell";
 import AddShiftModal from "../AddShiftModal/AddShiftModal";
 import { Shift } from "../../types/Shift";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { useSelector } from "react-redux";
 import { Posts } from "../../const";
 import { Post } from "../../types/Post";
@@ -21,7 +21,7 @@ type Props = {
 };
 
 export default function ScheduleGrid({ dates, rows, searchFor, scheduleType }: Props) {
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
   const headerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
@@ -87,7 +87,7 @@ export default function ScheduleGrid({ dates, rows, searchFor, scheduleType }: P
 
   return (
     <>
-      <div className={`page__content schedule ${ isAI ? 'schedule--ai' : ''}`}>
+      <div className={`page__content schedule ${ isDark ? 'schedule--dark' : ''}`}>
 
         {/* HEADER */}
         <div className="schedule__header">

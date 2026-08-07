@@ -6,13 +6,13 @@ import {
   ReactNode,
 } from "react";
 
-interface AIThemeContextType {
-  isAI: boolean;
+interface DarkThemeContextType {
   isMobile: boolean;
-  setIsAI: React.Dispatch<React.SetStateAction<boolean>>;
+  isDark: boolean;
+  setIsDark: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AIThemeContext = createContext<AIThemeContextType | undefined>(
+export const DarkThemeContext = createContext<DarkThemeContextType | undefined>(
   undefined
 );
 
@@ -20,12 +20,12 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-const AI_THEME_STORAGE_KEY = "is-ai-theme-enabled";
+const DARK_THEME_STORAGE_KEY = "is-dark-theme-enabled";
 
-export function AIThemeProvider({ children }: ProviderProps) {
-  const [isAI, setIsAI] = useState<boolean>(() => {
+export function DarkThemeProvider({ children }: ProviderProps) {
+  const [isDark, setIsDark] = useState<boolean>(() => {
     const savedValue = localStorage.getItem(
-      AI_THEME_STORAGE_KEY
+      DARK_THEME_STORAGE_KEY
     );
 
     return savedValue === "true";
@@ -49,20 +49,20 @@ export function AIThemeProvider({ children }: ProviderProps) {
 
   useEffect(() => {
     localStorage.setItem(
-      AI_THEME_STORAGE_KEY,
-      String(isAI)
+      DARK_THEME_STORAGE_KEY,
+      String(isDark)
     );
-  }, [isAI]);
+  }, [isDark]);
 
   return (
-    <AIThemeContext.Provider
+    <DarkThemeContext.Provider
       value={{
         isMobile,
-        isAI: isAI,
-        setIsAI,
+        isDark: isDark,
+        setIsDark,
       }}
     >
       {children}
-    </AIThemeContext.Provider>
+    </DarkThemeContext.Provider>
   );
 }

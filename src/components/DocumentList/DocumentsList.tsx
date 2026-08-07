@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../../types/User";
 import { X, File, Image } from "lucide-react";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { Link } from "react-router-dom";
 
 interface DocumentsListProps {
@@ -10,13 +10,13 @@ interface DocumentsListProps {
 }
 
 export default function DocumentsList({user, isCollapsed}: DocumentsListProps) {
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [iconColor, setIconColor] = useState('');
 
   useEffect(() => {
-    setIconColor(isAI ? '#0abcc7' : '#000000')
-  }, [ isAI ])
+    setIconColor(isDark ? '#0abcc7' : '#000000')
+  }, [ isDark ])
 
   const isPdf = (url: string) =>
     /\.pdf$/i.test(url);

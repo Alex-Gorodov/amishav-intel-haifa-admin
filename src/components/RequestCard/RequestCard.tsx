@@ -1,5 +1,5 @@
 import { StatusLabels } from "../../const";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { GiveRequestWithShift, RequestStatus, SwapRequestWithShifts } from "../../types/Request";
 // ✅ Restore measurement imports
 import { useRef, useEffect, useState } from "react";
@@ -21,7 +21,7 @@ export const RequestCard = ({
   onReject,
   onDelete,
 }: RequestCardProps) => {
-  const { isAI, isMobile } = useAITheme();
+  const { isDark, isMobile } = useDarkTheme();
 
   const firstUser = usersMap[0];
   const secondUser = usersMap[1];
@@ -41,8 +41,8 @@ export const RequestCard = ({
   const [quantizedWidth, setQuantizedWidth] = useState<number>();
 
   useEffect(() => {
-    // We only calculate the dynamic width if AI mode is active
-    if (!shiftsRef.current || !isAI) return;
+
+    if (!shiftsRef.current || !isDark) return;
 
     const idealWidth = shiftsRef.current.offsetWidth;
     // Round UP to the nearest multiple of 25 (e.g., 101 -> 125, 99 -> 100)
@@ -50,10 +50,10 @@ export const RequestCard = ({
 
     // Apply the multiple logic
     setQuantizedWidth(multipleOf25);
-  }, [isAI, isMobile]); // Recalculate if theme changes
+  }, [isDark, isMobile]); // Recalculate if theme changes
 
   return (
-    <div className={`request-card ${isAI ? 'request-card--ai' : ''}`}>
+    <div className={`request-card ${isDark ? 'request-card--dark' : ''}`}>
 
       {/* Users and icon */}
       <div className="request-card__users">
@@ -76,8 +76,8 @@ export const RequestCard = ({
       {
         isSwap ? (
           <div className="request-card__shifts request-card__shifts--swap" ref={shiftsRef}>
-            {/* ✅ AI Mode injects the multiple width inline */}
-            <div className="request-card__shift-block" style={isAI ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
+
+            <div className="request-card__shift-block" style={isDark ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
               <span className="request-card__text request-card__text--bold">
                 {req.fromShift?.post?.title || 'לא ידוע'}
               </span>
@@ -86,7 +86,7 @@ export const RequestCard = ({
               </span>
             </div>
 
-            <div className="request-card__shift-block" style={isAI ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
+            <div className="request-card__shift-block" style={isDark ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
               <span className="request-card__text request-card__text--bold">
                 {req.toShift?.post?.title || 'לא ידוע'}
               </span>
@@ -97,8 +97,8 @@ export const RequestCard = ({
           </div>
         ) : (
           <div className="request-card__shifts request-card__shifts--give" ref={shiftsRef}>
-            {/* ✅ AI Mode injects the multiple width inline */}
-            <div className="request-card__shift-block" style={isAI ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
+
+            <div className="request-card__shift-block" style={isDark ? { width: isMobile ? '100%' : quantizedWidth } : undefined}>
               <span className="request-card__text request-card__text--bold">
                 {req.fromShift?.post?.title || 'לא ידוע'}
               </span>
@@ -110,9 +110,9 @@ export const RequestCard = ({
         )
       }
 
-      <div className="request-card__divider" /> {/* Added divider for semantic clarity */}
+      <div className="request-card__divider" />
 
-      <div className="request-card__footer"> {/* Added semantic footer wrap */}
+      <div className="request-card__footer">
         <span className="request-card__label-wrap">
           <span className="request-card__text request-card__label">סטטוס:</span>{' '}
           <span className={`request-card__text request-card__status-tag request-card__status-tag--${req.status}`}>
@@ -122,11 +122,10 @@ export const RequestCard = ({
 
         {(isReceived && req.status !== RequestStatus.Rejected) && (
           <div className="request-card__buttons">
-            {/* ✅ AI Mode injects the multiple width inline */}
             <button
+
               onClick={() => onConfirm?.(req)}
               className="request-card__button request-card__button--confirm"
-              // style={isAI ? { width: quantizedWidth } : undefined}
             >
               <span className="request-card__button-text">אשר</span>
             </button>
@@ -134,7 +133,6 @@ export const RequestCard = ({
             <button
               onClick={() => onReject?.(req)}
               className="request-card__button request-card__button--reject"
-              // style={isAI ? { width: quantizedWidth } : undefined}
             >
               <span className="request-card__button-text">סרב</span>
             </button>

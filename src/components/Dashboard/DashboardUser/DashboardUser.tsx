@@ -3,7 +3,7 @@ import { getFullUserName } from "../../../utils/getFullUserName";
 import { getRoleObject } from "../../../utils/getRoleObject";
 import { getIcon } from "../../../utils/getIcon";
 import { getMonthlyHours } from "../../../utils/getMonthlyHours";
-import { useAITheme } from "../../../hooks/useAIContext";
+import { useDarkTheme } from "../../../hooks/useDarkThemeContext";
 import { useState } from "react";
 import { setEmployeeData } from "../../../store/api/setEmployeeData.api";
 import { fetchUsers } from "../../../store/api/fetchUsers.api";
@@ -20,8 +20,8 @@ export default function DashboardUser({user}: UserProps) {
   const dispatch = useDispatch()
 
   // Theme control
-  const { isAI } = useAITheme();
-  const className = isAI ? 'dashboard-ai' : 'dashboard';
+  const { isDark } = useDarkTheme();
+  const className = isDark ? 'dashboard-dark' : 'dashboard';
 
   const userName = getFullUserName(user)
 

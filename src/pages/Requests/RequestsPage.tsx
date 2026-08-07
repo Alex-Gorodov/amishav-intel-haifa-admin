@@ -8,14 +8,14 @@ import { GiveShiftRequest, RequestStatus, SwapShiftRequest } from '../../types/R
 import { RequestCard } from "../../components/RequestCard/RequestCard";
 import { confirmShiftRequest, rejectShiftRequest, setStateSuccess } from '../../store/actions';
 import { approveGiveRequest, approveSwapRequest, deleteRequest, rejectRequest } from '../../store/api/requestsActions.api';
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { normalizeDate } from "../../utils/dateUtils";
 import { ArrowLeftRight, MoveLeft } from "lucide-react";
 import { STATUS_PRIORITY, SuccessMessages } from "../../const";
 
 export default function RequestsPage() {
   const dispatch = useDispatch();
-  const { isAI, isMobile } = useAITheme();
+  const { isDark, isMobile } = useDarkTheme();
 
   const users = useSelector((state: RootState) => state.data.users);
 
@@ -223,7 +223,7 @@ export default function RequestsPage() {
 
   return (
     <Layout>
-      <div className={`${isAI ? 'page--ai' : ''}`}>
+      <div className={`${isDark ? 'page--dark' : ''}`}>
 
         <div className="page__header page__header--requests">
           <Toggle

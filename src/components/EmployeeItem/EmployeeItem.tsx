@@ -12,7 +12,7 @@ import { Pencil, Save } from "lucide-react";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
 import DocumentsList from "../DocumentList/DocumentsList";
 import { Colors, SuccessMessages } from "../../const";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { Link } from "react-router-dom";
 import { normalizeDate } from "../../utils/dateUtils";
 import { deleteEmployee, setStateSuccess } from "../../store/actions";
@@ -22,7 +22,7 @@ interface EmployeeItemProps {
 }
 
 export default function EmployeeItem({user}: EmployeeItemProps) {
-  const { isAI, isMobile } = useAITheme();
+  const { isDark, isMobile } = useDarkTheme();
   const dispatch = useDispatch();
 
   const [isRolesPopupOpen, setIsRolesPopupOpen] = useState(false);
@@ -111,7 +111,7 @@ export default function EmployeeItem({user}: EmployeeItemProps) {
 
   return (
     <tr
-      className={`employee ${isAI ? 'employee--ai' : ''} ${!isCollapsed ? 'employee--uncollapsed-row' : ''}`}
+      className={`employee ${isDark ? 'employee--dark' : ''} ${!isCollapsed ? 'employee--uncollapsed-row' : ''}`}
       onClick={() => setIsCollapsed(!isCollapsed)}
     >
       <td colSpan={4}>

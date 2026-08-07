@@ -166,11 +166,10 @@
     flex-wrap: wrap
     gap: 8px
 
-  // --- AI Overrides (Localized) ---
-  .role--ai
-    background-color: $ai-bg-glass
-    border: 1px solid $ai-border
-    color: $ai-cyan
+  .role--dark
+    background-color: $dark-bg-glass
+    border: 1px solid $dark-border
+    color: $dark-cyan
     border-radius: 4px
     backdrop-filter: blur(4px)
     padding-left: 28px
@@ -183,7 +182,7 @@
       align-items: center
       gap: 0.65rem
       background-color: transparent
-      border: 1px dashed $ai-cyan
+      border: 1px dashed $dark-cyan
       padding-left: 12px
 
       &:hover
@@ -194,7 +193,7 @@
     .employee__role-remove-btn
       height: 18px
       width: 18px
-      color: $ai-cyan
+      color: $dark-cyan
       top: 50%
       transform: translateY(-55%)
       opacity: 0.7
@@ -204,8 +203,7 @@
         color: #ff4d4d
         filter: drop-shadow(0 0 5px #ff4d4d)
 
-// --- AI Theme Row States ---
-.employee--ai
+.employee--dark
   background: transparent
   transition: 0.3s
 
@@ -229,8 +227,7 @@
     color: #8892b0
     font-family: 'Courier New', monospace
 
-// --- Table AI Global ---
-.page--ai .employees-table
+.page--dark .employees-table
   background: transparent
   border: none
 
@@ -242,7 +239,7 @@
       letter-spacing: 1.5px
 
 // Animations
-.ai-status-pulse
+.dark-status-pulse
   display: inline-block
   width: 8px
   height: 8px

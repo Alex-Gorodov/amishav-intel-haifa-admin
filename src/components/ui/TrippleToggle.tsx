@@ -1,5 +1,5 @@
 import React from "react";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 
 interface TripleToggleOption {
   label: string | React.ReactNode;
@@ -14,17 +14,17 @@ interface TripleToggleProps {
 }
 
 export const TripleToggle = ({ value, onChange, options, style }: TripleToggleProps) => {
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const activeIndex = options.findIndex((opt) => opt.value === value);
 
   return (
     <div
-      className={`toggle__wrapper toggle__wrapper--tripple ${isAI ? 'toggle__wrapper--ai' : ''}`}
+      className={`toggle__wrapper toggle__wrapper--tripple ${isDark ? 'toggle__wrapper--dark' : ''}`}
       style={style}
     >
       <div
-        className={`toggle__slider toggle__slider--tripple ${isAI ? 'toggle__slider--ai' : ''}`}
+        className={`toggle__slider toggle__slider--tripple ${isDark ? 'toggle__slider--dark' : ''}`}
         style={{
           // Multiplied by -100% to compensate for the Right-to-Left (RTL) axis flip
           transform: `translateX(${activeIndex * -100 + 200}%)`

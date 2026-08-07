@@ -6,7 +6,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { State } from "../../types/State";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { createShift } from "../../store/api/createShift.api";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { Post } from "../../types/Post";
 import { RootState } from "../../store/root-reducer";
 import { User } from "../../types/User";
@@ -34,7 +34,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
   const [insertedUserName, setInsertedUserName] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
 
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const users = useSelector((state: State) => state.data.users);
 
@@ -244,7 +244,7 @@ export default function AddShiftModal({ onClose, initialDate, initialPostId, sch
         <form
           onSubmit={handleSave}
           method="post"
-          className={`form ${isAI ? 'form--ai-theme' : ''}`}
+          className={`form ${isDark ? 'form--dark-theme' : ''}`}
         >
           <div className="form__wrapper">
 

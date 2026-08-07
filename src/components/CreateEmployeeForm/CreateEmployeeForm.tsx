@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { createEmployee } from '../../store/api/createEmployee.api';
 import { addEmployee, setStateSuccess } from '../../store/actions';
 import { RoleValue } from '../../types/User';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 import { FirebaseError } from 'firebase/app';
 
 interface Props {

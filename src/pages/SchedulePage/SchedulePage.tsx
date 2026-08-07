@@ -115,7 +115,7 @@ export default function SchedulePage() {
           <button
             className="button button--with-icon button--add schedule__btn--prev-week"
             onClick={() => setWeekOffset(prev => prev - 1)}
-            // style={{ color: isAI ? '#0abcc7' : '#ffffff'}}
+            // style={{ color: isDark ? '#0abcc7' : '#ffffff'}}
           >
             <ArrowRight size={18} color={'currentColor'}/>
             שבוע הקודם

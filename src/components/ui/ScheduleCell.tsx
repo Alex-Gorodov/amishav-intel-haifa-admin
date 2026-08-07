@@ -10,7 +10,7 @@ import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { getPostTimeRange } from "../../utils/getPostTimeRange";
 import { setStateSuccess } from "../../store/actions";
 import { SuccessMessages } from "../../const";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { Post } from "../../types/Post";
 
 interface ScheduleCellProps {
@@ -23,7 +23,7 @@ interface ScheduleCellProps {
 
 export default function ScheduleCell({ onAction, shift, searchFor, date, allPosts }: ScheduleCellProps) {
   const dispatch = useDispatch();
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
   const [isTriggerVisible, setTriggerVisible] = useState(false);
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [openUp, setOpenUp] = useState(false);
@@ -138,7 +138,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date, allPost
         schedule__cell
         ${isMatch ? 'schedule__cell--active' : ''}
         ${todayMatch ? 'schedule__cell--today' : ''}
-        ${isAI ? 'schedule__cell--ai' : ''}
+        ${isDark ? 'schedule__cell--dark' : ''}
       `}
       style={{ flexDirection: range ? 'column' : 'row' }}
       onMouseEnter={() => setTriggerVisible(true)}
@@ -150,7 +150,7 @@ export default function ScheduleCell({ onAction, shift, searchFor, date, allPost
           className="schedule__cell-trigger"
           onClick={handleToggleMenu}
         >
-          <EllipsisVertical size={18} color={isAI ? '#00f2ff' : '#000000'} />
+          <EllipsisVertical size={18} color={isDark ? '#00f2ff' : '#000000'} />
         </button>
       )}
 

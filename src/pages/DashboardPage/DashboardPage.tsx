@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
-import { useAITheme } from '../../hooks/useAIContext';
+import { useDarkTheme } from '../../hooks/useDarkThemeContext';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import { AppRoute, GUEST_MODE_KEY } from '../../const';
@@ -88,8 +88,8 @@ export default function App() {
     return 'אורח';
   };
 
-  const { isAI } = useAITheme();
-  const className = isAI ? 'dashboard-ai' : 'dashboard';
+  const { isDark } = useDarkTheme();
+  const className = isDark ? 'dashboard-dark' : 'dashboard';
 
   return (
     <Layout>

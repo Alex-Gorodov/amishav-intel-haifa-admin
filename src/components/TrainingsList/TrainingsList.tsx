@@ -9,7 +9,7 @@ import { TRAINING_SCHEMA, TrainingKey } from "../../const";
 import { fetchUsers } from "../../store/api/fetchUsers.api";
 import { useDispatch } from "react-redux";
 import { getFormattedTimestamp, normalizeDate } from "../../utils/dateUtils";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 
 interface TrainingsListProps {
   user: User;
@@ -20,13 +20,13 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
 
   const dispatch = useDispatch();
 
-  const { isAI } = useAITheme();
+  const { isDark } = useDarkTheme();
 
   const [iconColor, setIconColor] = useState('');
 
   useEffect(() => {
-    setIconColor(isAI ? '#0abcc7' : '#000000')
-  }, [ isAI ])
+    setIconColor(isDark ? '#0abcc7' : '#000000')
+  }, [ isDark ])
 
   const getExpirationDate = (training: Training) => {
     if (!training.updatingDate) return null;
@@ -184,7 +184,7 @@ export default function TrainingsList({user, isCollapsed = true}: TrainingsListP
 
   return (
     <div>
-      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''} ${isAI ? 'trainings--ai' : ''}`}>
+      <ul className={`trainings-list ${!isCollapsed ? 'trainings-list--uncollapsed' : ''} ${isDark ? 'trainings--dark' : ''}`}>
         {Object.keys(trainingLabels).map((key) => {
           const training = user.trainings[key as keyof typeof user.trainings];
 

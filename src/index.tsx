@@ -6,7 +6,7 @@ import { App } from './App';
 import { store } from './store';
 import { fetchUsers } from './store/api/fetchUsers.api';
 import { fetchSwapRequests, fetchGiveRequests } from './store/api/fetchRequests.api';
-import { AIThemeProvider } from './context/AIThemeContext';
+import { DarkThemeProvider } from './context/DarkThemeContext';
 import { fetchSecurityPosts } from './store/api/fetchSecurityPosts.api';
 import { fetchControllCenterPosts } from './store/api/fetchControllCenterPosts.api';
 import { loadGuestData } from './mocks/guestData';
@@ -32,9 +32,9 @@ if (typeof window !== 'undefined' && localStorage.getItem(GUEST_MODE_KEY) === 't
 
 root.render(
   <React.StrictMode>
-    <AIThemeProvider>
+    <DarkThemeProvider>
       <App />
-    </AIThemeProvider>
+    </DarkThemeProvider>
   </React.StrictMode>
 );
 

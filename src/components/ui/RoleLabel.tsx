@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { Role, User } from "../../types/User";
 import { addUserRole, removeUserRole } from "../../store/actions";
 import { setEmployeeData } from "../../store/api/setEmployeeData.api";
-import { useAITheme } from "../../hooks/useAIContext";
+import { useDarkTheme } from "../../hooks/useDarkThemeContext";
 import { useEffect, useRef, useState, useMemo } from "react";
 
 interface RoleLabelProps {
@@ -13,7 +13,7 @@ interface RoleLabelProps {
 
 export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   const dispatch = useDispatch();
-  const { isAI, isMobile } = useAITheme(); // Ensure context provides isMobile
+  const { isDark, isMobile } = useDarkTheme(); // Ensure context provides isMobile
 
   const roleRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState<number | string>("auto");
@@ -79,12 +79,12 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
   if (isButton) {
     return (
       <button
-        className={`employee__role-label employee__role-label--add ${isAI ? "role--ai" : ""}`}
+        className={`employee__role-label employee__role-label--add ${isDark ? "role--dark" : ""}`}
         style={{ width: isMobile ? "100%" : "auto" }} // Ensure button is also full width on mobile
         title="הוסף תפקיד"
         onClick={addRole}
       >
-        {isAI && <span className="ai-plus-icon">+</span>}
+        {isDark && <span className="dark-plus-icon">+</span>}
         <span>{role.label}</span>
       </button>
     );
@@ -92,7 +92,7 @@ export default function RoleLabel({ role, isButton, user }: RoleLabelProps) {
 
   return (
     <div
-      className={`employee__role-label ${isAI ? "role--ai" : ""}`}
+      className={`employee__role-label ${isDark ? "role--dark" : ""}`}
       ref={roleRef}
       style={{
         width: isMobile ? "100%" : width,
